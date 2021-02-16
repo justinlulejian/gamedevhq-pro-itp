@@ -1,15 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
-
-public class MechTwo : MonoBehaviour
+﻿namespace GameDevHQ.Scripts
 {
-    [SerializeField] private GameObject _navTarget;
-    
-    private NavMeshAgent _navMeshAgent;
-    
-    void Start()
+    public class MechTwo : Enemy
     {
-        _navMeshAgent = GetComponent<NavMeshAgent>();
-        _navMeshAgent.SetDestination(_navTarget.transform.position);
     }
 }
