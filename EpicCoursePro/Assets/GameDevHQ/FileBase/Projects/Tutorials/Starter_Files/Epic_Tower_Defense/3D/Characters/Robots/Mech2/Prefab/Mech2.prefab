@@ -439,7 +439,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <NavTarget>k__BackingField: {fileID: 0}
-  _health: 100
+  _navigationSpeed: 1.5
+  health: 100
   warFundValue: 200
 --- !u!54 &3024274155801505101
 Rigidbody:
