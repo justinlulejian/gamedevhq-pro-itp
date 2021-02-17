@@ -1,12 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace GameDevHQ.Scripts
 {
     public class Enemy : MonoBehaviour
     {
-        [SerializeField] [Tooltip("The end destination the enemy will attempt to navigate to.")][Header("Navigation components")]
-        private GameObject _navTarget;
+        [field: SerializeField]
+        [field: Tooltip("The end destination the enemy will attempt to navigate to.")]
+        [field: Header("Navigation components")]
+        public GameObject NavTarget { get; set;}
+
         private NavMeshAgent _navMeshAgent;
 
         [SerializeField] [Header("Health Settings")]
@@ -16,7 +20,7 @@ namespace GameDevHQ.Scripts
         [SerializeField] [Tooltip("The currency value provided when the enemy is killed by player.")]
         private int warFundValue = 100;
        
-        void Start()
+        private void Start()
         {
             _navMeshAgent = GetComponent<NavMeshAgent>();
             
@@ -24,8 +28,12 @@ namespace GameDevHQ.Scripts
             {
                 Debug.LogError($"Nav mesh agent is null on enemy: {this.gameObject.name}");
             }
+            if (NavTarget == null)
+            {
+                Debug.LogError($"Nav target for enemy: {this.gameObject.name} is null.");
+            }
             
-            _navMeshAgent.SetDestination(_navTarget.transform.position);
+            _navMeshAgent.SetDestination(NavTarget.transform.position);
         }
         
         public void Damage(int damageValue)
@@ -42,7 +50,5 @@ namespace GameDevHQ.Scripts
         {
             Destroy(this.gameObject);
         }
-        
-        
     }
 }
