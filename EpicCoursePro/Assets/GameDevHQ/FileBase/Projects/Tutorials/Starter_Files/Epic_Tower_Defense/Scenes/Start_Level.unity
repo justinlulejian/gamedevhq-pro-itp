@@ -1310,12 +1310,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ecb0a5009144aa4698e01746944827e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemiesToSpawn:
+  enemiesToSpawn:
   - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
   - {fileID: 1079767520691416, guid: fed6fd85e4a83418485118c22ed9f184, type: 3}
-  _enemyContainer: {fileID: 2106290996}
-  _enemySpawnStartPoint: {fileID: 1186263941}
-  _enemySpawnEndPoint: {fileID: 375435850}
+  enemyContainer: {fileID: 2106290996}
+  enemySpawnStartPoint: {fileID: 1186263941}
+  enemySpawnEndPoint: {fileID: 375435850}
 --- !u!1001 &210789249
 PrefabInstance:
   m_ObjectHideFlags: 0

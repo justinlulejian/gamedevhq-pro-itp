@@ -14,7 +14,7 @@ namespace GameDevHQ.Scripts
         private NavMeshAgent _navMeshAgent;
 
         [SerializeField] [Header("Health Settings")]
-        private int _health = 100;
+        private int health = 100;
 
         [Header("Currency Settings")]
         [SerializeField] [Tooltip("The currency value provided when the enemy is killed by player.")]
@@ -38,9 +38,9 @@ namespace GameDevHQ.Scripts
         
         public void Damage(int damageValue)
         {
-            Mathf.Min(0, _health -= damageValue);
+            Mathf.Min(0, health -= damageValue);
 
-            if (_health <= 0)
+            if (health <= 0)
             {
                 Kill();
             }
