@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class EnemyNavEnd : MonoBehaviour
 {
-    public static Action<GameObject> EnemyCollision;
+    public static event Action<GameObject> OnEnemyCollision;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            EnemyCollision.Invoke(other.gameObject);
+            OnEnemyCollision.Invoke(other.gameObject);
         }
     }
 }
