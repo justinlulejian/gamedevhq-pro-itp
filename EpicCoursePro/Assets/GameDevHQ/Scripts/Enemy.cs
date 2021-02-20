@@ -28,7 +28,8 @@ namespace GameDevHQ.Scripts
         private void Start()
         {
             _navMeshAgent = GetComponent<NavMeshAgent>();
-            
+            NavTarget = SpawnManager.Instance.GetEnemySpawnEndPoint();
+           
             if (_navMeshAgent == null)
             {
                 Debug.LogError($"Nav mesh agent is null on enemy: {this.gameObject.name}");
