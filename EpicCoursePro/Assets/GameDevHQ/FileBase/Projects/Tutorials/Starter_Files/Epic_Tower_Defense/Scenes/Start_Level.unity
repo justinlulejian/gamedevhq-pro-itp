@@ -1293,8 +1293,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -28.10214, y: 14.058103, z: -4.562493}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 2106290997}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1307,15 +1306,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 189097636}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ecb0a5009144aa4698e01746944827e, type: 3}
+  m_Script: {fileID: 11500000, guid: ff75611b10b2f344ba6a513312970c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemiesToSpawn:
-  - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
-  - {fileID: 1079767520691416, guid: fed6fd85e4a83418485118c22ed9f184, type: 3}
-  enemyContainer: {fileID: 2106290996}
-  enemySpawnStartPoint: {fileID: 1186263941}
-  enemySpawnEndPoint: {fileID: 375435850}
+  _enemySpawnStartPoint: {fileID: 1186263941}
+  _enemySpawnEndPoint: {fileID: 375435850}
+  _baseEnemiesToSpawnPerWave: 10
+  _numberOfWaves: 1
+  _currentWave: 0
 --- !u!1001 &210789249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2062,7 +2060,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 375435850}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2111,7 +2109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 375435850}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3818f7096b3b8e94ab4bfb7bcb99c31f, type: 3}
+  m_Script: {fileID: 11500000, guid: a6f950a2bac20fd4189086efed3c6b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!54 &375435856
@@ -3492,6 +3490,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640746100}
   m_CullTransparentMesh: 0
+--- !u!1 &674569846
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 674569848}
+  - component: {fileID: 674569847}
+  m_Layer: 0
+  m_Name: Pool_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &674569847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674569846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca256107c5016354d8630736de437ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyContainer: {fileID: 2106290996}
+  _enemyPrefabs:
+  - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
+  - {fileID: 1079767520691416, guid: fed6fd85e4a83418485118c22ed9f184, type: 3}
+--- !u!4 &674569848
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674569846}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -27.093885, y: 5.0028276, z: -5.531518}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2106290997}
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &677102450
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3986,7 +4032,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 4ed79c6d0cdf24a0f9686c8be0ffa0da, type: 2}
+  sharedProfile: {fileID: 0}
   isGlobal: 1
   blendDistance: 0
   weight: 1
@@ -6130,7 +6176,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186263941}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11339,10 +11385,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2106290996}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.4752617, y: 0.28999233, z: 1.0950563}
+  m_LocalPosition: {x: 0.46700668, y: 9.345267, z: 2.0640814}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 189097637}
+  m_Father: {fileID: 674569848}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2106755132
