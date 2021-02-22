@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GameDevHQ.Scripts;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class WaveManager : MonoSingleton<WaveManager>
@@ -11,10 +12,14 @@ public class WaveManager : MonoSingleton<WaveManager>
     [SerializeField] 
     [Header("Wave Settings")]
     private List<Wave> _waves;
+    [SerializeField] 
+    private float _baseTimeToWaitBetweenEnemySpawns = 10f;
 
     private int enemiesSpawnedInWave;
 
     private Queue<Wave> _wavesToSpawn;
+
+    private Enemy _lastEnemySpawnedInWave;
 
     // When a wave has started. Will later likely be used to provide info to UI about wave.
     public static event Action<Wave> onWaveStart; 
@@ -51,9 +56,32 @@ public class WaveManager : MonoSingleton<WaveManager>
             List<GameObject> enemyTypes = wave.enemyTypesToSpawn;
             GameObject randomEnemyType = enemyTypes.ElementAt(
                 UnityEngine.Random.Range(0, enemyTypes.Count));
+            yield return new WaitForSeconds(TimeToWaitBetweenEnemySpawnInWave(randomEnemyType));
             SpawnEnemy(randomEnemyType);
-            yield return new WaitForSeconds(2f);
         }
+
+        _lastEnemySpawnedInWave = null;
+    }
+
+    // TODO(improvement): Rather than do this with static time values, try dynamically spacing
+    // enemies even if they have different speeds.
+    private float TimeToWaitBetweenEnemySpawnInWave(GameObject enemyTypeToSpawn)
+    {
+        if (_lastEnemySpawnedInWave == null)
+        {
+            // Don't wait if this is the first enemy in the wave.
+            return 0f;
+        }
+        
+        float enemyTypeToSpawnSpeed = enemyTypeToSpawn.GetComponent<Enemy>().GetSpeed();
+        if (enemyTypeToSpawnSpeed > _lastEnemySpawnedInWave.GetSpeed())
+        {
+            Debug.Log($"Enemy to spawn is faster than last enemy, delaying spawn to" +
+                      $" {(_baseTimeToWaitBetweenEnemySpawns * 2).ToString()} seconds.");
+            return _baseTimeToWaitBetweenEnemySpawns * 1.5f;
+        }
+
+        return _baseTimeToWaitBetweenEnemySpawns;
     }
     
     private IEnumerator SpawnFixed(Wave wave)
@@ -62,15 +90,18 @@ public class WaveManager : MonoSingleton<WaveManager>
         for (int i = 0; i < spawnSequence.Count; i++)
         {
             GameObject enemyType = spawnSequence.ElementAt(i);
+            yield return new WaitForSeconds(TimeToWaitBetweenEnemySpawnInWave(enemyType));
             SpawnEnemy(enemyType);
-            yield return new WaitForSeconds(3f);
         }
+
+        _lastEnemySpawnedInWave = null;
     }
     
     private void SpawnEnemy(GameObject enemyType)
     {
         GameObject enemy = PoolManager.Instance.RequestEnemyType(enemyType);
         enemy.SetActive(true);
+        _lastEnemySpawnedInWave = enemy.GetComponent<Enemy>();
         enemiesSpawnedInWave++;
     }
 

@@ -29,6 +29,11 @@ namespace GameDevHQ.Scripts
         // When an enemy is enabled it will invoke this event.
         public static event Action<Transform, NavMeshAgent> OnSpawnStart;
 
+        public float GetSpeed()
+        {
+            return _navigationSpeed;
+        }
+        
         private void OnEnable()
         {
             if (_navMeshAgent == null)

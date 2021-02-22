@@ -13,6 +13,6 @@ namespace GameDevHQ.Scripts
                  "spawn sequence if specified.")]
         public bool randomSpawnOn;
         [Tooltip("How long the wave will wait before starting.")]
-        public float timeBeforeStart = 1f;
+        public float timeBeforeStart = 5f;
     }
 }
