@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace GameDevHQ.Scripts
@@ -7,8 +8,8 @@ namespace GameDevHQ.Scripts
     {
         [field: Header("Navigation and speed components")]
         [field: SerializeField]
-        [field: Tooltip("The end destination the enemy will attempt to navigate to.")]
-        public GameObject NavTarget { get; set;}
+        [field: Tooltip("The end destination Vector3 the enemy will attempt to navigate to.")]
+        private Vector3 _navDestinationPosition;
 
         [field: SerializeField]
         [field: Tooltip("The speed at which the enemy will approach the navigation target.")]
@@ -24,22 +25,26 @@ namespace GameDevHQ.Scripts
         [SerializeField] 
         [Tooltip("The currency value provided when the enemy is killed by player.")]
         private int warFundValue = 100;
-       
+
+        // When an enemy is enabled it will invoke this event.
+        public static event Action<Transform, NavMeshAgent> OnSpawnStart;
+
+        private void OnEnable()
+        {
+            if (_navMeshAgent == null)
+            {
+                _navMeshAgent = GetComponent<NavMeshAgent>();
+            }
+            OnSpawnStart.Invoke(this.transform, _navMeshAgent);
+            _navDestinationPosition = _navMeshAgent.destination;
+        }
+
         private void Start()
         {
-            _navMeshAgent = GetComponent<NavMeshAgent>();
-            NavTarget = SpawnManager.Instance.GetEnemySpawnEndPoint();
-           
             if (_navMeshAgent == null)
             {
                 Debug.LogError($"Nav mesh agent is null on enemy: {this.gameObject.name}");
             }
-            if (NavTarget == null)
-            {
-                Debug.LogError($"Nav target for enemy: {this.gameObject.name} is null.");
-            }
-            
-            _navMeshAgent.SetDestination(NavTarget.transform.position);
             _navMeshAgent.speed = _navigationSpeed;
         }
         

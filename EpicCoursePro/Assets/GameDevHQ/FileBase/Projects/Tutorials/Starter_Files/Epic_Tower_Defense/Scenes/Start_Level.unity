@@ -2033,6 +2033,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _waves:
   - {fileID: 11400000, guid: b2c9767ed01b31543b5dac7f691d4b0c, type: 2}
+  - {fileID: 11400000, guid: 0a54c558062e4d74a88a03e44f6056d2, type: 2}
+  - {fileID: 11400000, guid: 6845e5c08717a01418e0928308100187, type: 2}
 --- !u!4 &365295940
 Transform:
   m_ObjectHideFlags: 0
@@ -2076,7 +2078,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 375435850}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 243.713, y: 0.516, z: 250}
+  m_LocalPosition: {x: 218.21, y: 0.516, z: 251.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 534497538}

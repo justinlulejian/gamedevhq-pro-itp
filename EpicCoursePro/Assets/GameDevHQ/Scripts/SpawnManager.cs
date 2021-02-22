@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using GameDevHQ.Scripts;
-using UnityEditor.Rendering;
+﻿using GameDevHQ.Scripts;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SpawnManager : MonoSingleton<SpawnManager>
 {
@@ -26,11 +23,13 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     private void OnEnable()
     {
         WaveManager.onWaveFinish += RequestNextWave;
+        Enemy.OnSpawnStart += ResetEnemyNavOnSpawn;
     }
 
     private void OnDisable()
     {
         WaveManager.onWaveFinish -= RequestNextWave;
+        Enemy.OnSpawnStart -= ResetEnemyNavOnSpawn;
     }
 
     protected override void Awake()
@@ -56,7 +55,23 @@ public class SpawnManager : MonoSingleton<SpawnManager>
         WaveManager.Instance.SpawnNextWave();
     }
 
-
+    private void ResetEnemyNavOnSpawn(Transform enemyTransform, NavMeshAgent enemyNavMeshAgent)
+    {
+        GameObject enemyStartPoint = GetEnemySpawnStartPoint();
+        if (enemyStartPoint == null)
+        {
+            Debug.LogError("Enemy spawn start position was null from Spawn " +
+                           "Manager.");
+        }
+        enemyTransform.rotation = enemyStartPoint.transform.rotation;
+        if (!enemyNavMeshAgent.Warp(enemyStartPoint.transform.position))
+        {
+            Debug.LogError($"Attempt to warp enemy {enemyTransform.gameObject.name} to " +
+                           $"start position {enemyStartPoint.transform.position.ToString()}" +
+                           $" failed.");
+        }
+        enemyNavMeshAgent.SetDestination(GetEnemySpawnEndPoint().transform.position);
+    }
 
 
 }

@@ -63,7 +63,7 @@ public class WaveManager : MonoSingleton<WaveManager>
         {
             GameObject enemyType = spawnSequence.ElementAt(i);
             SpawnEnemy(enemyType);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
         }
     }
     
@@ -74,8 +74,10 @@ public class WaveManager : MonoSingleton<WaveManager>
         enemiesSpawnedInWave++;
     }
 
-    private void SpawnWave(Wave wave)
+    private IEnumerator SpawnWave(Wave wave)
     {
+        Debug.Log($"Spawning next wave: {wave.ToString()}");
+        yield return new WaitForSeconds(wave.timeBeforeStart);
         if (wave.randomSpawnOn)
         {
             StartCoroutine(SpawnRandom(wave));
@@ -97,7 +99,7 @@ public class WaveManager : MonoSingleton<WaveManager>
         
         if (_wavesToSpawn.Count > 0)
         {
-            SpawnWave(_wavesToSpawn.Dequeue());
+            StartCoroutine(SpawnWave(_wavesToSpawn.Dequeue()));
         }
     }
     
@@ -110,8 +112,6 @@ public class WaveManager : MonoSingleton<WaveManager>
         {
             onWaveFinish.Invoke();
         }
-        
-        // TODO: reset position to start with warp 
     }
 
     private void AllWavesCompleted()

@@ -438,8 +438,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cec5c870f85e334380586f834df591a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <NavTarget>k__BackingField: {fileID: 0}
-  _navigationSpeed: 1.5
+  _navDestinationPosition: {x: 0, y: 0, z: 0}
+  _navigationSpeed: 8
   health: 100
   warFundValue: 200
 --- !u!54 &3024274155801505101

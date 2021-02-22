@@ -34,15 +34,7 @@ namespace GameDevHQ.Scripts
         {
             for (int i = 0; i < numEnemies; i++)
             {
-                GameObject enemyStartPoint = SpawnManager.Instance.GetEnemySpawnStartPoint();
-                if (enemyStartPoint == null)
-                {
-                    Debug.LogError("Enemy spawn start position was null from Spawn " +
-                                   "Manager.");
-                }
-                GameObject spawnedEnemy = Instantiate(
-                    enemyType, enemyStartPoint.transform.position,
-                    enemyStartPoint.transform.rotation, _enemyContainer.transform);
+                GameObject spawnedEnemy = Instantiate(enemyType, _enemyContainer.transform);
                 spawnedEnemy.SetActive(false);
                 _enemyPool.Add(spawnedEnemy);
             }
@@ -51,9 +43,6 @@ namespace GameDevHQ.Scripts
         // Provides one inactivated enemy from the pool of the type that was specified.
         public GameObject RequestEnemyType(GameObject enemyType)
         {
-            // TODO: match enemy to pool of enemy types, then do the logic below just on the
-            // different pool type.
-            
             var inactiveEnemyOfType = _enemyPool.FirstOrDefault(
                 e => e.CompareTag(enemyType.tag) && !e.activeInHierarchy);
             if (inactiveEnemyOfType != null)
