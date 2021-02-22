@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _navDestinationPosition: {x: 0, y: 0, z: 0}
-  _navigationSpeed: 8
+  _navigationSpeed: 1.5
   health: 100
   warFundValue: 200
 --- !u!54 &3024274155801505101
