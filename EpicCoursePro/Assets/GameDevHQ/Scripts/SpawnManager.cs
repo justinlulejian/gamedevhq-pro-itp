@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using GameDevHQ.Scripts;
+﻿using GameDevHQ.Scripts;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SpawnManager : MonoSingleton<SpawnManager>
 {
@@ -12,17 +10,6 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     [SerializeField]
     private GameObject _enemySpawnEndPoint;
 
-    [SerializeField] 
-    [Header("Wave Settings")]
-    [Tooltip("Enemies per wave = <this number> * the current wave number")]
-    private int _baseEnemiesToSpawnPerWave = 10;
-    [SerializeField]
-    private int _numberOfWaves = 1;
-    [SerializeField]
-    private int _currentWave;
-    // TODO: create a better system for timing to keep spawn tidy.
-    private float _timeBetweenEnemySpawnInWave = 3.0f;
-    
     public GameObject GetEnemySpawnStartPoint()
     {
         return _enemySpawnStartPoint;
@@ -35,12 +22,14 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     
     private void OnEnable()
     {
-        EnemyNavEnd.OnEnemyCollision += DespawnOnEnemy;
+        WaveManager.onWaveFinish += RequestNextWave;
+        Enemy.OnSpawnStart += ResetEnemyNavOnSpawn;
     }
 
     private void OnDisable()
     {
-        EnemyNavEnd.OnEnemyCollision -= DespawnOnEnemy;
+        WaveManager.onWaveFinish -= RequestNextWave;
+        Enemy.OnSpawnStart -= ResetEnemyNavOnSpawn;
     }
 
     protected override void Awake()
@@ -58,24 +47,31 @@ public class SpawnManager : MonoSingleton<SpawnManager>
 
     private void Start()
     {
-        StartCoroutine(SpawnEnemies());
+        WaveManager.Instance.SpawnNextWave();
     }
 
-    private IEnumerator SpawnEnemies()
+    private void RequestNextWave()
     {
-        // TODO: add multi-wave system.
-        List<GameObject> spawnedEnemies = new List<GameObject>();
-        for (int j = 0; j < _baseEnemiesToSpawnPerWave; j++)
+        WaveManager.Instance.SpawnNextWave();
+    }
+
+    private void ResetEnemyNavOnSpawn(Transform enemyTransform, NavMeshAgent enemyNavMeshAgent)
+    {
+        GameObject enemyStartPoint = GetEnemySpawnStartPoint();
+        if (enemyStartPoint == null)
         {
-            PoolManager.Instance.RequestEnemy();
-            yield return new WaitForSeconds(_timeBetweenEnemySpawnInWave);
+            Debug.LogError("Enemy spawn start position was null from Spawn " +
+                           "Manager.");
         }
-        
+        enemyTransform.rotation = enemyStartPoint.transform.rotation;
+        if (!enemyNavMeshAgent.Warp(enemyStartPoint.transform.position))
+        {
+            Debug.LogError($"Attempt to warp enemy {enemyTransform.gameObject.name} to " +
+                           $"start position {enemyStartPoint.transform.position.ToString()}" +
+                           $" failed.");
+        }
+        enemyNavMeshAgent.SetDestination(GetEnemySpawnEndPoint().transform.position);
     }
 
-    private void DespawnOnEnemy(GameObject enemy)
-    {
-        PoolManager.Instance.RecycleEnemy(enemy);
-    }
 
 }
