@@ -8,64 +8,50 @@ namespace GameDevHQ.Scripts
 {
     public class PoolManager : MonoSingleton<PoolManager>
     {
-        private static List<GameObject> _enemyPool;
+        private static List<GameObject> _enemyPool = new List<GameObject>();
         [SerializeField] 
         private GameObject _enemyContainer;
         [SerializeField] 
-        private List<GameObject> _enemyPrefabs = new List<GameObject>();
-
-        private Random _random;
-        private bool _setupComplete;
-
+        private List<GameObject> _allEnemyPrefabs = new List<GameObject>();
+        [SerializeField]
+        private int _numberOfEnemiesToPool = 30;
+        
         protected override void Awake()
         {
             base.Awake();
-            if (_enemyPrefabs.Count == 0) 
+            if (_allEnemyPrefabs.Count == 0) 
             {
                 Debug.LogError("Enemy prefabs have not been specified in Pool Manager.");
-            } 
-            
-            _random = new Random();
-            _enemyPool = GenerateEnemies(30);
-            _setupComplete = true;
+            }
+
+            foreach (GameObject enemyPrefab in _allEnemyPrefabs)
+            {
+                GenerateEnemies(_numberOfEnemiesToPool, enemyPrefab);
+            }
         }
         
-        private List<GameObject> GenerateEnemies(int numEnemies)
+        private void GenerateEnemies(int numEnemies, GameObject enemyType)
         {
-        
-            List<GameObject> spawnedEnemies = new List<GameObject>();
             for (int i = 0; i < numEnemies; i++)
             {
-                GameObject enemyPrefab = _enemyPrefabs.ElementAt(
-                    _random.Next(_enemyPrefabs.Count));
-                GameObject enemyStartPoint = SpawnManager.Instance.GetEnemySpawnStartPoint();
-                if (enemyStartPoint == null)
-                {
-                    Debug.LogError("Enemy spawn start position was null from Spawn Manager.");
-                }
-                GameObject spawnedEnemy = Instantiate(
-                    enemyPrefab, enemyStartPoint.transform.position, enemyStartPoint.transform.rotation,
-                    _enemyContainer.transform);
+                GameObject spawnedEnemy = Instantiate(enemyType, _enemyContainer.transform);
                 spawnedEnemy.SetActive(false);
-                spawnedEnemies.Add(spawnedEnemy);
+                _enemyPool.Add(spawnedEnemy);
             }
-            return spawnedEnemies;
         }
 
-        // Provides a random enemy to the caller. When pre-spawned enemies are exhausted it generates
-        // on additional one recursively.
-        public GameObject RequestEnemy()
+        // Provides one inactivated enemy from the pool of the type that was specified.
+        public GameObject RequestEnemyType(GameObject enemyType)
         {
-            var inactiveEnemy = _enemyPool.FirstOrDefault(
-                b => !b.activeInHierarchy);
-            if (inactiveEnemy != null)
+            var inactiveEnemyOfType = _enemyPool.FirstOrDefault(
+                e => e.CompareTag(enemyType.tag) && !e.activeInHierarchy);
+            if (inactiveEnemyOfType != null)
             {
-                inactiveEnemy.SetActive(true);
-                return inactiveEnemy;
+                return inactiveEnemyOfType;
             }
         
-            _enemyPool = GenerateEnemies(1);
-            return RequestEnemy();
+            GenerateEnemies(1, enemyType);
+            return RequestEnemyType(enemyType);
         }
         
         public void RecycleEnemy(GameObject enemy)
