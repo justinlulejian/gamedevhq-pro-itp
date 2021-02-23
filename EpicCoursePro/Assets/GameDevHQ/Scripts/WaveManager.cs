@@ -76,8 +76,6 @@ public class WaveManager : MonoSingleton<WaveManager>
         float enemyTypeToSpawnSpeed = enemyTypeToSpawn.GetComponent<Enemy>().GetSpeed();
         if (enemyTypeToSpawnSpeed > _lastEnemySpawnedInWave.GetSpeed())
         {
-            Debug.Log($"Enemy to spawn is faster than last enemy, delaying spawn to" +
-                      $" {(_baseTimeToWaitBetweenEnemySpawns * 2).ToString()} seconds.");
             return _baseTimeToWaitBetweenEnemySpawns * 1.5f;
         }
 
