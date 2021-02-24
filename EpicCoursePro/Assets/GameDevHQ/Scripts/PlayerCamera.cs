@@ -7,16 +7,12 @@ public class PlayerCamera : MonoBehaviour
     [Header("Player camera movement and rotation settings")]
     [SerializeField] 
     private Camera _camera;
-    [SerializeField] 
     [Tooltip("How fast the camera zoom movement is in response to user mouse scroll wheel input.")]
     private float _zoomSpeed = 1000.0f;
-    [SerializeField] 
     [Tooltip("How fast the camera rotates itself in response to user input.")]
     private float _panningSpeed = 100.0f;
-    [SerializeField] 
     [Tooltip("How fast the camera move in response to user mouse input.")]
     private float _mouseMovementSpeed = 5f;
-    [SerializeField] 
     [Tooltip("% away from the edge of the screen where mouse movement will trigger.")]
     private float _mouseMovementTriggerDistance = .05f;
 
