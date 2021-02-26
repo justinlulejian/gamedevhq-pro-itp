@@ -23,13 +23,13 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     private void OnEnable()
     {
         WaveManager.onWaveFinish += RequestNextWave;
-        Enemy.OnSpawnStart += ResetEnemyNavOnSpawn;
+        Enemy.onSpawnStart += ResetEnemyNavOnSpawn;
     }
 
     private void OnDisable()
     {
         WaveManager.onWaveFinish -= RequestNextWave;
-        Enemy.OnSpawnStart -= ResetEnemyNavOnSpawn;
+        Enemy.onSpawnStart -= ResetEnemyNavOnSpawn;
     }
 
     protected override void Awake()

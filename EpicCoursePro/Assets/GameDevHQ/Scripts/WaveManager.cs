@@ -30,12 +30,12 @@ public class WaveManager : MonoSingleton<WaveManager>
     
     private void OnEnable()
     {
-        EnemyNavEnd.OnEnemyCollision += DespawnEnemy;
+        EnemyNavEnd.onEnemyCollision += DespawnEnemy;
     }
 
     private void OnDisable()
     {
-        EnemyNavEnd.OnEnemyCollision -= DespawnEnemy;
+        EnemyNavEnd.onEnemyCollision -= DespawnEnemy;
     }
     
     protected override void Awake()

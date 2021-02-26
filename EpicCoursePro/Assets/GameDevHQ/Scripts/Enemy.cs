@@ -27,7 +27,7 @@ namespace GameDevHQ.Scripts
         private int warFundValue = 100;
 
         // When an enemy is enabled it will invoke this event.
-        public static event Action<Transform, NavMeshAgent> OnSpawnStart;
+        public static event Action<Transform, NavMeshAgent> onSpawnStart;
 
         public float GetSpeed()
         {
@@ -40,7 +40,7 @@ namespace GameDevHQ.Scripts
             {
                 _navMeshAgent = GetComponent<NavMeshAgent>();
             }
-            OnSpawnStart.Invoke(this.transform, _navMeshAgent);
+            onSpawnStart.Invoke(this.transform, _navMeshAgent);
             _navDestinationPosition = _navMeshAgent.destination;
         }
 
