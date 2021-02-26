@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Debug = UnityEngine.Debug;
 
 public class PlayerCamera : MonoBehaviour
@@ -22,31 +21,26 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField]
     [Tooltip("% away from the edge of the screen where mouse movement will trigger.")]
     private float _mouseMovementTriggerDistance = .05f;
-    [SerializeField]
-    [Tooltip("% away from the edge of the screen where mouse movement will trigger.")]
-    private float _maximumHorizontalRotationDelta = 10f;
-    [SerializeField]
-    [Tooltip("% away from the edge of the screen where mouse movement will trigger.")]
-    private float _maximumVerticalRotationDelta = 10f;
-    [SerializeField]
-    [Tooltip("% away from the edge of the screen where mouse movement will trigger.")]
-    private float _maximumHorizontalMovementDelta = 10f;
-    [SerializeField]
-    [Tooltip("% away from the edge of the screen where mouse movement will trigger.")]
-    private float _maximumVerticallMovementDelta = 10f;
+
+    // These were established with what visually made sense to prevent looking beyond the map.
+    // TODO(improvement): Try to create a dynamic bounds that can be set in inspector.
+    private float _cameraXPosMin = -65;
+    private float _cameraXPosMax = -40;
+    private float _cameraYPosMin = 5f;
+    private float _cameraYPosMax = 29f;
+    private float _cameraZPosMin = -2.3f;
+    private float _cameraZPosMax = 7f;
+    private float _cameraFovMin = 8f;
+    private float _cameraFovMax = 35f;
     
     private Vector3 _cameraOriginalPosition;
-    private Quaternion _cameraOriginalRotation;
     
-    // TODO: Bounding, I think I should just bit the bullet and do basic static clamping and forget about using
-    // clamp magnitude. I can look into something better later. Right now it moves correctly at least.
     private void Awake()
     {
-        _cam = this.transform.GetComponent<Camera>();
+        _cam = transform.GetComponent<Camera>();
         _cameraOriginalPosition = transform.parent.position;
-        _cameraOriginalRotation = transform.parent.rotation;
         
-        if (_cam == null)
+        if (_cam == null)   
         {
             Debug.LogError("Main camera was not found for player. Movement may be impacted.");
         }
@@ -55,16 +49,10 @@ public class PlayerCamera : MonoBehaviour
             Debug.LogError("Player camera's original position was not found. Movement may " +
                            "be impacted.");
         }
-        if (_cameraOriginalRotation == null)
-        {
-            Debug.LogError("Player camera's original rotation was not found. Movement may " +
-                           "be impacted.");
-        }
     }
 
     private void Update()
     {
-        Debug.Log($"_cameraOriginalPosition: {_cameraOriginalPosition.ToString()}");
         CalculateMovement();
     }
 
@@ -75,7 +63,7 @@ public class PlayerCamera : MonoBehaviour
         Vector3 _movement = new Vector3();
         CalculateKeyboardMovement(ref _movement);
         CalculateZoomMovement(ref _movement);
-        // CalculateMouseMovement(ref _movement);
+        CalculateMouseMovement(ref _movement);
         MoveWithBounds(ref _movement);
     }
 
@@ -84,15 +72,15 @@ public class PlayerCamera : MonoBehaviour
         // Move the camera forwards and backwards on the scroll wheel.
         float zoomForwardBackwardMovement = (Input.GetAxis("Mouse ScrollWheel") * _zoomSpeed *
                                              Time.deltaTime);
-        position += new Vector3(0, 0, zoomForwardBackwardMovement);
+        _cam.fieldOfView =  Mathf.Clamp(
+            _cam.fieldOfView - zoomForwardBackwardMovement, _cameraFovMin, _cameraFovMax);
     }
 
     private void CalculateKeyboardMovement(ref Vector3 position)
     {
-        // TODO: This is not so much vertical as it is hover forward, notate better?
-        float verticalMovementSpeed = (
+        float forwardBackwardMoveSpeed = (
             Input.GetAxis("Vertical") * _keyboardMovementSpeed * Time.deltaTime);
-        position +=  new Vector3(0, verticalMovementSpeed, verticalMovementSpeed);
+        position +=  new Vector3(0, forwardBackwardMoveSpeed, forwardBackwardMoveSpeed);
         
         float horizontalMovementSpeed = (
             Input.GetAxis("Horizontal") * _keyboardMovementSpeed * Time.deltaTime);
@@ -102,14 +90,13 @@ public class PlayerCamera : MonoBehaviour
     // Mouse movement when cursor approaches end of screen. RTS-style.
     private void CalculateMouseMovement(ref Vector3 position)
     {
-        
         if (Input.mousePosition.y > (Screen.height * (1.0f - _mouseMovementTriggerDistance)))
         {
-            position += (Vector3.up * (Time.deltaTime * _mouseMovementSpeed));
+            position += ((Vector3.forward + Vector3.up) * (Time.deltaTime * _mouseMovementSpeed));
         }
         if (Input.mousePosition.y < (1.0f - _mouseMovementTriggerDistance))
         {
-            position += (Vector3.down * (Time.deltaTime * _mouseMovementSpeed));
+            position += ((Vector3.back + Vector3.down) * (Time.deltaTime * _mouseMovementSpeed));
         }
         if (Input.mousePosition.x > (Screen.width * (1.0f - _mouseMovementTriggerDistance)))
         {
@@ -120,13 +107,36 @@ public class PlayerCamera : MonoBehaviour
             position += (Vector3.left * (Time.deltaTime * _mouseMovementSpeed));
         }
     }
+    
+    private bool IsMovePositionOutOfBounds(ref Vector3 movePosition)
+    {
+        Vector3 currentPosition = transform.position;
+        Vector3 newPosition = currentPosition + movePosition;
+        if (newPosition.x < _cameraXPosMin || newPosition.x > _cameraXPosMax)
+        {
+            return true;
+        }
+        if (newPosition.y < _cameraYPosMin || newPosition.y > _cameraYPosMax)
+        {
+            return true;
+        }
+        if (newPosition.z < _cameraZPosMin || newPosition.z > _cameraZPosMax)
+        {
+            return true;
+        }
+        return false;
+    }
 
     private void MoveWithBounds(ref Vector3 movePosition)
     {
-        // Bounds: Zoom Z axis +40:-5 
-        // Y axis: +7:-8 
-        // X axis: +5:-6 (need to prevent it from going outside buildings when zoomed though...)
         _cam.transform.Translate(movePosition);
-        Debug.Log($"Vector3.distance is now: {Vector3.Distance(_cameraOriginalPosition, transform.position).ToString()}");
+        if (IsMovePositionOutOfBounds(ref movePosition))
+        {
+            Vector3 currentPosition = transform.position;
+            currentPosition.x = Mathf.Clamp(currentPosition.x, _cameraXPosMin, _cameraXPosMax);
+            currentPosition.y = Mathf.Clamp(currentPosition.y, _cameraYPosMin, _cameraYPosMax);
+            currentPosition.z = Mathf.Clamp(currentPosition.z, _cameraZPosMin, _cameraZPosMax);
+            transform.position = currentPosition;
+        }
     }
 }
