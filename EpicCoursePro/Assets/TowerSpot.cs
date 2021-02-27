@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class TowerSpot : MonoBehaviour
 {
@@ -6,19 +7,17 @@ public class TowerSpot : MonoBehaviour
 
     [SerializeField] 
     private ParticleSystem _availableParticleSystem;
-
+    
     private void OnEnable()
     {
-        TowerManager.onActivateTowers += ActivateTower;
-        TowerManager.onDeactivateTowers += DeactivateTower;
+        TowerManager.onTowerPlacementModeStatusChange += OnTowerPlacementModeChange;
     }
 
     private void OnDisable()
     {
-        TowerManager.onActivateTowers -= ActivateTower;
-        TowerManager.onDeactivateTowers += DeactivateTower;
+        TowerManager.onTowerPlacementModeStatusChange -= OnTowerPlacementModeChange;
     }
-    
+
     private void Awake()
     {
         _availableParticleSystem = GetComponent<ParticleSystem>();
@@ -27,22 +26,19 @@ public class TowerSpot : MonoBehaviour
         {
             Debug.Log("Particle system is null on tower spot.");
         }
-        // _availableParticleSystem.Play();
     }
-    
 
-    public void ActivateTower()
+    public void OnTowerPlacementModeChange(bool modeEnabled)
     {
-        Debug.Log($"Activating tower");
-        IsAvailableForPlacement = false;
-        _availableParticleSystem.Play();
-    }
-    
-    public void DeactivateTower()
-    {
-        Debug.Log($"Deactivating tower");
-        IsAvailableForPlacement = true;
-        _availableParticleSystem.Stop();
+        IsAvailableForPlacement = modeEnabled;
+        if (modeEnabled)
+        {
+            _availableParticleSystem.Play();
+        }
+        else
+        {
+            _availableParticleSystem.Stop();
+        }
     }
 }
  

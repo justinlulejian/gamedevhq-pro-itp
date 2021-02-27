@@ -105,7 +105,6 @@ public class WaveManager : MonoSingleton<WaveManager>
 
     private IEnumerator SpawnWave(Wave wave)
     {
-        Debug.Log($"Spawning next wave: {wave.ToString()}");
         yield return new WaitForSeconds(wave.timeBeforeStart);
         if (wave.randomSpawnOn)
         {
