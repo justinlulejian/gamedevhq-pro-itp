@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GameDevHQ.FileBase.Missle_Launcher.Missle;
+using GameDevHQ.Scripts;
 
 namespace GameDevHQ.FileBase.Missle_Launcher
 {
-    public class Missle_Launcher : MonoBehaviour
+    public class Missle_Launcher : AbstractTower
     {
         [SerializeField]
         private GameObject _missilePrefab; //holds the missle gameobject to clone

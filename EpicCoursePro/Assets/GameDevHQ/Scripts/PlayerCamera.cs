@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using Debug = UnityEngine.Debug;
 
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : MonoSingleton<PlayerCamera>
 {
     private Camera _cam;
     
@@ -34,9 +34,15 @@ public class PlayerCamera : MonoBehaviour
     private float _cameraFovMax = 35f;
     
     private Vector3 _cameraOriginalPosition;
-    
-    private void Awake()
+
+    public Camera GetPlayerCamera()
     {
+        return _cam;
+    }
+    
+    protected override void Awake()
+    {
+        base.Awake();
         _cam = transform.GetComponent<Camera>();
         _cameraOriginalPosition = transform.parent.position;
         
