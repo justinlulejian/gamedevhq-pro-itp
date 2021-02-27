@@ -47,8 +47,7 @@ public class TowerSpot : MonoBehaviour
 
     public void OnTowerPlacementModeChange(bool modeEnabled)
     {
-        IsAvailableForPlacement = modeEnabled;
-        if (modeEnabled)
+        if (modeEnabled && IsAvailableForPlacement)
         {
             _availableParticleSystem.Play();
         }
@@ -58,10 +57,14 @@ public class TowerSpot : MonoBehaviour
         }
     }
     
-    // Swap decoy tower for original tower prefab.
+    // Swap decoy tower for original tower prefab on spot.
     private void OnMouseEnter()
     {
-        if (IsAvailableForPlacement)
+        Debug.Log(
+            $"TowerSpot OnMouseEnter: " +
+            $"IsAvailableForPlacement-{IsAvailableForPlacement.ToString()}, " +
+            $"IsTowerPlacementModeActivated-{TowerManager.Instance.IsTowerPlacementModeActivated().ToString()} ");
+        if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
         {
             onUserMouseEnterTowerSpot.Invoke(this);
             _availableParticleSystem.Stop();
@@ -71,7 +74,7 @@ public class TowerSpot : MonoBehaviour
     // Reactivate decoy tower and deactivate un-placed tower.
     private void OnMouseExit()
     {
-        if (IsAvailableForPlacement)
+        if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
         {
             onUserMouseExitTowerSpot.Invoke();
             _availableParticleSystem.Play();
@@ -81,7 +84,7 @@ public class TowerSpot : MonoBehaviour
     // Place tower in spot, don't allow it to be removed by mouse exit.
     private void OnMouseDown()
     {
-        if (IsAvailableForPlacement)
+        if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated() )
         {
             onUserMouseDownTowerSpot.Invoke(this);
         }

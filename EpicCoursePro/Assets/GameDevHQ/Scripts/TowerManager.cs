@@ -24,6 +24,11 @@ public class TowerManager : MonoSingleton<TowerManager>
 
     public static event Action<bool> onTowerPlacementModeStatusChange;
     private bool _towerPlacementModeActivated;
+
+    public bool IsTowerPlacementModeActivated()
+    {
+        return _towerPlacementModeActivated;
+    }
     
     private void OnEnable()
     {
@@ -41,6 +46,11 @@ public class TowerManager : MonoSingleton<TowerManager>
     
     private void ActivateTowerPlacementPreview(TowerSpot towerSpot)
     {
+        Debug.Log(
+            $"TowerManager ActivateTowerPlacementPreview: " +
+            $"_towerPlacementModeActivated-{_towerPlacementModeActivated.ToString()}, " +
+            $"_currentDecoyTower=null-{(_currentDecoyTower != null).ToString()} ");
+
         if (_towerPlacementModeActivated && _currentDecoyTower != null)
         {
             _currentDecoyTower.gameObject.SetActive(false);
@@ -69,8 +79,9 @@ public class TowerManager : MonoSingleton<TowerManager>
         _currentDecoyTower.gameObject.SetActive(true);
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (_decoyTowerContainer == null)
         {
             Debug.LogError("Decoy tower container is null in Tower Manager.");
