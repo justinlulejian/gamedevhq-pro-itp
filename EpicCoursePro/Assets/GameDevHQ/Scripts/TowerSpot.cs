@@ -13,8 +13,6 @@ public class TowerSpot : MonoBehaviour
     [SerializeField] 
     private GameObject _towerPlaced;
 
-   
-
     // TODO: wrap all my .Invokes() in null checks to make sure we aren't invoking with no listeners.
     public static event Action<TowerSpot> onUserMouseEnterTowerSpot; 
     public static event Action onUserMouseExitTowerSpot; 
@@ -60,10 +58,6 @@ public class TowerSpot : MonoBehaviour
     // Swap decoy tower for original tower prefab on spot.
     private void OnMouseEnter()
     {
-        Debug.Log(
-            $"TowerSpot OnMouseEnter: " +
-            $"IsAvailableForPlacement-{IsAvailableForPlacement.ToString()}, " +
-            $"IsTowerPlacementModeActivated-{TowerManager.Instance.IsTowerPlacementModeActivated().ToString()} ");
         if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
         {
             onUserMouseEnterTowerSpot.Invoke(this);
@@ -84,7 +78,7 @@ public class TowerSpot : MonoBehaviour
     // Place tower in spot, don't allow it to be removed by mouse exit.
     private void OnMouseDown()
     {
-        if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated() )
+        if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
         {
             onUserMouseDownTowerSpot.Invoke(this);
         }
@@ -95,6 +89,5 @@ public class TowerSpot : MonoBehaviour
         _towerPlaced = towerToPlace;
         IsAvailableForPlacement = false;
     }
-    
 }
  

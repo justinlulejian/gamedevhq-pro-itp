@@ -6,7 +6,7 @@ using GameDevHQ.Scripts;
 
 namespace GameDevHQ.FileBase.Missle_Launcher
 {
-    public class Missle_Launcher : AbstractTower
+    public class Missle_Launcher : Tower
     {
         [SerializeField]
         private GameObject _missilePrefab; //holds the missle gameobject to clone

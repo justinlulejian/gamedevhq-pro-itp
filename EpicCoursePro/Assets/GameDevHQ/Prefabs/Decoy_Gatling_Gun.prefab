@@ -1,5 +1,98 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2073442085
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2073442086}
+  - component: {fileID: 2073442089}
+  - component: {fileID: 2073442088}
+  - component: {fileID: 2073442087}
+  m_Layer: 2
+  m_Name: Decoy_Gatling_Gun_Attack_Radius
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2073442086
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073442085}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 8, y: 0, z: 8}
+  m_Children: []
+  m_Father: {fileID: 1355061383790543309}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &2073442089
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073442085}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &2073442088
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073442085}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 6fb91a638867383468d01772fcecc722, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!135 &2073442087
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073442085}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1357998180549459455
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +104,7 @@ GameObject:
   - component: {fileID: 1356021233673303575}
   - component: {fileID: 1180267301160536375}
   - component: {fileID: 1159683448552114765}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Muzzle_Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4765,7 +4858,7 @@ GameObject:
   - component: {fileID: 1356067818562498561}
   - component: {fileID: 1160941787772366267}
   - component: {fileID: 1161198479651021545}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Tracer_Round
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9519,7 +9612,7 @@ GameObject:
   - component: {fileID: 1356074894254089573}
   - component: {fileID: 1344488138244515589}
   - component: {fileID: 1336848332512588161}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Mini_Gun_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9598,7 +9691,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1356036422483286849}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Rotate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9632,7 +9725,7 @@ GameObject:
   - component: {fileID: 1355906699277934605}
   - component: {fileID: 1345362489544033385}
   - component: {fileID: 1336579313927198707}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Barrels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9711,7 +9804,7 @@ GameObject:
   - component: {fileID: 1355999301715245011}
   - component: {fileID: 1344854677008676541}
   - component: {fileID: 1337001921483907071}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Turret_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9789,7 +9882,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1355061383790543309}
   - component: {fileID: -7377124579253851748}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Decoy_Gatling_Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9809,6 +9902,7 @@ Transform:
   m_Children:
   - {fileID: 1356036422483286849}
   - {fileID: 1355999301715245011}
+  - {fileID: 2073442086}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9826,6 +9920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TowerType: 1
   WarFundValue: 0
+  AttackRadiusObj: {fileID: 2073442085}
   TowerPrefab: {fileID: 0}
 --- !u!1 &1358839007411604363
 GameObject:
@@ -9838,7 +9933,7 @@ GameObject:
   - component: {fileID: 1355727302981638847}
   - component: {fileID: 1344834767200576153}
   - component: {fileID: 1336673946735186347}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Barrel_Tip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9917,7 +10012,7 @@ GameObject:
   - component: {fileID: 1355355286172675865}
   - component: {fileID: 1345384270208792501}
   - component: {fileID: 1336972196110629239}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Mini_Gun_Braces
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9994,7 +10089,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1355384315699900931}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Barrel_to_Spin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10029,7 +10124,7 @@ GameObject:
   - component: {fileID: 1355962686234680009}
   - component: {fileID: 1345436822616094703}
   - component: {fileID: 1336696410980129773}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Turret_Bottom_Of_Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10109,7 +10204,7 @@ GameObject:
   - component: {fileID: 1356042197347306513}
   - component: {fileID: 1161395318792572413}
   - component: {fileID: 1160439228121271819}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bullet_Casing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
