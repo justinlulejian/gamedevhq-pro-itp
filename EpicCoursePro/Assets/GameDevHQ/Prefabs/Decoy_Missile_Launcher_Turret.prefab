@@ -1,5 +1,98 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1182418357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1182418358}
+  - component: {fileID: 1182418361}
+  - component: {fileID: 1182418360}
+  - component: {fileID: 1182418359}
+  m_Layer: 2
+  m_Name: Decoy_Missile_Attack_Radius
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1182418358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182418357}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 15, y: 0, z: 15}
+  m_Children: []
+  m_Father: {fileID: 4372178766529644507}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &1182418361
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182418357}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1182418360
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182418357}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 6fb91a638867383468d01772fcecc722, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!135 &1182418359
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182418357}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4375250607559736901
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +104,7 @@ GameObject:
   - component: {fileID: 4372157708784720381}
   - component: {fileID: 4378962108316541019}
   - component: {fileID: 4390588850542890509}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missle_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +181,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4374017475940790807}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RotX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +215,7 @@ GameObject:
   - component: {fileID: 4372289161907223571}
   - component: {fileID: 4380347239788071005}
   - component: {fileID: 4389211843969090675}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missle_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +294,7 @@ GameObject:
   - component: {fileID: 4372295842057527333}
   - component: {fileID: 4379822047091801521}
   - component: {fileID: 4390816879319511791}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missle_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +371,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4373948540042750765}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RotY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +404,7 @@ GameObject:
   - component: {fileID: 4372217787594051191}
   - component: {fileID: 4379993689673803189}
   - component: {fileID: 4390070728652505973}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Turret_Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +483,7 @@ GameObject:
   - component: {fileID: 4372266934361808541}
   - component: {fileID: 4379968351264490099}
   - component: {fileID: 4390536986180974889}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missile_Support
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -468,7 +561,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4372413475816371193}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missile_Launcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -500,7 +593,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4372178766529644507}
   - component: {fileID: 9078260692834426835}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Decoy_Missile_Launcher_Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,6 +612,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4372413475816371193}
+  - {fileID: 1182418358}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -536,6 +630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TowerType: 2
   WarFundValue: 0
+  AttackRadiusObj: {fileID: 1182418357}
   TowerPrefab: {fileID: 0}
 --- !u!1 &4376211189244729237
 GameObject:
@@ -548,7 +643,7 @@ GameObject:
   - component: {fileID: 4373769525626090743}
   - component: {fileID: 4379088351255420397}
   - component: {fileID: 4390733205394261309}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missle_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,7 +722,7 @@ GameObject:
   - component: {fileID: 4374104613889637175}
   - component: {fileID: 4380768478839193437}
   - component: {fileID: 4388816971980680807}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -707,7 +802,7 @@ GameObject:
   - component: {fileID: 4371921973282669783}
   - component: {fileID: 4380354735724866125}
   - component: {fileID: 4389261320435126485}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missle_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -786,7 +881,7 @@ GameObject:
   - component: {fileID: 4372191756227990947}
   - component: {fileID: 4380349838637954933}
   - component: {fileID: 4389263421548724051}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missile_Launcher_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -871,7 +966,7 @@ GameObject:
   - component: {fileID: 4373759470055044935}
   - component: {fileID: 4380697194480725717}
   - component: {fileID: 4390817240714474037}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missle_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
