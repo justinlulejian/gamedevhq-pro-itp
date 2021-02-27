@@ -45,6 +45,7 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
         base.Awake();
         _cam = transform.GetComponent<Camera>();
         _cameraOriginalPosition = transform.parent.position;
+        _cam.depthTextureMode = DepthTextureMode.Depth;
         
         if (_cam == null)   
         {
@@ -69,7 +70,7 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
         Vector3 _movement = new Vector3();
         CalculateKeyboardMovement(ref _movement);
         CalculateZoomMovement(ref _movement);
-        CalculateMouseMovement(ref _movement);
+        // CalculateMouseMovement(ref _movement);
         MoveWithBounds(ref _movement);
     }
 
@@ -94,6 +95,8 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
     }
 
     // Mouse movement when cursor approaches end of screen. RTS-style.
+    // TODO: Mouse continues in direction when it goes off screen. Stop adding to position when
+    // it hits the edge (makes editor debugging harder.
     private void CalculateMouseMovement(ref Vector3 position)
     {
         if (Input.mousePosition.y > (Screen.height * (1.0f - _mouseMovementTriggerDistance)))
