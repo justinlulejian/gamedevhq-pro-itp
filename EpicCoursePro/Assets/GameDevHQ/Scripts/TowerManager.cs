@@ -112,7 +112,7 @@ public class TowerManager : MonoSingleton<TowerManager>
             towerTransform.position = towerSpotTransform.position;
             towerTransform.rotation = Quaternion.identity;
             _instantiatedPreviewTowerOnSpot = tower;
-            onTowerPreview.Invoke();
+            onTowerPreview?.Invoke();
         }
     }
 
@@ -138,7 +138,7 @@ public class TowerManager : MonoSingleton<TowerManager>
             towerSpot.PlaceTower(_instantiatedPreviewTowerOnSpot);
             _instantiatedPreviewTowerOnSpot = null;
             EnableDecoy();
-            onTowerPlaced.Invoke();
+            onTowerPlaced?.Invoke();
         }
 
         if (gM.GetWarFunds() == 0)
@@ -152,7 +152,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         if (_towerPlacementModeActivated)
         {
             _currentDecoyTower.gameObject.SetActive(true);
-            onDecoyEnabled.Invoke();
+            onDecoyEnabled?.Invoke();
         }
     }
 
@@ -166,7 +166,7 @@ public class TowerManager : MonoSingleton<TowerManager>
             dt => dt.TowerType == towerType);
         _currentDecoyTower = decoyTower;
         decoyTower.gameObject.SetActive(true);
-        onDecoyEnabled.Invoke();
+        onDecoyEnabled?.Invoke();
     }
 
     private void ResetCurrentDecoyTower()

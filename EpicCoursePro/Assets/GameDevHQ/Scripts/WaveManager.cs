@@ -121,7 +121,7 @@ public class WaveManager : MonoSingleton<WaveManager>
 
         if (_wavesToSpawn.Count < 1)
         {
-            onWavesComplete.Invoke();
+            onWavesComplete?.Invoke();
             AllWavesCompleted();
         }
         
@@ -138,7 +138,7 @@ public class WaveManager : MonoSingleton<WaveManager>
 
         if (enemiesSpawnedInWave == 0)
         {
-            onWaveFinish.Invoke();
+            onWaveFinish?.Invoke();
         }
     }
 

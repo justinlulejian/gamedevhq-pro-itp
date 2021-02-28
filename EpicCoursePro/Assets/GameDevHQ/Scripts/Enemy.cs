@@ -40,7 +40,7 @@ namespace GameDevHQ.Scripts
             {
                 _navMeshAgent = GetComponent<NavMeshAgent>();
             }
-            onSpawnStart.Invoke(this.transform, _navMeshAgent);
+            onSpawnStart?.Invoke(this.transform, _navMeshAgent);
             _navDestinationPosition = _navMeshAgent.destination;
         }
 

@@ -13,7 +13,6 @@ public class TowerSpot : MonoBehaviour
     [SerializeField] 
     private GameObject _towerPlaced;
 
-    // TODO: wrap all my .Invokes() in null checks to make sure we aren't invoking with no listeners.
     public static event Action<TowerSpot> onUserMouseEnterTowerSpot; 
     public static event Action onUserMouseExitTowerSpot; 
     public static event Action<TowerSpot> onUserMouseDownTowerSpot;
@@ -70,7 +69,7 @@ public class TowerSpot : MonoBehaviour
     {
         if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
         {
-            onUserMouseExitTowerSpot.Invoke();
+            onUserMouseExitTowerSpot?.Invoke();
             _availableParticleSystem.Play();
         }
     }

@@ -10,7 +10,7 @@ public class EnemyNavEnd : MonoBehaviour
         // TODO(improvement): Make this more dynamic.
         if (other.gameObject.CompareTag("Mech1") || other.gameObject.CompareTag("Mech2"))
         {
-            onEnemyCollision.Invoke(other.gameObject);
+            onEnemyCollision?.Invoke(other.gameObject);
         }
     }
 }
