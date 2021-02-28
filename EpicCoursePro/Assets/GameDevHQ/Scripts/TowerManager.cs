@@ -26,7 +26,6 @@ public class TowerManager : MonoSingleton<TowerManager>
     public static event Action onTowerPreview;
     public static event Action onTowerPlaced;
     public static event Action onDecoyEnabled;
-    public static event Action onDecoyDisabled;
     
     private bool _towerPlacementModeActivated;
 
@@ -49,49 +48,6 @@ public class TowerManager : MonoSingleton<TowerManager>
         TowerSpot.onUserMouseDownTowerSpot -= PlaceTower;
     }
     
-    private void ActivateTowerPlacementPreview(TowerSpot towerSpot)
-    {
-        {
-            _currentDecoyTower.gameObject.SetActive(false);
-            AbstractTower towerToPlace = _towerObjs.First(
-                t => t.TowerType == _currentDecoyTower.TowerType);
-            Transform towerSpotTransform = towerSpot.transform;
-            _instantiatedPreviewTowerOnSpot = Instantiate(
-                towerToPlace.gameObject, towerSpotTransform.position, Quaternion.identity,
-                towerSpotTransform);
-            onTowerPreview.Invoke();
-        }
-    }
-
-    private void DeactivateTowerPlacementPreview()
-    {
-        if (_towerPlacementModeActivated && _currentDecoyTower != null)
-        {
-            EnableDecoy();
-            Destroy(_instantiatedPreviewTowerOnSpot);
-        }
-    }
-    
-    private void PlaceTower(TowerSpot towerSpot)
-    {
-        AbstractTower towerToPlace = _instantiatedPreviewTowerOnSpot.GetComponent<AbstractTower>();
-        GameManager gM = GameManager.Instance;
-        if (gM.PlayerCanPurchaseItem(towerToPlace.WarFundValue))
-        {
-            gM.PurchaseItem(towerToPlace.WarFundValue);
-            towerSpot.PlaceTower(_instantiatedPreviewTowerOnSpot);
-            _instantiatedPreviewTowerOnSpot = null;
-            EnableDecoy();
-            onTowerPlaced.Invoke();
-        }
-    }
-
-    private void EnableDecoy()
-    {
-        _currentDecoyTower.gameObject.SetActive(true);
-        onDecoyEnabled.Invoke();
-    }
-
     protected override void Awake()
     {
         base.Awake();
@@ -134,31 +90,63 @@ public class TowerManager : MonoSingleton<TowerManager>
             }
         }
     }
-
+    
     private void Update()
     {
-        if (Input.GetMouseButtonDown((int)MouseButton.RightMouse))
+        if (_towerPlacementModeActivated && Input.GetMouseButtonDown((int)MouseButton.RightMouse))
         {
-            DeactivateTowerPlacementPreview();
-            ResetCurrentDecoyTower();
-            _towerPlacementModeActivated = false;
-            onTowerPlacementModeStatusChange.Invoke(false);
+            DeactivateTowerPlacementMode();
         }
-        // TODO: Switching between tower placement types requires mouse to move out of spot and
-        // return before it'll display preview.
-        if (Input.GetKeyDown(KeyCode.T))
+    }
+    
+    private void ActivateTowerPlacementPreview(TowerSpot towerSpot)
+    {
         {
-            _towerPlacementModeActivated = true;
-            DeactivateTowerPlacementPreview();
-            onTowerPlacementModeStatusChange.Invoke(true);
-            SetCurrentDecoyTower(1);
+            _currentDecoyTower.gameObject.SetActive(false);
+            AbstractTower towerToPlace = _towerObjs.First(
+                t => t.TowerType == _currentDecoyTower.TowerType);
+            Transform towerSpotTransform = towerSpot.transform;
+            _instantiatedPreviewTowerOnSpot = Instantiate(
+                towerToPlace.gameObject, towerSpotTransform.position, Quaternion.identity,
+                towerSpotTransform);
+            onTowerPreview.Invoke();
         }
-        if (Input.GetKeyDown(KeyCode.R))
+    }
+
+    private void DeactivateTowerPlacementPreview()
+    {
+        if (_towerPlacementModeActivated && _currentDecoyTower != null)
         {
-            _towerPlacementModeActivated = true;
-            DeactivateTowerPlacementPreview();
-            onTowerPlacementModeStatusChange.Invoke(true);
-            SetCurrentDecoyTower(2);
+            EnableDecoy();
+            Destroy(_instantiatedPreviewTowerOnSpot);
+        }
+    }
+    
+    private void PlaceTower(TowerSpot towerSpot)
+    {
+        AbstractTower towerToPlace = _instantiatedPreviewTowerOnSpot.GetComponent<AbstractTower>();
+        GameManager gM = GameManager.Instance;
+        if (gM.PlayerCanPurchaseItem(towerToPlace.WarFundValue))
+        {
+            gM.PurchaseItem(towerToPlace.WarFundValue);
+            towerSpot.PlaceTower(_instantiatedPreviewTowerOnSpot);
+            _instantiatedPreviewTowerOnSpot = null;
+            EnableDecoy();
+            onTowerPlaced.Invoke();
+        }
+
+        if (gM.GetWarFunds() == 0)
+        {
+            DeactivateTowerPlacementMode();
+        }
+    }
+
+    private void EnableDecoy()
+    {
+        if (_towerPlacementModeActivated)
+        {
+            _currentDecoyTower.gameObject.SetActive(true);
+            onDecoyEnabled.Invoke();
         }
     }
 
@@ -182,6 +170,24 @@ public class TowerManager : MonoSingleton<TowerManager>
             _currentDecoyTower.gameObject.SetActive(false);
             _currentDecoyTower = null;
         }
+    }
+    
+    public void StartTowerPlacementModeOfType(int towerType)
+    {
+        // TODO: Switching between tower placement types requires mouse to move out of spot and
+        // return before it'll display preview.
+        _towerPlacementModeActivated = true;
+        DeactivateTowerPlacementPreview();
+        onTowerPlacementModeStatusChange.Invoke(true);
+        SetCurrentDecoyTower(towerType);
+    }
+
+    private void DeactivateTowerPlacementMode()
+    {
+        DeactivateTowerPlacementPreview();
+        ResetCurrentDecoyTower();
+        _towerPlacementModeActivated = false;
+        onTowerPlacementModeStatusChange.Invoke(false);
     }
     
 }

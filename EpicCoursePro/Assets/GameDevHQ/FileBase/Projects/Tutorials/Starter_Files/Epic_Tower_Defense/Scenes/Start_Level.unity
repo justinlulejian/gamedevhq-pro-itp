@@ -1059,6 +1059,8 @@ GameObject:
   - component: {fileID: 150529099}
   - component: {fileID: 150529101}
   - component: {fileID: 150529100}
+  - component: {fileID: 150529102}
+  - component: {fileID: 150529103}
   m_Layer: 5
   m_Name: Gatling
   m_TagString: Untagged
@@ -1123,6 +1125,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150529098}
   m_CullTransparentMesh: 0
+--- !u!114 &150529102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150529098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 150529100}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2135656936}
+        m_MethodName: StartTowerPlacementModeOfType
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &150529103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150529098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67a56ea230c80fb45b6a25056aab6e85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _towerPrefab: {fileID: 2363984451845793099, guid: 1c0f8e288365b1043a83ccf4fad55b71,
+    type: 3}
+  _priceText: {fileID: 1969830997}
 --- !u!1 &153817126
 GameObject:
   m_ObjectHideFlags: 0
@@ -11641,6 +11712,7 @@ GameObject:
   - component: {fileID: 350660923}
   - component: {fileID: 350660925}
   - component: {fileID: 350660924}
+  - component: {fileID: 350660926}
   m_Layer: 5
   m_Name: War_Funds
   m_TagString: Untagged
@@ -11709,6 +11781,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350660922}
   m_CullTransparentMesh: 0
+--- !u!114 &350660926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350660922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a55558fa69019fb438dfb5816ab0f1ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _warFundsText: {fileID: 2109062355}
 --- !u!1 &365295938
 GameObject:
   m_ObjectHideFlags: 0
@@ -13004,7 +13089,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &592720669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23930,7 +24015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &909662580
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24834,7 +24919,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: $500
+  m_Text: $200
 --- !u!222 &1054502605
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -31272,7 +31357,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1353408164
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31787,6 +31872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerWarFunds: 500
+  _playerMaximumWarFunds: 100000
 --- !u!4 &1387163928
 Transform:
   m_ObjectHideFlags: 0
@@ -32220,6 +32306,8 @@ GameObject:
   - component: {fileID: 1416097949}
   - component: {fileID: 1416097951}
   - component: {fileID: 1416097950}
+  - component: {fileID: 1416097952}
+  - component: {fileID: 1416097953}
   m_Layer: 5
   m_Name: Missile
   m_TagString: Untagged
@@ -32284,6 +32372,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1416097948}
   m_CullTransparentMesh: 0
+--- !u!114 &1416097952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416097948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1416097950}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2135656936}
+        m_MethodName: StartTowerPlacementModeOfType
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1416097953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416097948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67a56ea230c80fb45b6a25056aab6e85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _towerPrefab: {fileID: 1589799907309799649, guid: 87f6de024d1535e4287acb0fb289aa50,
+    type: 3}
+  _priceText: {fileID: 1054502604}
 --- !u!1001 &1429168616
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32366,7 +32523,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1432688603
 RectTransform:
   m_ObjectHideFlags: 0
@@ -59893,7 +60050,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: $200
+  m_Text: $100
 --- !u!222 &1969830998
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -74612,7 +74769,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2105959596
 RectTransform:
   m_ObjectHideFlags: 0
@@ -74824,7 +74981,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 350
+  m_Text: 0
 --- !u!222 &2109062356
 CanvasRenderer:
   m_ObjectHideFlags: 0
