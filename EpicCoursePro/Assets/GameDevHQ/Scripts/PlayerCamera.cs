@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.Rendering;
+﻿using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class PlayerCamera : MonoSingleton<PlayerCamera>
@@ -22,16 +19,25 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
     [Tooltip("% away from the edge of the screen where mouse movement will trigger.")]
     private float _mouseMovementTriggerDistance = .05f;
 
+    // Movement 
     // These were established with what visually made sense to prevent looking beyond the map.
     // TODO(improvement): Try to create a dynamic bounds that can be set in inspector.
-    private float _cameraXPosMin = -65;
-    private float _cameraXPosMax = -40;
-    private float _cameraYPosMin = 5f;
-    private float _cameraYPosMax = 29f;
-    private float _cameraZPosMin = -2.3f;
-    private float _cameraZPosMax = 7f;
-    private float _cameraFovMin = 8f;
-    private float _cameraFovMax = 35f;
+    private const float CameraXPosMin = -65;
+    private const float CameraXPosMax = -40;
+    private const float CameraYPosMin = 5f;
+    private const float CameraYPosMax = 29f;
+    private const float CameraZPosMin = -2.3f;
+    private const float CameraZPosMax = 7f;
+    private const float CameraFovMin = 8f;
+    private const float CameraFovMax = 35f;
+    // Mouse camera movement.
+    private int _mouseCamMovementForwardTrigger;
+    private int _mouseCamMovementBackwardTrigger;
+    private int _mouseCamMovementLeftTrigger;
+    private int _mouseCamMovementRightTrigger;
+    private Vector3 _moveForward = Vector3.forward + Vector3.up;
+    private Vector3 _moveBackward = Vector3.back + Vector3.down;
+    
     
     private Vector3 _cameraOriginalPosition;
 
@@ -46,6 +52,15 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
         _cam = transform.GetComponent<Camera>();
         _cameraOriginalPosition = transform.parent.position;
         _cam.depthTextureMode = DepthTextureMode.Depth;
+
+        _mouseCamMovementForwardTrigger = Mathf.RoundToInt(
+            Screen.height * (1.0f - _mouseMovementTriggerDistance));
+        _mouseCamMovementBackwardTrigger = Mathf.RoundToInt(
+            Screen.height * _mouseMovementTriggerDistance);
+        _mouseCamMovementRightTrigger = Mathf.RoundToInt(
+            Screen.width * (1.0f - _mouseMovementTriggerDistance));
+        _mouseCamMovementLeftTrigger = Mathf.RoundToInt(
+            Screen.width * _mouseMovementTriggerDistance);
         
         if (_cam == null)   
         {
@@ -70,7 +85,7 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
         Vector3 _movement = new Vector3();
         CalculateKeyboardMovement(ref _movement);
         CalculateZoomMovement(ref _movement);
-        // CalculateMouseMovement(ref _movement);
+        CalculateMouseMovement(ref _movement);
         MoveWithBounds(ref _movement);
     }
 
@@ -80,7 +95,7 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
         float zoomForwardBackwardMovement = (Input.GetAxis("Mouse ScrollWheel") * _zoomSpeed *
                                              Time.deltaTime);
         _cam.fieldOfView =  Mathf.Clamp(
-            _cam.fieldOfView - zoomForwardBackwardMovement, _cameraFovMin, _cameraFovMax);
+            _cam.fieldOfView - zoomForwardBackwardMovement, CameraFovMin, CameraFovMax);
     }
 
     private void CalculateKeyboardMovement(ref Vector3 position)
@@ -95,41 +110,50 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
     }
 
     // Mouse movement when cursor approaches end of screen. RTS-style.
-    // TODO: Mouse continues in direction when it goes off screen. Stop adding to position when
-    // it hits the edge (makes editor debugging harder.
     private void CalculateMouseMovement(ref Vector3 position)
     {
-        if (Input.mousePosition.y > (Screen.height * (1.0f - _mouseMovementTriggerDistance)))
+        if (CheckFloatInIntRange(
+            Input.mousePosition.y, _mouseCamMovementForwardTrigger, Screen.height))
         {
-            position += ((Vector3.forward + Vector3.up) * (Time.deltaTime * _mouseMovementSpeed));
+            position += (_moveForward * (Time.deltaTime * _mouseMovementSpeed));
         }
-        if (Input.mousePosition.y < (1.0f - _mouseMovementTriggerDistance))
+        if (CheckFloatInIntRange(
+            Input.mousePosition.y, 0, _mouseCamMovementBackwardTrigger))
         {
-            position += ((Vector3.back + Vector3.down) * (Time.deltaTime * _mouseMovementSpeed));
+            position += (_moveBackward * (Time.deltaTime * _mouseMovementSpeed));
         }
-        if (Input.mousePosition.x > (Screen.width * (1.0f - _mouseMovementTriggerDistance)))
+        if (CheckFloatInIntRange(
+            Input.mousePosition.x, _mouseCamMovementRightTrigger, Screen.width))
         {
             position += (Vector3.right * (Time.deltaTime * _mouseMovementSpeed));
         }
-        if (Input.mousePosition.x < (1.0f - _mouseMovementTriggerDistance))
+        if (CheckFloatInIntRange(
+            Input.mousePosition.x, 0, _mouseCamMovementLeftTrigger))
         {
             position += (Vector3.left * (Time.deltaTime * _mouseMovementSpeed));
         }
+    }
+
+    // Check rounded float value to int is in range [min, max) (excludes max).
+    private bool CheckFloatInIntRange(float value, int min, int max)
+    {
+        int intValue = Mathf.RoundToInt(value);
+        return intValue >= min && intValue < max;
     }
     
     private bool IsMovePositionOutOfBounds(ref Vector3 movePosition)
     {
         Vector3 currentPosition = transform.position;
         Vector3 newPosition = currentPosition + movePosition;
-        if (newPosition.x < _cameraXPosMin || newPosition.x > _cameraXPosMax)
+        if (newPosition.x < CameraXPosMin || newPosition.x > CameraXPosMax)
         {
             return true;
         }
-        if (newPosition.y < _cameraYPosMin || newPosition.y > _cameraYPosMax)
+        if (newPosition.y < CameraYPosMin || newPosition.y > CameraYPosMax)
         {
             return true;
         }
-        if (newPosition.z < _cameraZPosMin || newPosition.z > _cameraZPosMax)
+        if (newPosition.z < CameraZPosMin || newPosition.z > CameraZPosMax)
         {
             return true;
         }
@@ -142,9 +166,9 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
         if (IsMovePositionOutOfBounds(ref movePosition))
         {
             Vector3 currentPosition = transform.position;
-            currentPosition.x = Mathf.Clamp(currentPosition.x, _cameraXPosMin, _cameraXPosMax);
-            currentPosition.y = Mathf.Clamp(currentPosition.y, _cameraYPosMin, _cameraYPosMax);
-            currentPosition.z = Mathf.Clamp(currentPosition.z, _cameraZPosMin, _cameraZPosMax);
+            currentPosition.x = Mathf.Clamp(currentPosition.x, CameraXPosMin, CameraXPosMax);
+            currentPosition.y = Mathf.Clamp(currentPosition.y, CameraYPosMin, CameraYPosMax);
+            currentPosition.z = Mathf.Clamp(currentPosition.z, CameraZPosMin, CameraZPosMax);
             transform.position = currentPosition;
         }
     }
