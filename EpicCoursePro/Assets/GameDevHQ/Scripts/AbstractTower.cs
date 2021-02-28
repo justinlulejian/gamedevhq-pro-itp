@@ -9,6 +9,5 @@ namespace GameDevHQ.Scripts
         public int WarFundValue;
         public GameObject AttackRadiusObj;
         protected MeshRenderer _attackRadiusMeshRenderer;
-        public GameObject TowerPrefab;
     }
 }

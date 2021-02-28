@@ -106,9 +106,12 @@ public class TowerManager : MonoSingleton<TowerManager>
             AbstractTower towerToPlace = _towerObjs.First(
                 t => t.TowerType == _currentDecoyTower.TowerType);
             Transform towerSpotTransform = towerSpot.transform;
-            _instantiatedPreviewTowerOnSpot = Instantiate(
-                towerToPlace.gameObject, towerSpotTransform.position, Quaternion.identity,
-                towerSpotTransform);
+            GameObject tower = PoolManager.Instance.RequestObjOfType(towerToPlace.gameObject);
+            tower.SetActive(true);
+            Transform towerTransform = tower.transform;
+            towerTransform.position = towerSpotTransform.position;
+            towerTransform.rotation = Quaternion.identity;
+            _instantiatedPreviewTowerOnSpot = tower;
             onTowerPreview.Invoke();
         }
     }
@@ -118,7 +121,10 @@ public class TowerManager : MonoSingleton<TowerManager>
         if (_towerPlacementModeActivated && _currentDecoyTower != null)
         {
             EnableDecoy();
-            Destroy(_instantiatedPreviewTowerOnSpot);
+            if (_instantiatedPreviewTowerOnSpot != null)
+            {
+                PoolManager.Instance.RecyclePooledObj(_instantiatedPreviewTowerOnSpot);
+            }
         }
     }
     
