@@ -97,7 +97,7 @@ public class WaveManager : MonoSingleton<WaveManager>
     
     private void SpawnEnemy(GameObject enemyType)
     {
-        GameObject enemy = PoolManager.Instance.RequestEnemyType(enemyType);
+        GameObject enemy = PoolManager.Instance.RequestObjOfType(enemyType);
         enemy.SetActive(true);
         _lastEnemySpawnedInWave = enemy.GetComponent<Enemy>();
         enemiesSpawnedInWave++;
@@ -133,7 +133,7 @@ public class WaveManager : MonoSingleton<WaveManager>
     
     private void DespawnEnemy(GameObject enemy)
     {
-        PoolManager.Instance.RecycleEnemy(enemy);
+        PoolManager.Instance.RecyclePooledObj(enemy);
         enemiesSpawnedInWave--;
 
         if (enemiesSpawnedInWave == 0)
