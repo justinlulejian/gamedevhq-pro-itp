@@ -20,13 +20,13 @@ namespace GameDevHQ.Scripts
         private void SubtractWarFunds(int funds)
         {
             _playerWarFunds = Mathf.Clamp(_playerWarFunds - funds, 0, _playerMaximumWarFunds);
-            onWarFundsChange.Invoke(_playerWarFunds);
+            onWarFundsChange?.Invoke(_playerWarFunds);
         }
 
         public void AddWarFunds(int funds)
         {
             _playerWarFunds += funds;
-            onWarFundsChange.Invoke(_playerWarFunds);
+            onWarFundsChange?.Invoke(_playerWarFunds);
         }
 
         public bool PlayerCanPurchaseItem(int purchaseCost)
