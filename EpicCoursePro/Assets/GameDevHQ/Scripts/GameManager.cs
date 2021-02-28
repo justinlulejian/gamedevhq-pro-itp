@@ -1,29 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-public class GameManager : MonoSingleton<GameManager>
+namespace GameDevHQ.Scripts
 {
-    [SerializeField]
-    private int _playerWarFunds = 500;
-
-    private void SubtractWarFunds(int funds)
+    public class GameManager : MonoSingleton<GameManager>
     {
-        _playerWarFunds = Mathf.Clamp(_playerWarFunds - funds, 0, _playerWarFunds * 9999);
-    }
+        [SerializeField]
+        private int _playerWarFunds = 500;
+        [SerializeField] 
+        private int _playerMaximumWarFunds = 100000;
+    
+        public static event Action<int> onWarFundsChange;
+    
+        public int GetWarFunds()
+        {
+            return _playerWarFunds;
+        }
 
-    public void AddWarFunds(int funds)
-    {
-        _playerWarFunds += funds;
-    }
+        private void SubtractWarFunds(int funds)
+        {
+            _playerWarFunds = Mathf.Clamp(_playerWarFunds - funds, 0, _playerMaximumWarFunds);
+            onWarFundsChange.Invoke(_playerWarFunds);
+        }
 
-    public bool PlayerCanPurchaseItem(int purchaseCost)
-    {
-        return _playerWarFunds >= purchaseCost;
-    }
+        public void AddWarFunds(int funds)
+        {
+            _playerWarFunds += funds;
+            onWarFundsChange.Invoke(_playerWarFunds);
+        }
 
-    public void PurchaseItem(int purchaseCost)
-    {
-        SubtractWarFunds(purchaseCost); 
+        public bool PlayerCanPurchaseItem(int purchaseCost)
+        {
+            return _playerWarFunds >= purchaseCost;
+        }
+
+        public void PurchaseItem(int purchaseCost)
+        {
+            SubtractWarFunds(purchaseCost); 
+        }
     }
 }
