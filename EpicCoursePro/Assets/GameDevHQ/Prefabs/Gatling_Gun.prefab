@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 386667133}
   - component: {fileID: 386667132}
   - component: {fileID: 386667131}
+  - component: {fileID: 4580180374136799279}
   m_Layer: 2
   m_Name: Gatling_Gun_Attack_Radius
   m_TagString: Untagged
@@ -93,6 +94,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4580180374136799279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386667129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b310a30367240f041afb183f454a93b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _towerObj: {fileID: 2363984451845793099}
 --- !u!1 &2362233061396759439
 GameObject:
   m_ObjectHideFlags: 0
@@ -14677,7 +14691,7 @@ MonoBehaviour:
   TowerType: 1
   WarFundValue: 100
   AttackRadiusObj: {fileID: 386667129}
-  TowerPrefab: {fileID: 0}
+  _attackRadius: {fileID: 0}
   Muzzle_Flash: {fileID: 2363646036695275949}
   bulletCasings: {fileID: 2453288935817963951}
   fireSound: {fileID: 8300000, guid: 08e0cb88300e54b09aa0deb684c3a3de, type: 3}

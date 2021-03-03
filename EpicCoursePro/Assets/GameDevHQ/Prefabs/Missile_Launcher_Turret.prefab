@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 368257729}
   - component: {fileID: 368257728}
   - component: {fileID: 368257727}
+  - component: {fileID: 4386054838355193253}
   m_Layer: 2
   m_Name: Missile_Attack_Radius
   m_TagString: Untagged
@@ -93,6 +94,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4386054838355193253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368257725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b310a30367240f041afb183f454a93b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _towerObj: {fileID: 1589799907309799649}
 --- !u!1 &1589777141480426895
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +314,7 @@ MonoBehaviour:
   TowerType: 2
   WarFundValue: 200
   AttackRadiusObj: {fileID: 368257725}
-  TowerPrefab: {fileID: 0}
+  _attackRadius: {fileID: 0}
   _missilePrefab: {fileID: 1408549652012730, guid: 6f244204e60f45647b263f4edda01147,
     type: 3}
   _misslePositions:

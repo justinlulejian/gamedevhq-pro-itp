@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Wave2
   m_EditorClassIdentifier: 
   amountToSpawn: 20
-  enemyTypesToSpawn:
+  enemyTypesToSpawn: []
+  fixedSpawnSequence:
   - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
   - {fileID: 1079767520691416, guid: fed6fd85e4a83418485118c22ed9f184, type: 3}
-  fixedSpawnSequence: []
-  randomSpawnOn: 1
+  - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
+  randomSpawnOn: 0
   timeBeforeStart: 1

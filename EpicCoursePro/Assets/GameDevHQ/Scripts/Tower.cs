@@ -3,51 +3,30 @@ using UnityEngine;
 
 namespace GameDevHQ.Scripts
 {
-    public class Tower : AbstractTower
+    public abstract class Tower : AbstractTower
     {
-        
-        protected virtual void OnEnable()
-        {
-            TowerManager.onTowerPreview += TurnOnAttackRadius;
-            TowerManager.onTowerPlaced += TurnOffAttackRadius;
-            TowerManager.onTowerPlacementModeStatusChange += ChangeAttachRadiusVisible;
-        }
+        private AttackRadius _attackRadius;
+        public bool IsPlaced { get; set; }
 
-        protected virtual void OnDisable()
+        protected override void Awake()
         {
-            TowerManager.onTowerPreview -= TurnOnAttackRadius;
-            TowerManager.onTowerPlaced -= TurnOffAttackRadius;
-            TowerManager.onTowerPlacementModeStatusChange -= ChangeAttachRadiusVisible;
-        }
-        
-        protected void Awake()
-        {
-            if (AttackRadiusObj == null)
+            base.Awake();
+            
+            _attackRadius = AttackRadiusObj.GetComponent<AttackRadius>();
+            
+            if (_attackRadius == null)
             {
                 Debug.LogError($"Attack radius was null on tower {this.name}.");
             }
-            
-            _attackRadiusMeshRenderer = AttackRadiusObj.GetComponent<MeshRenderer>();
-            
-            if (_attackRadiusMeshRenderer == null)
-            {
-                Debug.LogError($"Attack radius mesh renderer was null on tower {this.name}.");
-            }
         }
 
-        protected void TurnOnAttackRadius()
+        // How the tower will react to enemies within it's attack radius.
+        public abstract void EnemyInAttackRadius(Enemy enemy);
+
+        public void EnableAttackRadiusCollider()
         {
-            _attackRadiusMeshRenderer.enabled = true;
+            _attackRadius.EnableCollider();
         }
         
-        protected void TurnOffAttackRadius()
-        {
-            _attackRadiusMeshRenderer.enabled = false;
-        }
-        
-        protected void ChangeAttachRadiusVisible(bool visible)
-        {
-            _attackRadiusMeshRenderer.enabled = visible;
-        }
     }
 }

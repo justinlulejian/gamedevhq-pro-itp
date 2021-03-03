@@ -8,7 +8,7 @@ public class EnemyNavEnd : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // TODO(improvement): Make this more dynamic.
-        if (other.gameObject.CompareTag("Mech1") || other.gameObject.CompareTag("Mech2"))
+        if (other.gameObject.CompareTag("Enemy"))
         {
             onEnemyCollision?.Invoke(other.gameObject);
         }
