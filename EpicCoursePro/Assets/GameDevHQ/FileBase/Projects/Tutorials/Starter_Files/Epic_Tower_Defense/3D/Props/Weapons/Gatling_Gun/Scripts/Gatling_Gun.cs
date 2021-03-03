@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using GameDevHQ.Scripts;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 
@@ -35,7 +36,7 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         {
             _gunBarrel = GameObject.Find("Barrel_to_Spin").GetComponent<Transform>(); //assigning the transform of the gun barrel to the variable
             Muzzle_Flash.SetActive(false); //setting the initial state of the muzzle flash effect to off
-            _audioSource = GetComponent<AudioSource>(); //ssign the Audio Source to the reference variable
+            _audioSource = GetComponent<AudioSource>(); // assign the Audio Source to the reference variable
             _audioSource.playOnAwake = false; //disabling play on awake
             _audioSource.loop = true; //making sure our sound effect loops
             _audioSource.clip = fireSound; //assign the clip to play
@@ -64,11 +65,18 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             //     _startWeaponNoise = true; //set the start weapon noise value to true
             // }
         }
+        
+        public override void EnemyInAttackRadius(Enemy enemy)
+        {
+            if (!IsPlaced) return;
+            Debug.Log($"Tower {name} is attacking enemy: {enemy.name}.");
+        }
 
         // Method to rotate gun barrel 
         void RotateBarrel() 
         {
-            _gunBarrel.transform.Rotate(Vector3.forward * Time.deltaTime * -500.0f); //rotate the gun barrel along the "forward" (z) axis at 500 meters per second
+            //rotate the gun barrel along the "forward" (z) axis at 500 meters per second
+            _gunBarrel.transform.Rotate(Vector3.forward * Time.deltaTime * -500.0f);
 
         }
     }

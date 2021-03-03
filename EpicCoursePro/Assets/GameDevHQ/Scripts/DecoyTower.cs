@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace GameDevHQ.Scripts
+﻿namespace GameDevHQ.Scripts
 {
-    public class DecoyTower : Tower
+    public class DecoyTower : AbstractTower
     {
-        // TODO: Set Decoy's to default to transparent shaders.
-
         protected override void OnEnable()
         {
             TowerManager.onDecoyEnabled += TurnOnAttackRadius;

@@ -26,15 +26,24 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         private float _destroyTime = 10.0f; //how long till the rockets get cleaned up
         private bool _launched; //bool to check if we launched the rockets
 
+        
+        
+        
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && _launched == false) //check for space key and if we launched the rockets
-            {
-                _launched = true; //set the launch bool to true
-                StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets. 
-            }
+            // if (Input.GetKeyDown(KeyCode.Space) && _launched == false) //check for space key and if we launched the rockets
+            // {
+            //     _launched = true; //set the launch bool to true
+            //     StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets. 
+            // }
         }
-
+        
+        public override void EnemyInAttackRadius(Enemy enemy)
+        {
+            if (!IsPlaced) return;
+            Debug.Log($"Tower {name} is attacking enemy: {enemy.name}.");
+        }
+        
         IEnumerator FireRocketsRoutine()
         {
             for (int i = 0; i < _misslePositions.Length; i++) //for loop to iterate through each missle position

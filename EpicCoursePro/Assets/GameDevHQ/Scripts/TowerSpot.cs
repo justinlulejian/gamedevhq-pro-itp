@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography;
 using GameDevHQ.Scripts;
 using UnityEngine;
 
@@ -85,7 +84,17 @@ public class TowerSpot : MonoBehaviour
     
     public void PlaceTower(GameObject towerToPlace)
     {
+        Tower tower = towerToPlace.GetComponent<Tower>();
+        if (tower == null)
+        {
+            Debug.LogError($"Tower {towerToPlace.name} has been placed in tower spot" +
+                           $" {name}, but the tower does not have a behavior script. Tower will" +
+                           $"not be placed.");
+            return;
+        }
         _towerPlaced = towerToPlace;
+        tower.IsPlaced = true;
+        tower.EnableAttackRadiusCollider();
         IsAvailableForPlacement = false;
     }
 }

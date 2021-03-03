@@ -83,10 +83,17 @@ namespace GameDevHQ.Scripts
         }
 
         // Provides one inactivated enemy from the pool of the type that was specified.
-        public GameObject RequestEnemyType(GameObject enemyType)
+        private GameObject RequestEnemyType(GameObject enemyType)
         {
+            Enemy requestedEnemy = enemyType.GetComponent<Enemy>();
+            if (requestedEnemy == null)
+            {
+                Debug.LogError($"Enemy {name} does not have a Enemy script attached.");
+            }
             var inactiveEnemyOfType = _enemyPool.FirstOrDefault(
-                e => e.CompareTag(enemyType.tag) && !e.activeInHierarchy);
+                e => 
+                    e.GetComponent<Enemy>().EnemyType == requestedEnemy.EnemyType &&
+                    !e.activeInHierarchy);
             if (inactiveEnemyOfType != null)
             {
                 return inactiveEnemyOfType;
@@ -95,8 +102,8 @@ namespace GameDevHQ.Scripts
             GeneratePooledObjects(1, enemyType, _enemyPool, _enemyContainer.transform);
             return RequestEnemyType(enemyType);
         }
-        
-        public GameObject RequestTowerType(GameObject towerType)
+
+        private GameObject RequestTowerType(GameObject towerType)
         {
             var inactiveTowerOfType = _towerPool.FirstOrDefault(
                 t => 

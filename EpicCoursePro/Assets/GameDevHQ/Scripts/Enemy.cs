@@ -6,7 +6,11 @@ namespace GameDevHQ.Scripts
 {
     public class Enemy : MonoBehaviour
     {
-        [field: Header("Navigation and speed components")]
+        [Header("Generic Enemy Settings")]
+        [Tooltip("The unique ID of the enemy, must something other than 0 (zero).")]
+        public int EnemyType;
+
+        [field: Header("Navigation and Speed Components")]
         [field: SerializeField]
         [field: Tooltip("The end destination Vector3 the enemy will attempt to navigate to.")]
         private Vector3 _navDestinationPosition;
@@ -20,14 +24,28 @@ namespace GameDevHQ.Scripts
         [SerializeField] 
         [Header("Health Settings")]
         private int health = 100;
+        public bool IsDead => health == 0;
+        
 
         [Header("Currency Settings")]
         [SerializeField] 
         [Tooltip("The currency value provided when the enemy is killed by player.")]
-        private int warFundValue = 100;
+        public int WarFundValue = 100;
+
+        
 
         // When an enemy is enabled it will invoke this event.
         public static event Action<Transform, NavMeshAgent> onSpawnStart;
+        public static event Action<Enemy> onEnemyKilledByPlayer;
+
+        private void Awake()
+        {
+            if (EnemyType == 0)
+            {
+                Debug.LogError("Enemy does not have a type, assign a type for proper usage" +
+                               " in-game.");
+            }
+        }
 
         public float GetSpeed()
         {
@@ -53,19 +71,14 @@ namespace GameDevHQ.Scripts
             _navMeshAgent.speed = _navigationSpeed;
         }
         
-        public void Damage(int damageValue)
+        public void PlayerDamageEnemy(int damageValue)
         {
             Mathf.Min(0, health -= damageValue);
 
-            if (health <= 0)
+            if (health == 0)
             {
-                Kill();
+                onEnemyKilledByPlayer?.Invoke(this);
             }
-        }
-        
-        private void Kill()
-        {
-            Destroy(this.gameObject);
         }
     }
 }
