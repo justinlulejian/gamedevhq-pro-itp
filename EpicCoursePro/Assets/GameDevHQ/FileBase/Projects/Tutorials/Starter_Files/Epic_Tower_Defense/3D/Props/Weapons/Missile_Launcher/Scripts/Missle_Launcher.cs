@@ -27,27 +27,17 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         private bool _launched; //bool to check if we launched the rockets
 
         
-        
-        
-        private void Update()
-        {
-            // if (Input.GetKeyDown(KeyCode.Space) && _launched == false) //check for space key and if we launched the rockets
-            // {
-            //     _launched = true; //set the launch bool to true
-            //     StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets. 
-            // }
-        }
-        
-        // public override void EnemyInAttackRadius(Enemy enemy)
-        // {
-        //     if (!IsPlaced) return;
-        //     Debug.Log($"Tower {name} is attacking enemy: {enemy.name}.");
-        // }
-        
         IEnumerator FireRocketsRoutine()
         {
+            // TODO: When we detect collisions, should this be more dynamic so we're more certain
+            // the rocket will collide? Otherwise it'll always miss sometimes (if rot is large).
+            // This also has the problem where a rocket will fire late after enemy exits and rocket
+            // will fire later.
+            // Wait a moment for the turret to get some rotation towards target before firing.
+            yield return new WaitForSeconds(.5f);
             for (int i = 0; i < _misslePositions.Length; i++) //for loop to iterate through each missle position
             {
+                // TODO: Pool rockets
                 GameObject rocket = Instantiate(_missilePrefab) as GameObject; //instantiate a rocket
 
                 rocket.transform.parent = _misslePositions[i].transform; //set the rockets parent to the missle launch position 
@@ -69,6 +59,25 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             }
 
             _launched = false; //set launch bool to false
+        }
+
+        private void AnimateFiring()
+        {
+            if (_launched || !_targetingEnemy) return;
+            _launched = true; //set the launch bool to true
+            StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets.
+        }
+        
+
+        protected override void FireAtEnemy(Enemy enemy)
+        {
+            AnimateFiring();
+            _firingAtEnemy = true;
+        }
+
+        protected override void ResetFiringState()
+        {
+            _firingAtEnemy = false;
         }
     }
 }

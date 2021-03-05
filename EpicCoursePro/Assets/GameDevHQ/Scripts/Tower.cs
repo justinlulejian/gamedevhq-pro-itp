@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace GameDevHQ.Scripts
 {
@@ -9,7 +11,8 @@ namespace GameDevHQ.Scripts
     {
         [Header("Target Settings")]
         private AttackRadius _attackRadius;
-        private bool _targetingEnemy;
+        protected bool _targetingEnemy;
+        protected bool _firingAtEnemy;
         public bool IsPlaced { get; set; }
         [Header("Rotation Settings")]
         [SerializeField] 
@@ -41,14 +44,14 @@ namespace GameDevHQ.Scripts
         private void RotateTowardsTarget(Enemy enemy)
         {
             // TODO: Clamp the rotation so it doesn't rotate too oddly depending on where enemy is.
-            Vector3 direction = enemy.transform.position - _rotationTransform.position;
+            Vector3 direction = enemy.WeaponTargetTransform.position - _rotationTransform.position;
             Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
             _rotationTransform.rotation =
                 Quaternion.Slerp(_rotationTransform.rotation, lookRotation,
                     _rotationSpeed * Time.deltaTime);
         }
         
-        // Resets the rotation while, but will stop if a new enemy is being targeted.
+        // Resets the rotation while no targets, but will stop if a new enemy is being targeted.
         private IEnumerator ResetRotation()
         {
             while (!_targetingEnemy)
@@ -60,11 +63,8 @@ namespace GameDevHQ.Scripts
             }
         }
 
-        private void FireAtEnemy(Enemy enemy)
-        {
-            // TODO
-            return;
-        }
+        protected abstract void FireAtEnemy(Enemy enemy);
+        protected abstract void ResetFiringState();
 
         // How the tower will react to enemies within it's attack radius.
         public void EnemyInAttackRadius(Enemy enemy)
@@ -80,6 +80,7 @@ namespace GameDevHQ.Scripts
             if (!IsPlaced) return;
             _targetingEnemy = false;
             StartCoroutine(ResetRotation());
+            ResetFiringState();
         }
 
         public void EnableAttackRadiusCollider()
