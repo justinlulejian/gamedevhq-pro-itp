@@ -66,11 +66,7 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             // }
         }
         
-        public override void EnemyInAttackRadius(Enemy enemy)
-        {
-            if (!IsPlaced) return;
-            Debug.Log($"Tower {name} is attacking enemy: {enemy.name}.");
-        }
+        
 
         // Method to rotate gun barrel 
         void RotateBarrel() 

@@ -38,11 +38,11 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             // }
         }
         
-        public override void EnemyInAttackRadius(Enemy enemy)
-        {
-            if (!IsPlaced) return;
-            Debug.Log($"Tower {name} is attacking enemy: {enemy.name}.");
-        }
+        // public override void EnemyInAttackRadius(Enemy enemy)
+        // {
+        //     if (!IsPlaced) return;
+        //     Debug.Log($"Tower {name} is attacking enemy: {enemy.name}.");
+        // }
         
         IEnumerator FireRocketsRoutine()
         {

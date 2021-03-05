@@ -14691,7 +14691,7 @@ MonoBehaviour:
   TowerType: 1
   WarFundValue: 100
   AttackRadiusObj: {fileID: 386667129}
-  _attackRadius: {fileID: 0}
+  _rotationObject: {fileID: 2364340935526984089}
   Muzzle_Flash: {fileID: 2363646036695275949}
   bulletCasings: {fileID: 2453288935817963951}
   fireSound: {fileID: 8300000, guid: 08e0cb88300e54b09aa0deb684c3a3de, type: 3}
@@ -15007,7 +15007,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2364340935526984089}
   m_LocalRotation: {x: -0, y: -9.8607613e-32, z: -4.1037882e-26, w: 1}
-  m_LocalPosition: {x: -0.29565015, y: 0.38314095, z: -0.22158031}
+  m_LocalPosition: {x: -0.235, y: 0.383, z: -0.222}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2367351274477721169}

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using GameDevHQ.Scripts;
 using Rock.Collections;
 using UnityEngine;
@@ -86,5 +83,10 @@ public class AttackRadius : MonoBehaviour
     {
         if (!_tower.IsPlaced) return;
         _enemiesInAttackRadius.Remove(other.gameObject);
+
+        if (_enemiesInAttackRadius.Count == 0)
+        {
+            _tower.NoEnemiesInAttackRadius();
+        }
     }
 }
