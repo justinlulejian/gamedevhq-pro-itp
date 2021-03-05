@@ -1586,7 +1586,8 @@ MonoBehaviour:
   _navDestinationPosition: {x: 0, y: 0, z: 0}
   _navigationSpeed: 1.7
   health: 100
-  warFundValue: 100
+  WarFundValue: 100
+  _weaponTarget: {fileID: 1970402011964454}
 --- !u!54 &-384081460443946620
 Rigidbody:
   m_ObjectHideFlags: 0

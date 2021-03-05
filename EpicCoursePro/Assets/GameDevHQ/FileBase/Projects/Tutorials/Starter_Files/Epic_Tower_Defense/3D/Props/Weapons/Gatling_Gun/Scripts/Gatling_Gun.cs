@@ -42,42 +42,43 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             _audioSource.clip = fireSound; //assign the clip to play
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            // if (Input.GetMouseButton(0)) //Check for left click (held) user input
-            // { 
-            //     RotateBarrel(); //Call the rotation function responsible for rotating our gun barrel
-            //     Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
-            //     bulletCasings.Emit(1); //Emit the bullet casing particle effect  
-            //
-            //     if (_startWeaponNoise == true) //checking if we need to start the gun sound
-            //     {
-            //         _audioSource.Play(); //play audio clip attached to audio source
-            //         _startWeaponNoise = false; //set the start weapon noise value to false to prevent calling it again
-            //     }
-            //
-            // }
-            // else if (Input.GetMouseButtonUp(0)) //Check for left click (release) user input
-            // {      
-            //     Muzzle_Flash.SetActive(false); //turn off muzzle flash particle effect
-            //     _audioSource.Stop(); //stop the sound effect from playing
-            //     _startWeaponNoise = true; //set the start weapon noise value to true
-            // }
-        }
-        
-        public override void EnemyInAttackRadius(Enemy enemy)
-        {
-            if (!IsPlaced) return;
-            Debug.Log($"Tower {name} is attacking enemy: {enemy.name}.");
-        }
-
         // Method to rotate gun barrel 
         void RotateBarrel() 
         {
+            // TODO: Make this a slower spin up effect?
             //rotate the gun barrel along the "forward" (z) axis at 500 meters per second
-            _gunBarrel.transform.Rotate(Vector3.forward * Time.deltaTime * -500.0f);
+            _gunBarrel.transform.Rotate(Vector3.forward * (Time.deltaTime * -500.0f));
 
+        }
+
+        private void AnimateFiring()
+        {
+            RotateBarrel();
+            PlayFiringAnimation();
+        }
+
+        private void PlayFiringAnimation()
+        {
+            if (!_firingAtEnemy)
+            {
+                Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
+                _audioSource.Play(); //play audio clip attached to audio source
+            }
+            bulletCasings.Emit(1); //Emit the bullet casing particle effect  
+        }
+        
+
+        protected override void FireAtEnemy(Enemy enemy)
+        {
+            AnimateFiring();
+            _firingAtEnemy = true;
+        }
+
+        protected override void ResetFiringState()
+        {
+            _firingAtEnemy = false;
+            Muzzle_Flash.SetActive(false);
+            _audioSource.Stop();
         }
     }
 

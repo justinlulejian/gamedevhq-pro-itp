@@ -443,6 +443,7 @@ MonoBehaviour:
   _navigationSpeed: 1.5
   health: 100
   WarFundValue: 200
+  _weaponTarget: {fileID: 1051602920195426}
 --- !u!54 &3024274155801505101
 Rigidbody:
   m_ObjectHideFlags: 0

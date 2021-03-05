@@ -32,7 +32,12 @@ namespace GameDevHQ.Scripts
         [Tooltip("The currency value provided when the enemy is killed by player.")]
         public int WarFundValue = 100;
 
-        
+        [Header("Targeting Settings")]
+        [SerializeField]
+        [Tooltip(
+            "The object player weapons will target when firing. Must have transform attached.")]
+        private GameObject _weaponTarget;
+        private Transform _weaponTargetTransform;
 
         // When an enemy is enabled it will invoke this event.
         public static event Action<Transform, NavMeshAgent> onSpawnStart;
@@ -42,8 +47,16 @@ namespace GameDevHQ.Scripts
         {
             if (EnemyType == 0)
             {
-                Debug.LogError("Enemy does not have a type, assign a type for proper usage" +
-                               " in-game.");
+                Debug.LogError($"Enemy {name} does not have a type, assign a type for" +
+                               $" proper usage in-game.");
+            }
+            
+            WeaponTargetTransform = _weaponTarget.transform;
+
+            if (WeaponTargetTransform == null)
+            {
+                Debug.LogError($"Enemy {name} does not have a valid weapon target. Make " +
+                               $"sure target object has transform attached.");
             }
         }
 
@@ -70,7 +83,13 @@ namespace GameDevHQ.Scripts
             }
             _navMeshAgent.speed = _navigationSpeed;
         }
-        
+
+        public Transform WeaponTargetTransform
+        {
+            get => _weaponTargetTransform;
+            private set => _weaponTargetTransform = value;
+        }
+
         public void PlayerDamageEnemy(int damageValue)
         {
             Mathf.Min(0, health -= damageValue);
