@@ -21,10 +21,11 @@ namespace GameDevHQ.Scripts
 
         private NavMeshAgent _navMeshAgent;
 
-        [SerializeField] 
         [Header("Health Settings")]
-        private int health = 100;
-        public bool IsDead => health == 0;
+        [SerializeField] 
+        private int _maxHealth = 100;
+        private int _currentHealth; 
+        public bool IsDead => _currentHealth == 0;
         
 
         [Header("Currency Settings")]
@@ -64,7 +65,20 @@ namespace GameDevHQ.Scripts
         {
             return _navigationSpeed;
         }
-        
+
+        private void PrepareEnemyForRecycling()
+        {
+            // Reset health so if recycled they'll start with
+            _currentHealth = _maxHealth;
+        }
+
+
+        private void OnDisable()
+        {
+            // Reset health so if recycled they'll start with
+            PrepareEnemyForRecycling();
+        }
+
         private void OnEnable()
         {
             if (_navMeshAgent == null)
@@ -73,6 +87,7 @@ namespace GameDevHQ.Scripts
             }
             onSpawnStart?.Invoke(this.transform, _navMeshAgent);
             _navDestinationPosition = _navMeshAgent.destination;
+            
         }
 
         private void Start()
@@ -92,10 +107,14 @@ namespace GameDevHQ.Scripts
 
         public void PlayerDamageEnemy(int damageValue)
         {
-            Mathf.Min(0, health -= damageValue);
+            Mathf.Min(0, _currentHealth -= damageValue);
+            
+            Debug.Log($"Enemy {name} damaged by player for {damageValue.ToString()}. " +
+                      $"HP now {_currentHealth.ToString()}");
 
-            if (health == 0)
+            if (_currentHealth == 0)
             {
+                Debug.Log($"Enemy {name} killed by player");
                 onEnemyKilledByPlayer?.Invoke(this);
             }
         }

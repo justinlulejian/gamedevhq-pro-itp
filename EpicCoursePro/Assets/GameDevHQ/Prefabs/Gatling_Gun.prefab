@@ -89,7 +89,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 386667129}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -14691,6 +14691,10 @@ MonoBehaviour:
   TowerType: 1
   WarFundValue: 100
   AttackRadiusObj: {fileID: 386667129}
+  _targetedEnemy: {fileID: 0}
+  _firingAtEnemy: 0
+  _damageValue: 20
+  _damageRate: 1
   _rotationObject: {fileID: 2364340935526984089}
   _rotationSpeed: 5
   Muzzle_Flash: {fileID: 2363646036695275949}

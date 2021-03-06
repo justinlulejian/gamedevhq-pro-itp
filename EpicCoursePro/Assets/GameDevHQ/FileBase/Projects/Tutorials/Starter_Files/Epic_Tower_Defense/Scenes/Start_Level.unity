@@ -11827,7 +11827,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b2c9767ed01b31543b5dac7f691d4b0c, type: 2}
   - {fileID: 11400000, guid: 0a54c558062e4d74a88a03e44f6056d2, type: 2}
   - {fileID: 11400000, guid: 6845e5c08717a01418e0928308100187, type: 2}
-  _baseTimeToWaitBetweenEnemySpawns: 10
+  _baseTimeToWaitBetweenEnemySpawns: 2
 --- !u!4 &365295940
 Transform:
   m_ObjectHideFlags: 0
@@ -13408,7 +13408,7 @@ MonoBehaviour:
   _allEnemyPrefabs:
   - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
   - {fileID: 1079767520691416, guid: fed6fd85e4a83418485118c22ed9f184, type: 3}
-  _numberOfEnemiesToPool: 30
+  _numberOfEnemiesToPool: 1
   _towerContainer: {fileID: 1889572039}
   _allTowerPrefabs:
   - {fileID: 2363984451845793099, guid: 1c0f8e288365b1043a83ccf4fad55b71, type: 3}

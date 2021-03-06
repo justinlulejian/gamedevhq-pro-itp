@@ -1501,9 +1501,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4505513421613776}
+  - component: {fileID: 47714622}
   - component: {fileID: 95831276238310704}
   - component: {fileID: 47714621}
-  - component: {fileID: 47714622}
   - component: {fileID: -384081460443946620}
   - component: {fileID: 5729360976336060421}
   m_Layer: 0
@@ -1529,6 +1529,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &47714622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1637921026644932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b31448a23dcf2dc4da6454c96c84a18c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyType: 1
+  _navDestinationPosition: {x: 0, y: 0, z: 0}
+  _navigationSpeed: 4.99
+  _health: 100
+  WarFundValue: 100
+  _weaponTarget: {fileID: 1970402011964454}
 --- !u!95 &95831276238310704
 Animator:
   serializedVersion: 3
@@ -1570,24 +1588,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &47714622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1637921026644932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b31448a23dcf2dc4da6454c96c84a18c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyType: 1
-  _navDestinationPosition: {x: 0, y: 0, z: 0}
-  _navigationSpeed: 1.7
-  health: 100
-  WarFundValue: 100
-  _weaponTarget: {fileID: 1970402011964454}
 --- !u!54 &-384081460443946620
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1600,7 +1600,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

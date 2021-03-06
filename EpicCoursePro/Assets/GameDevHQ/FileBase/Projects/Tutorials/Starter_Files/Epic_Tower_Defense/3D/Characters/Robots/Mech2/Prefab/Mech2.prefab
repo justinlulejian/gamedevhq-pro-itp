@@ -357,9 +357,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4628475265953764}
+  - component: {fileID: 6274882}
   - component: {fileID: 95460924271877448}
   - component: {fileID: 6274883}
-  - component: {fileID: 6274882}
   - component: {fileID: 3024274155801505101}
   - component: {fileID: 2517432056721220506}
   m_Layer: 0
@@ -385,6 +385,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6274882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079767520691416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cec5c870f85e334380586f834df591a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyType: 2
+  _navDestinationPosition: {x: 0, y: 0, z: 0}
+  _navigationSpeed: 5.7
+  _health: 100
+  WarFundValue: 200
+  _weaponTarget: {fileID: 1051602920195426}
 --- !u!95 &95460924271877448
 Animator:
   serializedVersion: 3
@@ -414,7 +432,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 1.5
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -426,24 +444,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6274882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079767520691416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cec5c870f85e334380586f834df591a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyType: 2
-  _navDestinationPosition: {x: 0, y: 0, z: 0}
-  _navigationSpeed: 1.5
-  health: 100
-  WarFundValue: 200
-  _weaponTarget: {fileID: 1051602920195426}
 --- !u!54 &3024274155801505101
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -456,7 +456,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

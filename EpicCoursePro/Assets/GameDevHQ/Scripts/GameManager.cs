@@ -11,6 +11,16 @@ namespace GameDevHQ.Scripts
         private int _playerMaximumWarFunds = 100000;
     
         public static event Action<int> onWarFundsChange;
+        
+        private void OnEnable()
+        {
+            Enemy.onEnemyKilledByPlayer += AddWarFundsForEnemy;
+        }
+
+        private void OnDisable()
+        {
+            Enemy.onEnemyKilledByPlayer -= AddWarFundsForEnemy;
+        }
     
         public int GetWarFunds()
         {
@@ -37,6 +47,11 @@ namespace GameDevHQ.Scripts
         public void PurchaseItem(int purchaseCost)
         {
             SubtractWarFunds(purchaseCost); 
+        }
+
+        private void AddWarFundsForEnemy(Enemy enemy)
+        {
+            AddWarFunds(enemy.WarFundValue);
         }
     }
 }

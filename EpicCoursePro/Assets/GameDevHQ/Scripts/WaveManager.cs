@@ -31,11 +31,13 @@ public class WaveManager : MonoSingleton<WaveManager>
     private void OnEnable()
     {
         EnemyNavEnd.onEnemyCollision += DespawnEnemy;
+        Enemy.onEnemyKilledByPlayer += DespawnEnemy;
     }
 
     private void OnDisable()
     {
         EnemyNavEnd.onEnemyCollision -= DespawnEnemy;
+        Enemy.onEnemyKilledByPlayer -= DespawnEnemy;
     }
     
     protected override void Awake()
@@ -97,7 +99,7 @@ public class WaveManager : MonoSingleton<WaveManager>
     
     private void SpawnEnemy(GameObject enemyType)
     {
-        GameObject enemy = PoolManager.Instance.RequestObjOfType(enemyType);
+       GameObject enemy = PoolManager.Instance.RequestObjOfType(enemyType);
         enemy.SetActive(true);
         _lastEnemySpawnedInWave = enemy.GetComponent<Enemy>();
         enemiesSpawnedInWave++;
@@ -140,6 +142,11 @@ public class WaveManager : MonoSingleton<WaveManager>
         {
             onWaveFinish?.Invoke();
         }
+    }
+    
+    private void DespawnEnemy(Enemy enemy)
+    {
+        DespawnEnemy(enemy.gameObject);
     }
 
     private void AllWavesCompleted()
