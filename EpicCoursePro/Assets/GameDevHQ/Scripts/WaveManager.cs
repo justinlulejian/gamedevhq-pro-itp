@@ -132,7 +132,7 @@ public class WaveManager : MonoSingleton<WaveManager>
             StartCoroutine(SpawnWave(_wavesToSpawn.Dequeue()));
         }
     }
-    
+
     private void DespawnEnemy(GameObject enemy)
     {
         PoolManager.Instance.RecyclePooledObj(enemy);

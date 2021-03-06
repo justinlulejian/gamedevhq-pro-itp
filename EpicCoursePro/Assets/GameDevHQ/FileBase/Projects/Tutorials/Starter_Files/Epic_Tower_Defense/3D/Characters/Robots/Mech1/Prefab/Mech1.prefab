@@ -1544,9 +1544,12 @@ MonoBehaviour:
   EnemyType: 1
   _navDestinationPosition: {x: 0, y: 0, z: 0}
   _navigationSpeed: 4.99
-  _health: 100
+  _maxHealth: 100
   WarFundValue: 100
   _weaponTarget: {fileID: 1970402011964454}
+  DeathAnimWaitTime: 5
+  _deathExplosionPrefab: {fileID: 4688366796816071956, guid: 0bd59304b034bee4e939420e993113e1,
+    type: 3}
 --- !u!95 &95831276238310704
 Animator:
   serializedVersion: 3
