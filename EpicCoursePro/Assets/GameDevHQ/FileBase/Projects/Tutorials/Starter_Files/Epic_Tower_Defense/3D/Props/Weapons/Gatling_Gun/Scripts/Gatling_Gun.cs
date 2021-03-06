@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using GameDevHQ.Scripts;
 using UnityEditor.Rendering;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 
 namespace GameDevHQ.FileBase.Gatling_Gun
@@ -42,6 +45,17 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             _audioSource.clip = fireSound; //assign the clip to play
         }
 
+        private void Update()
+        {
+            // TODO: Does this need to be called in update or could it be another less updated
+            // method like a coroutine?
+            if (Time.time > _canFire && _targetedEnemy && !_targetedEnemy.IsDead)
+            {
+                _targetedEnemy.PlayerDamageEnemy(_damageValue);
+                _canFire = Time.time + _damageRate;
+            }
+        }
+
         // Method to rotate gun barrel 
         void RotateBarrel() 
         {
@@ -64,14 +78,19 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                 Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
                 _audioSource.Play(); //play audio clip attached to audio source
             }
+            Debug.Log($"Tower {name} firing at target {_targetedEnemy.name}");
             bulletCasings.Emit(1); //Emit the bullet casing particle effect  
         }
         
 
-        protected override void FireAtEnemy(Enemy enemy)
+        protected override void StartFiringAtEnemy(Enemy enemy)
         {
             AnimateFiring();
-            _firingAtEnemy = true;
+        }
+
+        protected override void StopAttacking()
+        {
+            throw new NotImplementedException();
         }
 
         protected override void ResetFiringState()
@@ -81,5 +100,4 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             _audioSource.Stop();
         }
     }
-
 }

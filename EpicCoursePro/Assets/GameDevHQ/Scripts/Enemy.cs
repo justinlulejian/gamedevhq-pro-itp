@@ -21,10 +21,10 @@ namespace GameDevHQ.Scripts
 
         private NavMeshAgent _navMeshAgent;
 
-        [SerializeField] 
         [Header("Health Settings")]
-        private int health = 100;
-        public bool IsDead => health == 0;
+        [SerializeField] 
+        private int _health = 100;
+        public bool IsDead => _health == 0;
         
 
         [Header("Currency Settings")]
@@ -92,10 +92,14 @@ namespace GameDevHQ.Scripts
 
         public void PlayerDamageEnemy(int damageValue)
         {
-            Mathf.Min(0, health -= damageValue);
+            Mathf.Min(0, _health -= damageValue);
+            
+            // Debug.Log($"Enemy {name} damaged by player for {damageValue.ToString()}. " +
+            //           $"HP now {_health.ToString()}");
 
-            if (health == 0)
+            if (_health == 0)
             {
+                Debug.Log($"Enemy {name} killed by player");
                 onEnemyKilledByPlayer?.Invoke(this);
             }
         }

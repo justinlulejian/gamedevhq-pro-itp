@@ -1585,7 +1585,7 @@ MonoBehaviour:
   EnemyType: 1
   _navDestinationPosition: {x: 0, y: 0, z: 0}
   _navigationSpeed: 1.7
-  health: 100
+  _health: 100
   WarFundValue: 100
   _weaponTarget: {fileID: 1970402011964454}
 --- !u!54 &-384081460443946620
@@ -1600,7 +1600,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

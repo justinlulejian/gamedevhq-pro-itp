@@ -11,8 +11,16 @@ namespace GameDevHQ.Scripts
     {
         [Header("Target Settings")]
         private AttackRadius _attackRadius;
-        protected bool _targetingEnemy;
+        [SerializeField]
+        protected Enemy _targetedEnemy;
+        [SerializeField]
         protected bool _firingAtEnemy;
+        [SerializeField]
+        protected int _damageValue = 20;
+        [SerializeField] 
+        protected float _damageRate = 1f;
+        protected float _canFire;
+
         public bool IsPlaced { get; set; }
         [Header("Rotation Settings")]
         [SerializeField] 
@@ -21,7 +29,23 @@ namespace GameDevHQ.Scripts
         private float _rotationSpeed = 5f;
         private Transform _rotationTransform;
         private Quaternion _originalRotation;
+
+        public static event Action<GameObject, int> onTowerDamageEnemy;
         
+        protected abstract void StartFiringAtEnemy(Enemy enemy);
+        protected abstract void StopAttacking();
+
+        protected abstract void ResetFiringState();
+        
+        protected override void OnEnable()
+        {
+            Enemy.onEnemyKilledByPlayer += ResetTowerAttackStateIfEnemyKilled;
+        }
+
+        protected override void OnDisable()
+        {
+            Enemy.onEnemyKilledByPlayer -= ResetTowerAttackStateIfEnemyKilled;
+        }
 
         protected override void Awake()
         {
@@ -54,7 +78,7 @@ namespace GameDevHQ.Scripts
         // Resets the rotation while no targets, but will stop if a new enemy is being targeted.
         private IEnumerator ResetRotation()
         {
-            while (!_targetingEnemy)
+            while (!_targetedEnemy)
             {
                 _rotationTransform.rotation =
                     Quaternion.Slerp(_rotationTransform.rotation, _originalRotation,
@@ -63,22 +87,40 @@ namespace GameDevHQ.Scripts
             }
         }
 
-        protected abstract void FireAtEnemy(Enemy enemy);
-        protected abstract void ResetFiringState();
-
-        // How the tower will react to enemies within it's attack radius.
-        public void EnemyInAttackRadius(Enemy enemy)
+        private IEnumerator DamageTargetedEnemyRoutine(Enemy enemy)
         {
-            if (!IsPlaced) return;
-            _targetingEnemy = true;
-            RotateTowardsTarget(enemy);
-            FireAtEnemy(enemy);
+            // TODO: Should I be checking _firingAtEnemy too so that firing anim isn't going w/out
+            // damage?
+            while (_targetedEnemy && !enemy.IsDead)
+            {
+                Debug.Log($"Tower {name} is damaging enemy {enemy.name} for" +
+                          $" {_damageValue.ToString()} value.");
+                enemy.PlayerDamageEnemy(_damageValue);
+                yield return new WaitForSeconds(1.0f);
+            }
         }
         
+
+        // How the tower will react to enemies within it's attack radius.
+        public void UpdateAttackTarget(Enemy enemy)
+        {
+            if (enemy == null)
+            {
+                // Gatling: stop firing anim, clear any enemy state, rotate back to default.
+                // Missile: stop missile launch routing, clear enemy state, rotate back to default.
+                StopAttacking();
+            }
+            // TODO: Figure out a way to start the firing process once rotation is close to being
+            // done.
+            _targetedEnemy = enemy;
+            RotateTowardsTarget(enemy);
+            StartFiringAtEnemy(enemy);
+        }
+
         public void NoEnemiesInAttackRadius()
         {
             if (!IsPlaced) return;
-            _targetingEnemy = false;
+            _targetedEnemy = null;
             StartCoroutine(ResetRotation());
             ResetFiringState();
         }
@@ -88,5 +130,13 @@ namespace GameDevHQ.Scripts
             _attackRadius.EnableCollider();
         }
         
+        private void ResetTowerAttackStateIfEnemyKilled(Enemy enemy)
+        {
+            if (!_targetedEnemy == enemy) return;
+            _firingAtEnemy = false;
+            _targetedEnemy = null;
+            StartCoroutine(ResetRotation());
+            ResetFiringState();
+        }
     }
 }

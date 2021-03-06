@@ -314,7 +314,12 @@ MonoBehaviour:
   TowerType: 2
   WarFundValue: 200
   AttackRadiusObj: {fileID: 368257725}
+  _targetedEnemy: {fileID: 0}
+  _firingAtEnemy: 0
+  _damageValue: 20
+  _damageRate: 1
   _rotationObject: {fileID: 1590539315427714201}
+  _rotationSpeed: 5
   _missilePrefab: {fileID: 1408549652012730, guid: 6f244204e60f45647b263f4edda01147,
     type: 3}
   _misslePositions:

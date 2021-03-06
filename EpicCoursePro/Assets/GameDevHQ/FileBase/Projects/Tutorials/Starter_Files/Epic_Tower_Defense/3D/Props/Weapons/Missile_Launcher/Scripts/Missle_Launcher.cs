@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GameDevHQ.FileBase.Missle_Launcher.Missle;
@@ -26,6 +27,34 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         private float _destroyTime = 10.0f; //how long till the rockets get cleaned up
         private bool _launched; //bool to check if we launched the rockets
 
+        private void Update()
+        {
+            // TODO: This is duplicated with Gatling impl for now, but missile collision damage
+            // feature will remove this.
+            if (Time.time > _canFire && _targetedEnemy && !_targetedEnemy.IsDead)
+            {
+                _targetedEnemy.PlayerDamageEnemy(_damageValue);
+                _canFire = Time.time + _damageRate;
+            }
+           
+        }
+
+        private void FireRocket(int i)
+        {
+            // TODO: Pool rockets
+            GameObject rocket = Instantiate(_missilePrefab) as GameObject; //instantiate a rocket
+
+            rocket.transform.parent = _misslePositions[i].transform; //set the rockets parent to the missle launch position 
+            rocket.transform.localPosition = Vector3.zero; //set the rocket position values to zero
+            rocket.transform.localEulerAngles = new Vector3(-90, 0, 0); //set the rotation values to be properly aligned with the rockets forward direction
+            rocket.transform.parent = null; //set the rocket parent to null
+
+            rocket.GetComponent<GameDevHQ.FileBase.Missle_Launcher.Missle.Missle>().AssignMissleRules(
+                _launchSpeed, _power, _fuseDelay, _destroyTime); //assign missle properties 
+
+            _misslePositions[i].SetActive(false); //turn off the rocket sitting in the turret to make it look like it fired
+
+        }
         
         IEnumerator FireRocketsRoutine()
         {
@@ -37,21 +66,12 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             yield return new WaitForSeconds(.5f);
             for (int i = 0; i < _misslePositions.Length; i++) //for loop to iterate through each missle position
             {
-                // TODO: Pool rockets
-                GameObject rocket = Instantiate(_missilePrefab) as GameObject; //instantiate a rocket
-
-                rocket.transform.parent = _misslePositions[i].transform; //set the rockets parent to the missle launch position 
-                rocket.transform.localPosition = Vector3.zero; //set the rocket position values to zero
-                rocket.transform.localEulerAngles = new Vector3(-90, 0, 0); //set the rotation values to be properly aligned with the rockets forward direction
-                rocket.transform.parent = null; //set the rocket parent to null
-
-                rocket.GetComponent<GameDevHQ.FileBase.Missle_Launcher.Missle.Missle>().AssignMissleRules(_launchSpeed, _power, _fuseDelay, _destroyTime); //assign missle properties 
-
-                _misslePositions[i].SetActive(false); //turn off the rocket sitting in the turret to make it look like it fired
-
+                Debug.Log($"Tower {name} firing at target {_targetedEnemy.name}");
+                FireRocket(i);
                 yield return new WaitForSeconds(_fireDelay); //wait for the firedelay
             }
 
+            // Reset rockets.
             for (int i = 0; i < _misslePositions.Length; i++) //itterate through missle positions
             {
                 yield return new WaitForSeconds(_reloadTime); //wait for reload time
@@ -63,16 +83,20 @@ namespace GameDevHQ.FileBase.Missle_Launcher
 
         private void AnimateFiring()
         {
-            if (_launched || !_targetingEnemy) return;
+            if (!_targetedEnemy || _launched) return;
             _launched = true; //set the launch bool to true
             StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets.
         }
         
 
-        protected override void FireAtEnemy(Enemy enemy)
+        protected override void StartFiringAtEnemy(Enemy enemy)
         {
             AnimateFiring();
-            _firingAtEnemy = true;
+        }
+
+        protected override void StopAttacking()
+        {
+            throw new NotImplementedException();
         }
 
         protected override void ResetFiringState()
