@@ -16,12 +16,12 @@ public class AttackRadius : MonoBehaviour
     
     private void OnEnable()
     {
-        Enemy.onEnemyKilledByPlayer += RemoveTarget;
+        Enemy.onEnemyKilledByPlayer += RemoveTargetFromTrackingAndMaybeUpdate;
     }
 
     private void OnDisable()
     {
-        Enemy.onEnemyKilledByPlayer -= RemoveTarget;
+        Enemy.onEnemyKilledByPlayer -= RemoveTargetFromTrackingAndMaybeUpdate;
     }
 
     private void Awake()
@@ -70,6 +70,9 @@ public class AttackRadius : MonoBehaviour
         }
     }
 
+    // TODO: Implement priority queuing with _enemiesInAttackRadius so that an enemy further along
+    // in the path towards the navigation end has higher priority when selecting choosing target for
+    // tower.
     private void UpdateTarget()
     {
         if (!_tower.IsPlaced) return;
@@ -83,18 +86,21 @@ public class AttackRadius : MonoBehaviour
         }
     }
 
-    private void RemoveTarget(GameObject enemyObj)
+    private void RemoveTargetFromRadiusTracking(GameObject enemyObj)
     {
-        if (_enemiesInAttackRadius.TryGetValue(enemyObj, out var enemy))
-        {
-            _enemiesInAttackRadius.Remove(enemy.gameObject);
-        }
+        _enemiesInAttackRadius.Remove(enemyObj);
+    }
+    
+    private void RemoveTargetFromTrackingAndMaybeUpdate(GameObject enemyObj)
+    {
+        if (!_tower.IsPlaced) return;
+        RemoveTargetFromRadiusTracking(enemyObj);
         UpdateTarget();
     }
     
-    private void RemoveTarget(Enemy enemy)
+    private void RemoveTargetFromTrackingAndMaybeUpdate(Enemy enemy)
     {
-        RemoveTarget(enemy.gameObject);
+        RemoveTargetFromTrackingAndMaybeUpdate(enemy.gameObject);
     }
     
     // Enqueue the enemy and it's behavior script that enters radius.
@@ -107,18 +113,18 @@ public class AttackRadius : MonoBehaviour
     }
 
     // Add target for tower to attack and remove it from attack radius if it dies.
-    private void OnTriggerStay(Collider other)
-    {
-        // TODO: Do we really care if it's staying in? We just fire from enter to exit so do we need
-        // to do that in stay? Or do we need to if radius spawns over enemy?
-        // if (!_tower.IsPlaced || _enemiesInAttackRadius.Count == 0) return;
-        // UpdateTarget();
-    }
+    // private void OnTriggerStay(Collider other)
+    // {
+    //     // TODO: Do we really care if it's staying in? We just fire from enter to exit so do we need
+    //     // to do that in stay? Or do we need to if radius spawns over enemy?
+    //     // if (!_tower.IsPlaced || _enemiesInAttackRadius.Count == 0) return;
+    //     // UpdateTarget();
+    // }
 
     // Remove enemy from attack radius tracking if it exits.
     private void OnTriggerExit(Collider other)
     {
-        if (!_tower.IsPlaced) return;
-        RemoveTarget(other.gameObject);
+        if (!other.CompareTag("Enemy")) return;
+        RemoveTargetFromTrackingAndMaybeUpdate(other.gameObject);
     }
 }

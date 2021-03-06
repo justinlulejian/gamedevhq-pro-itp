@@ -45,52 +45,80 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             _audioSource.clip = fireSound; //assign the clip to play
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             // TODO: Does this need to be called in update or could it be another less updated
             // method like a coroutine?
             if (Time.time > _canFire && _targetedEnemy && !_targetedEnemy.IsDead)
             {
                 _targetedEnemy.PlayerDamageEnemy(_damageValue);
-                _canFire = Time.time + _damageRate;
+                _canFire = Time.time + _damageRate; //
             }
+            if (_targetedEnemy) 
+            {
+                RotateBarrel();
+                bulletCasings.Emit(1); //Emit the bullet casing particle effect 
+                Debug.Log($"Tower {name} firing at target {_targetedEnemy.name}");
+            }
+            
+            if (_targetedEnemy && !_firingAtEnemy)
+            {
+                Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
+                _audioSource.Play(); //play audio clip attached to audio source
+                _firingAtEnemy = true;  // Only initiate this one per firing instance.
+            }
+            
+            
         }
 
         // Method to rotate gun barrel 
         void RotateBarrel() 
         {
-            // TODO: Make this a slower spin up effect?
+            // TODO: Make this a slower spin up effect with lerp?
             //rotate the gun barrel along the "forward" (z) axis at 500 meters per second
             _gunBarrel.transform.Rotate(Vector3.forward * (Time.deltaTime * -500.0f));
 
         }
 
-        private void AnimateFiring()
-        {
-            RotateBarrel();
-            PlayFiringAnimation();
-        }
-
-        private void PlayFiringAnimation()
-        {
-            if (!_firingAtEnemy)
-            {
-                Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
-                _audioSource.Play(); //play audio clip attached to audio source
-            }
-            Debug.Log($"Tower {name} firing at target {_targetedEnemy.name}");
-            bulletCasings.Emit(1); //Emit the bullet casing particle effect  
-        }
+        // private void AnimateFiring()
+        // {
+        //     // RotateBarrel();
+        //     // PlayFiringAnimation();
+        // }
+        //
+        // private void PlayFiringAnimation()
+        // {
+        //     if (!_firingAtEnemy && !Muzzle_Flash.activeSelf && !_audioSource.isPlaying)
+        //     {
+        //         Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
+        //         _audioSource.Play(); //play audio clip attached to audio source
+        //     }
+        //     Debug.Log($"Tower {name} firing at target {_targetedEnemy.name}");
+        //     bulletCasings.Emit(1); //Emit the bullet casing particle effect  
+        // }
         
 
         protected override void StartFiringAtEnemy(Enemy enemy)
         {
-            AnimateFiring();
+            // AnimateFiring();
         }
+
+        // private IEnumerator RotateBarrelWhileFiring()
+        // {
+        //     while (_targetedEnemy != null)
+        //     {
+        //         RotateBarrel();
+        //         yield return null;
+        //     }
+        // }
 
         protected override void StopAttacking()
         {
-            throw new NotImplementedException();
+            _targetedEnemy = null;
+            _firingAtEnemy = false;
+            Muzzle_Flash.SetActive(false);
+            _audioSource.Stop();
         }
 
         protected override void ResetFiringState()

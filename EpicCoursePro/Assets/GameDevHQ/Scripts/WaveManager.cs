@@ -99,7 +99,7 @@ public class WaveManager : MonoSingleton<WaveManager>
     
     private void SpawnEnemy(GameObject enemyType)
     {
-        GameObject enemy = PoolManager.Instance.RequestObjOfType(enemyType);
+       GameObject enemy = PoolManager.Instance.RequestObjOfType(enemyType);
         enemy.SetActive(true);
         _lastEnemySpawnedInWave = enemy.GetComponent<Enemy>();
         enemiesSpawnedInWave++;

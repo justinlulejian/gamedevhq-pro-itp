@@ -27,8 +27,9 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         private float _destroyTime = 10.0f; //how long till the rockets get cleaned up
         private bool _launched; //bool to check if we launched the rockets
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             // TODO: This is duplicated with Gatling impl for now, but missile collision damage
             // feature will remove this.
             if (Time.time > _canFire && _targetedEnemy && !_targetedEnemy.IsDead)
@@ -36,7 +37,12 @@ namespace GameDevHQ.FileBase.Missle_Launcher
                 _targetedEnemy.PlayerDamageEnemy(_damageValue);
                 _canFire = Time.time + _damageRate;
             }
-           
+
+            if (_targetedEnemy && !_launched)
+            {
+                StartCoroutine(FireRocketsRoutine());
+                _launched = true;
+            }
         }
 
         private void FireRocket(int i)
@@ -66,12 +72,18 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             yield return new WaitForSeconds(.5f);
             for (int i = 0; i < _misslePositions.Length; i++) //for loop to iterate through each missle position
             {
+                // If we switch enemies mid-routine then stop firing, reload, and then start
+                // shooting again. TODO: this'll need to change once it's not called in update anymore?
+                if (_targetedEnemy == null)
+                {
+                    break;
+                }
                 Debug.Log($"Tower {name} firing at target {_targetedEnemy.name}");
                 FireRocket(i);
                 yield return new WaitForSeconds(_fireDelay); //wait for the firedelay
             }
 
-            // Reset rockets.
+            // Reset/reload rockets after firing.
             for (int i = 0; i < _misslePositions.Length; i++) //itterate through missle positions
             {
                 yield return new WaitForSeconds(_reloadTime); //wait for reload time
@@ -81,22 +93,21 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             _launched = false; //set launch bool to false
         }
 
-        private void AnimateFiring()
-        {
-            if (!_targetedEnemy || _launched) return;
-            _launched = true; //set the launch bool to true
-            StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets.
-        }
-        
+        // private void AnimateFiring()
+        // {
+        //     if (!_targetedEnemy || _launched) return;
+        //     _launched = true; //set the launch bool to true
+        //     StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets.
+        // }
 
         protected override void StartFiringAtEnemy(Enemy enemy)
         {
-            AnimateFiring();
+            // AnimateFiring();
         }
 
         protected override void StopAttacking()
         {
-            throw new NotImplementedException();
+            _targetedEnemy = null;
         }
 
         protected override void ResetFiringState()

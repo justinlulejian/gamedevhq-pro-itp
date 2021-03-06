@@ -39,12 +39,12 @@ namespace GameDevHQ.Scripts
         
         protected override void OnEnable()
         {
-            Enemy.onEnemyKilledByPlayer += ResetTowerAttackStateIfEnemyKilled;
+            // Enemy.onEnemyKilledByPlayer += ResetTowerAttackStateIfEnemyKilled;
         }
 
         protected override void OnDisable()
         {
-            Enemy.onEnemyKilledByPlayer -= ResetTowerAttackStateIfEnemyKilled;
+            // Enemy.onEnemyKilledByPlayer -= ResetTowerAttackStateIfEnemyKilled;
         }
 
         protected override void Awake()
@@ -65,6 +65,14 @@ namespace GameDevHQ.Scripts
             }
         }
 
+        protected virtual void Update()
+        {
+            if (_targetedEnemy)
+            {
+                RotateTowardsTarget(_targetedEnemy);
+            }
+        }
+
         private void RotateTowardsTarget(Enemy enemy)
         {
             // TODO: Clamp the rotation so it doesn't rotate too oddly depending on where enemy is.
@@ -78,7 +86,8 @@ namespace GameDevHQ.Scripts
         // Resets the rotation while no targets, but will stop if a new enemy is being targeted.
         private IEnumerator ResetRotation()
         {
-            while (!_targetedEnemy)
+            // comparing rotation would prevent this from running forever.
+            while (_targetedEnemy == null && _rotationTransform.rotation != _originalRotation)
             {
                 _rotationTransform.rotation =
                     Quaternion.Slerp(_rotationTransform.rotation, _originalRotation,
@@ -106,37 +115,42 @@ namespace GameDevHQ.Scripts
         {
             if (enemy == null)
             {
+                _targetedEnemy = null;
+                StartCoroutine(ResetRotation());
                 // Gatling: stop firing anim, clear any enemy state, rotate back to default.
                 // Missile: stop missile launch routing, clear enemy state, rotate back to default.
                 StopAttacking();
             }
-            // TODO: Figure out a way to start the firing process once rotation is close to being
-            // done.
+           
+            // TODO: Necessary check? Avoid updating things if not necessary.
+            if (enemy == _targetedEnemy) return;
             _targetedEnemy = enemy;
-            RotateTowardsTarget(enemy);
+            // RotateTowardsTarget(enemy);  // moved to update temporarily
+            // TODO: Figure out a way to start the firing process once rotation is close to being
+            // done to make it look more natural.
             StartFiringAtEnemy(enemy);
         }
 
-        public void NoEnemiesInAttackRadius()
-        {
-            if (!IsPlaced) return;
-            _targetedEnemy = null;
-            StartCoroutine(ResetRotation());
-            ResetFiringState();
-        }
+        // public void NoEnemiesInAttackRadius()
+        // {
+        //     if (!IsPlaced) return;
+        //     _targetedEnemy = null;
+        //     StartCoroutine(ResetRotation());
+        //     ResetFiringState();
+        // }
 
         public void EnableAttackRadiusCollider()
         {
             _attackRadius.EnableCollider();
         }
         
-        private void ResetTowerAttackStateIfEnemyKilled(Enemy enemy)
-        {
-            if (!_targetedEnemy == enemy) return;
-            _firingAtEnemy = false;
-            _targetedEnemy = null;
-            StartCoroutine(ResetRotation());
-            ResetFiringState();
-        }
+        // private void ResetTowerAttackStateIfEnemyKilled(Enemy enemy)
+        // {
+        //     if (!_targetedEnemy == enemy) return;
+        //     _firingAtEnemy = false;
+        //     _targetedEnemy = null;
+        //     StartCoroutine(ResetRotation());
+        //     ResetFiringState();
+        // }
     }
 }
