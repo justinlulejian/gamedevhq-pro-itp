@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -40,6 +41,12 @@ namespace GameDevHQ.Scripts
         private GameObject _weaponTarget;
         private Transform _weaponTargetTransform;
 
+        [Header("Animation Settings")]
+        [Tooltip("Time to wait for enemy to play it's death animation before recycling to pool.")]
+        public float DeathAnimWaitTime = 5f;
+        private Animator _animator;
+        public GameObject _deathExplosionPrefab;
+        
         // When an enemy is enabled it will invoke this event.
         public static event Action<Transform, NavMeshAgent> onSpawnStart;
         public static event Action<Enemy> onEnemyKilledByPlayer;
@@ -59,6 +66,18 @@ namespace GameDevHQ.Scripts
                 Debug.LogError($"Enemy {name} does not have a valid weapon target. Make " +
                                $"sure target object has transform attached.");
             }
+
+            _animator = GetComponent<Animator>();
+
+            if (_animator == null)
+            {
+                Debug.LogError($"Animator is null on enemy {name}");
+            }
+            
+            if (_deathExplosionPrefab == null)
+            {
+                Debug.LogError($"Death explosion prefab is null on enemy {name}");
+            }
         }
 
         public float GetSpeed()
@@ -70,8 +89,10 @@ namespace GameDevHQ.Scripts
         {
             // Reset health so if recycled they'll start with
             _currentHealth = _maxHealth;
+            _animator.SetTrigger("OnEnemyDeath");
+            _animator.WriteDefaultValues(); // Reset position of mech to upright.
+            _navMeshAgent.enabled = true;
         }
-
 
         private void OnDisable()
         {
@@ -105,6 +126,26 @@ namespace GameDevHQ.Scripts
             private set => _weaponTargetTransform = value;
         }
 
+        private void PlayDeathExplosion()
+        {
+            GameObject deathExplosion = Instantiate(
+                _deathExplosionPrefab, transform.position, Quaternion.identity);
+            Destroy(deathExplosion, 5f);
+        }
+        
+        private IEnumerator WaitBeforeDespawn(Enemy enemy)
+        {
+            yield return new WaitForSeconds(enemy.DeathAnimWaitTime);
+            onEnemyKilledByPlayer?.Invoke(this);
+        }
+        
+        private void AnimateDeath()
+        {
+            _animator.SetTrigger("OnEnemyDeath");
+            _navMeshAgent.enabled = false;
+            PlayDeathExplosion();
+        }
+
         public void PlayerDamageEnemy(int damageValue)
         {
             Mathf.Min(0, _currentHealth -= damageValue);
@@ -115,7 +156,8 @@ namespace GameDevHQ.Scripts
             if (_currentHealth == 0)
             {
                 Debug.Log($"Enemy {name} killed by player");
-                onEnemyKilledByPlayer?.Invoke(this);
+                AnimateDeath();
+                StartCoroutine(WaitBeforeDespawn(this));
             }
         }
     }
