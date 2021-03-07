@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using GameDevHQ.Scripts;
 using Rock.Collections;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class AttackRadius : MonoBehaviour
@@ -76,14 +77,9 @@ public class AttackRadius : MonoBehaviour
     private void UpdateTarget()
     {
         if (!_tower.IsPlaced) return;
-        if (_enemiesInAttackRadius.Count > 0)
-        {
-            _tower.UpdateAttackTarget(_enemiesInAttackRadius.First().Value);
-        }
-        else
-        {
-            _tower.UpdateAttackTarget(null);
-        }
+        _tower.UpdateAttackTarget(_enemiesInAttackRadius.Count > 0
+            ? _enemiesInAttackRadius.First().Value
+            : null);
     }
 
     private void RemoveTargetFromRadiusTracking(GameObject enemyObj)
@@ -113,13 +109,9 @@ public class AttackRadius : MonoBehaviour
     }
 
     // Add target for tower to attack and remove it from attack radius if it dies.
-    // private void OnTriggerStay(Collider other)
-    // {
-    //     // TODO: Do we really care if it's staying in? We just fire from enter to exit so do we need
-    //     // to do that in stay? Or do we need to if radius spawns over enemy?
-    //     // if (!_tower.IsPlaced || _enemiesInAttackRadius.Count == 0) return;
-    //     // UpdateTarget();
-    // }
+    private void OnTriggerStay(Collider other)
+    {
+    }
 
     // Remove enemy from attack radius tracking if it exits.
     private void OnTriggerExit(Collider other)

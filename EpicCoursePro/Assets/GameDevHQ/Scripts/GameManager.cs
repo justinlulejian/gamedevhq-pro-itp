@@ -9,6 +9,9 @@ namespace GameDevHQ.Scripts
         private int _playerWarFunds = 500;
         [SerializeField] 
         private int _playerMaximumWarFunds = 100000;
+        #if UNITY_EDITOR
+            public float CurrentTimeScale;
+        #endif
     
         public static event Action<int> onWarFundsChange;
         
@@ -21,7 +24,25 @@ namespace GameDevHQ.Scripts
         {
             Enemy.onEnemyKilledByPlayer -= AddWarFundsForEnemy;
         }
-    
+
+        private void Update()
+        {
+            // Debug timescale slow down function.
+            #if UNITY_EDITOR
+                if (Input.GetKey(KeyCode.H))
+                {
+                    Time.timeScale = Mathf.Clamp(Time.timeScale - .01f, 0f, 1.0f);
+                } else if (Input.GetKey(KeyCode.J))
+                {
+                    Time.timeScale += .1f;
+                } else if (Input.GetKey(KeyCode.K))
+                {
+                    Time.timeScale = 1.0f;
+                }
+                CurrentTimeScale = Time.timeScale;
+            #endif
+        }
+
         public int GetWarFunds()
         {
             return _playerWarFunds;

@@ -1543,7 +1543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyType: 1
   _navDestinationPosition: {x: 0, y: 0, z: 0}
-  _navigationSpeed: 4.99
+  _navigationSpeed: 1.7
   _maxHealth: 100
   WarFundValue: 100
   _weaponTarget: {fileID: 1970402011964454}
