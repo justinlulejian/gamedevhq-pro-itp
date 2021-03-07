@@ -50,6 +50,7 @@ namespace GameDevHQ.Scripts
         // When an enemy is enabled it will invoke this event.
         public static event Action<Transform, NavMeshAgent> onSpawnStart;
         public static event Action<Enemy> onEnemyKilledByPlayer;
+        public static event Action<Enemy> onEnemyCompletedDeathAnimation;
 
         private void Awake()
         {
@@ -130,13 +131,13 @@ namespace GameDevHQ.Scripts
         {
             GameObject deathExplosion = Instantiate(
                 _deathExplosionPrefab, transform.position, Quaternion.identity);
-            Destroy(deathExplosion, 5f);
+            Destroy(deathExplosion, DeathAnimWaitTime);
         }
         
         private IEnumerator WaitBeforeDespawn(Enemy enemy)
         {
             yield return new WaitForSeconds(enemy.DeathAnimWaitTime);
-            onEnemyKilledByPlayer?.Invoke(this);
+            onEnemyCompletedDeathAnimation?.Invoke(this);
         }
         
         private void AnimateDeath()
@@ -150,12 +151,9 @@ namespace GameDevHQ.Scripts
         {
             Mathf.Min(0, _currentHealth -= damageValue);
             
-            Debug.Log($"Enemy {name} damaged by player for {damageValue.ToString()}. " +
-                      $"HP now {_currentHealth.ToString()}");
-
             if (_currentHealth == 0)
             {
-                Debug.Log($"Enemy {name} killed by player");
+                onEnemyKilledByPlayer.Invoke(this);
                 AnimateDeath();
                 StartCoroutine(WaitBeforeDespawn(this));
             }

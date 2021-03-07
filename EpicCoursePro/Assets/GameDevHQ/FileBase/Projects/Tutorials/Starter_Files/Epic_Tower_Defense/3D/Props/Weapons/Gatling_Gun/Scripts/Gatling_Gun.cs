@@ -26,6 +26,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
     [RequireComponent(typeof(AudioSource))] //Require Audio Source component
     public class Gatling_Gun : Tower
     {
+        [SerializeField] 
+        private GameObject _gunBarrelObj;
         private Transform _gunBarrel; //Reference to hold the gun barrel
         public GameObject Muzzle_Flash; //reference to the muzzle flash effect to play when firing
         public ParticleSystem bulletCasings; //reference to the bullet casing effect to play when firing
@@ -37,7 +39,15 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         // Use this for initialization
         void Start()
         {
-            _gunBarrel = GameObject.Find("Barrel_to_Spin").GetComponent<Transform>(); //assigning the transform of the gun barrel to the variable
+            
+            _gunBarrel = _gunBarrelObj.GetComponent<Transform>(); //assigning the transform of the gun barrel to the variable
+
+            if (_gunBarrel == null)
+            {
+                Debug.LogError($"Tower {name} id: {this.GetInstanceID().ToString()} is " +
+                               $"missing it's gun barrel transform.");
+            }
+            
             Muzzle_Flash.SetActive(false); //setting the initial state of the muzzle flash effect to off
             _audioSource = GetComponent<AudioSource>(); // assign the Audio Source to the reference variable
             _audioSource.playOnAwake = false; //disabling play on awake
@@ -55,11 +65,10 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                 _targetedEnemy.PlayerDamageEnemy(_damageValue);
                 _canFire = Time.time + _damageRate; //
             }
-            if (_targetedEnemy) 
+            if (_targetedEnemy != null) 
             {
                 RotateBarrel();
                 bulletCasings.Emit(1); //Emit the bullet casing particle effect 
-                Debug.Log($"Tower {name} firing at target {_targetedEnemy.name}");
             }
             
             if (_targetedEnemy && !_firingAtEnemy)
@@ -81,27 +90,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
 
         }
 
-        // private void AnimateFiring()
-        // {
-        //     // RotateBarrel();
-        //     // PlayFiringAnimation();
-        // }
-        //
-        // private void PlayFiringAnimation()
-        // {
-        //     if (!_firingAtEnemy && !Muzzle_Flash.activeSelf && !_audioSource.isPlaying)
-        //     {
-        //         Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
-        //         _audioSource.Play(); //play audio clip attached to audio source
-        //     }
-        //     Debug.Log($"Tower {name} firing at target {_targetedEnemy.name}");
-        //     bulletCasings.Emit(1); //Emit the bullet casing particle effect  
-        // }
-        
-
         protected override void StartFiringAtEnemy(Enemy enemy)
         {
-            // AnimateFiring();
         }
 
         // private IEnumerator RotateBarrelWhileFiring()

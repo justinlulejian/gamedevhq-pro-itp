@@ -14693,10 +14693,11 @@ MonoBehaviour:
   AttackRadiusObj: {fileID: 386667129}
   _targetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
-  _damageValue: 20
+  _damageValue: 1
   _damageRate: 1
   _rotationObject: {fileID: 2364340935526984089}
   _rotationSpeed: 5
+  _gunBarrelObj: {fileID: 2363862936723575029}
   Muzzle_Flash: {fileID: 2363646036695275949}
   bulletCasings: {fileID: 2453288935817963951}
   fireSound: {fileID: 8300000, guid: 08e0cb88300e54b09aa0deb684c3a3de, type: 3}

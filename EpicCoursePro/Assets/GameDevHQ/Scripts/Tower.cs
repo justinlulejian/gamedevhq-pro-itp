@@ -30,23 +30,11 @@ namespace GameDevHQ.Scripts
         private Transform _rotationTransform;
         private Quaternion _originalRotation;
 
-        public static event Action<GameObject, int> onTowerDamageEnemy;
-        
         protected abstract void StartFiringAtEnemy(Enemy enemy);
         protected abstract void StopAttacking();
 
         protected abstract void ResetFiringState();
         
-        protected override void OnEnable()
-        {
-            // Enemy.onEnemyKilledByPlayer += ResetTowerAttackStateIfEnemyKilled;
-        }
-
-        protected override void OnDisable()
-        {
-            // Enemy.onEnemyKilledByPlayer -= ResetTowerAttackStateIfEnemyKilled;
-        }
-
         protected override void Awake()
         {
             base.Awake();
@@ -96,20 +84,6 @@ namespace GameDevHQ.Scripts
             }
         }
 
-        private IEnumerator DamageTargetedEnemyRoutine(Enemy enemy)
-        {
-            // TODO: Should I be checking _firingAtEnemy too so that firing anim isn't going w/out
-            // damage?
-            while (_targetedEnemy && !enemy.IsDead)
-            {
-                Debug.Log($"Tower {name} is damaging enemy {enemy.name} for" +
-                          $" {_damageValue.ToString()} value.");
-                enemy.PlayerDamageEnemy(_damageValue);
-                yield return new WaitForSeconds(1.0f);
-            }
-        }
-        
-
         // How the tower will react to enemies within it's attack radius.
         public void UpdateAttackTarget(Enemy enemy)
         {
@@ -117,9 +91,8 @@ namespace GameDevHQ.Scripts
             {
                 _targetedEnemy = null;
                 StartCoroutine(ResetRotation());
-                // Gatling: stop firing anim, clear any enemy state, rotate back to default.
-                // Missile: stop missile launch routing, clear enemy state, rotate back to default.
                 StopAttacking();
+                return;
             }
            
             // TODO: Necessary check? Avoid updating things if not necessary.
@@ -130,27 +103,9 @@ namespace GameDevHQ.Scripts
             // done to make it look more natural.
             StartFiringAtEnemy(enemy);
         }
-
-        // public void NoEnemiesInAttackRadius()
-        // {
-        //     if (!IsPlaced) return;
-        //     _targetedEnemy = null;
-        //     StartCoroutine(ResetRotation());
-        //     ResetFiringState();
-        // }
-
         public void EnableAttackRadiusCollider()
         {
             _attackRadius.EnableCollider();
         }
-        
-        // private void ResetTowerAttackStateIfEnemyKilled(Enemy enemy)
-        // {
-        //     if (!_targetedEnemy == enemy) return;
-        //     _firingAtEnemy = false;
-        //     _targetedEnemy = null;
-        //     StartCoroutine(ResetRotation());
-        //     ResetFiringState();
-        // }
     }
 }

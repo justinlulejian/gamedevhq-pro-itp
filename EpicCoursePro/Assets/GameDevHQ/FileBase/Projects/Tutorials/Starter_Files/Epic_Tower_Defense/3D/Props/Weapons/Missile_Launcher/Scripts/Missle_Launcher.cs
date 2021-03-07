@@ -78,7 +78,6 @@ namespace GameDevHQ.FileBase.Missle_Launcher
                 {
                     break;
                 }
-                Debug.Log($"Tower {name} firing at target {_targetedEnemy.name}");
                 FireRocket(i);
                 yield return new WaitForSeconds(_fireDelay); //wait for the firedelay
             }
@@ -93,16 +92,9 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             _launched = false; //set launch bool to false
         }
 
-        // private void AnimateFiring()
-        // {
-        //     if (!_targetedEnemy || _launched) return;
-        //     _launched = true; //set the launch bool to true
-        //     StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets.
-        // }
 
         protected override void StartFiringAtEnemy(Enemy enemy)
         {
-            // AnimateFiring();
         }
 
         protected override void StopAttacking()

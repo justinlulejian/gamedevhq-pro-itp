@@ -31,13 +31,13 @@ public class WaveManager : MonoSingleton<WaveManager>
     private void OnEnable()
     {
         EnemyNavEnd.onEnemyCollision += DespawnEnemy;
-        Enemy.onEnemyKilledByPlayer += DespawnEnemy;
+        Enemy.onEnemyCompletedDeathAnimation += DespawnEnemy;
     }
 
     private void OnDisable()
     {
         EnemyNavEnd.onEnemyCollision -= DespawnEnemy;
-        Enemy.onEnemyKilledByPlayer -= DespawnEnemy;
+        Enemy.onEnemyCompletedDeathAnimation -= DespawnEnemy;
     }
     
     protected override void Awake()
