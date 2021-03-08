@@ -39,7 +39,6 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         // Use this for initialization
         void Start()
         {
-            
             _gunBarrel = _gunBarrelObj.GetComponent<Transform>(); //assigning the transform of the gun barrel to the variable
 
             if (_gunBarrel == null)
@@ -50,39 +49,74 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             
             Muzzle_Flash.SetActive(false); //setting the initial state of the muzzle flash effect to off
             _audioSource = GetComponent<AudioSource>(); // assign the Audio Source to the reference variable
+            
+            if (_gunBarrel == null)
+            {
+                Debug.LogError($"Tower {name} id: {this.GetInstanceID().ToString()} is " +
+                               $"missing it's audio source.");
+            }
             _audioSource.playOnAwake = false; //disabling play on awake
             _audioSource.loop = true; //making sure our sound effect loops
             _audioSource.clip = fireSound; //assign the clip to play
+
+            StartCoroutine(FiringRoutine());
         }
 
-        protected override void Update()
+        private IEnumerator FiringRoutine()
         {
-            base.Update();
-            // TODO: Does this need to be called in update or could it be another less updated
-            // method like a coroutine?
-            if (Time.time > _canFire && _targetedEnemy && !_targetedEnemy.IsDead)
+            yield return new WaitUntil(() => _currentTargetedEnemy != null);
+            Enemy originalEnemyTarget = _currentTargetedEnemy;
+            Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
+            _audioSource.Play();
+            bulletCasings.Play();
+            while (true)
             {
-                _targetedEnemy.PlayerDamageEnemy(_damageValue);
-                _canFire = Time.time + _damageRate; //
+                // Switching targets.
+                if (_currentTargetedEnemy != originalEnemyTarget)
+                {
+                    break;
+                }
+                SpinBarrel();
+                RotateTowardsTarget();
+                yield return null;
             }
-            if (_targetedEnemy != null) 
+
+            if (_currentTargetedEnemy == null)
             {
-                RotateBarrel();
-                bulletCasings.Emit(1); //Emit the bullet casing particle effect 
+                Muzzle_Flash.SetActive(false);
+                _audioSource.Stop();
+                bulletCasings.Stop();
             }
-            
-            if (_targetedEnemy && !_firingAtEnemy)
-            {
-                Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
-                _audioSource.Play(); //play audio clip attached to audio source
-                _firingAtEnemy = true;  // Only initiate this one per firing instance.
-            }
-            
-            
+            // TODO: Could this be refactored to be a continuously running coroutine?
+            StartCoroutine(FiringRoutine());
         }
+
+        // protected override void Update()
+        // {
+        //     base.Update();
+        //     // TODO: Does this need to be called in update or could it be another less updated
+        //     // method like a coroutine?
+        //     if (Time.time > _canFire && _currentTargetedEnemy && !_currentTargetedEnemy.IsDead)
+        //     {
+        //         _currentTargetedEnemy.PlayerDamageEnemy(_damageValue);
+        //         _canFire = Time.time + _damageRate; //
+        //     }
+        //     if (_currentTargetedEnemy != null) 
+        //     {
+        //         SpinBarrel();
+        //         bulletCasings.Emit(1); //Emit the bullet casing particle effect 
+        //     }
+        //     
+        //     if (_currentTargetedEnemy && !_firingAtEnemy)
+        //     {
+        //         Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
+        //         _audioSource.Play(); //play audio clip attached to audio source
+        //         _firingAtEnemy = true;  // Only initiate this one per firing instance.
+        //     }
+        // }
 
         // Method to rotate gun barrel 
-        void RotateBarrel() 
+        void SpinBarrel() 
         {
             // TODO: Make this a slower spin up effect with lerp?
             //rotate the gun barrel along the "forward" (z) axis at 500 meters per second
@@ -96,16 +130,16 @@ namespace GameDevHQ.FileBase.Gatling_Gun
 
         // private IEnumerator RotateBarrelWhileFiring()
         // {
-        //     while (_targetedEnemy != null)
+        //     while (_currentTargetedEnemy != null)
         //     {
-        //         RotateBarrel();
+        //         SpinBarrel();
         //         yield return null;
         //     }
         // }
 
         protected override void StopAttacking()
         {
-            _targetedEnemy = null;
+            _currentTargetedEnemy = null;
             _firingAtEnemy = false;
             Muzzle_Flash.SetActive(false);
             _audioSource.Stop();

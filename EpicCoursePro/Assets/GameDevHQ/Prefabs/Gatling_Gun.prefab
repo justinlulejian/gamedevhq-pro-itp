@@ -228,12 +228,12 @@ ParticleSystem:
   m_GameObject: {fileID: 2362272582316565879}
   serializedVersion: 6
   lengthInSec: 2
-  simulationSpeed: 2
+  simulationSpeed: 10
   stopAction: 0
   cullingMode: 1
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -4897,7 +4897,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: e452c20f0c1a04e4bb39908ed6686f98, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14691,7 +14690,8 @@ MonoBehaviour:
   TowerType: 1
   WarFundValue: 100
   AttackRadiusObj: {fileID: 386667129}
-  _targetedEnemy: {fileID: 0}
+  _currentTargetedEnemy: {fileID: 0}
+  _previousTargetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
   _damageValue: 1
   _damageRate: 1

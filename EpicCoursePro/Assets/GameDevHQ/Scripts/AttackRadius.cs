@@ -111,6 +111,13 @@ public class AttackRadius : MonoBehaviour
     // Add target for tower to attack and remove it from attack radius if it dies.
     private void OnTriggerStay(Collider other)
     {
+        if (!_tower.IsPlaced) return;
+        if (!other.CompareTag("Enemy")) return;
+        if (!_enemiesInAttackRadius.ContainsKey(other.gameObject))
+        {
+            TrackTarget(other.gameObject);
+            UpdateTarget();
+        }
     }
 
     // Remove enemy from attack radius tracking if it exits.

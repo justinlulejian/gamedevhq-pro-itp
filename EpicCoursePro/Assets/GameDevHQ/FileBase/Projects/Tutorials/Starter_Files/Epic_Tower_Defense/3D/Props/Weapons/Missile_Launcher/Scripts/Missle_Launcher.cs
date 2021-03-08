@@ -32,13 +32,13 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             base.Update();
             // TODO: This is duplicated with Gatling impl for now, but missile collision damage
             // feature will remove this.
-            if (Time.time > _canFire && _targetedEnemy && !_targetedEnemy.IsDead)
+            if (Time.time > _canFire && _currentTargetedEnemy && !_currentTargetedEnemy.IsDead)
             {
-                _targetedEnemy.PlayerDamageEnemy(_damageValue);
+                _currentTargetedEnemy.PlayerDamageEnemy(_damageValue);
                 _canFire = Time.time + _damageRate;
             }
 
-            if (_targetedEnemy && !_launched)
+            if (_currentTargetedEnemy && !_launched)
             {
                 StartCoroutine(FireRocketsRoutine());
                 _launched = true;
@@ -74,7 +74,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             {
                 // If we switch enemies mid-routine then stop firing, reload, and then start
                 // shooting again. TODO: this'll need to change once it's not called in update anymore?
-                if (_targetedEnemy == null)
+                if (_currentTargetedEnemy == null)
                 {
                     break;
                 }
@@ -99,7 +99,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher
 
         protected override void StopAttacking()
         {
-            _targetedEnemy = null;
+            _currentTargetedEnemy = null;
         }
 
         protected override void ResetFiringState()

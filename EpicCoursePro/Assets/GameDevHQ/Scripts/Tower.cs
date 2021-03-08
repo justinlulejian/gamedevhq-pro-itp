@@ -12,7 +12,9 @@ namespace GameDevHQ.Scripts
         [Header("Target Settings")]
         private AttackRadius _attackRadius;
         [SerializeField]
-        protected Enemy _targetedEnemy;
+        protected Enemy _currentTargetedEnemy;
+        [SerializeField]
+        protected Enemy _previousTargetedEnemy;
         [SerializeField]
         protected bool _firingAtEnemy;
         [SerializeField]
@@ -52,19 +54,19 @@ namespace GameDevHQ.Scripts
                 Debug.LogError($"Rotation transform was null on tower {this.name}.");
             }
         }
-
+        
         protected virtual void Update()
         {
-            if (_targetedEnemy)
-            {
-                RotateTowardsTarget(_targetedEnemy);
-            }
+            // if (_currentTargetedEnemy)
+            // {
+            //     RotateTowardsTarget(_currentTargetedEnemy);
+            // }
         }
 
-        private void RotateTowardsTarget(Enemy enemy)
+        protected void RotateTowardsTarget()
         {
             // TODO: Clamp the rotation so it doesn't rotate too oddly depending on where enemy is.
-            Vector3 direction = enemy.WeaponTargetTransform.position - _rotationTransform.position;
+            Vector3 direction = _currentTargetedEnemy.WeaponTargetTransform.position - _rotationTransform.position;
             Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
             _rotationTransform.rotation =
                 Quaternion.Slerp(_rotationTransform.rotation, lookRotation,
@@ -75,7 +77,7 @@ namespace GameDevHQ.Scripts
         private IEnumerator ResetRotation()
         {
             // comparing rotation would prevent this from running forever.
-            while (_targetedEnemy == null && _rotationTransform.rotation != _originalRotation)
+            while (_currentTargetedEnemy == null && _rotationTransform.rotation != _originalRotation)
             {
                 _rotationTransform.rotation =
                     Quaternion.Slerp(_rotationTransform.rotation, _originalRotation,
@@ -89,19 +91,20 @@ namespace GameDevHQ.Scripts
         {
             if (enemy == null)
             {
-                _targetedEnemy = null;
+                _currentTargetedEnemy = null;
                 StartCoroutine(ResetRotation());
                 StopAttacking();
                 return;
             }
            
             // TODO: Necessary check? Avoid updating things if not necessary.
-            if (enemy == _targetedEnemy) return;
-            _targetedEnemy = enemy;
+            if (enemy == _currentTargetedEnemy) return;
+            _previousTargetedEnemy = _currentTargetedEnemy;
+            _currentTargetedEnemy = enemy;
             // RotateTowardsTarget(enemy);  // moved to update temporarily
             // TODO: Figure out a way to start the firing process once rotation is close to being
             // done to make it look more natural.
-            StartFiringAtEnemy(enemy);
+            // StartFiringAtEnemy(enemy);
         }
         public void EnableAttackRadiusCollider()
         {
