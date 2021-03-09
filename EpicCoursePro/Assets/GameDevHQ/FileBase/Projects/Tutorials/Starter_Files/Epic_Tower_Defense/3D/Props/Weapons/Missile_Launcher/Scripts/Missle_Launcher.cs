@@ -48,15 +48,25 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         private void FireRocket(int i)
         {
             // TODO: Pool rockets
-            GameObject rocket = Instantiate(_missilePrefab) as GameObject; //instantiate a rocket
-
-            rocket.transform.parent = _misslePositions[i].transform; //set the rockets parent to the missle launch position 
+            // GameObject rocket = Instantiate(_missilePrefab) as GameObject; //instantiate a rocket
+            GameObject rocket = PoolManager.Instance.RequestObjOfType(_missilePrefab);
+            rocket.SetActive(true);
+            
+            Transform rocketOriginalParent = rocket.transform.parent;
+            rocket.transform.parent = _misslePositions[i].transform; //set the rockets parent to the missile launch position 
             rocket.transform.localPosition = Vector3.zero; //set the rocket position values to zero
             rocket.transform.localEulerAngles = new Vector3(-90, 0, 0); //set the rotation values to be properly aligned with the rockets forward direction
-            rocket.transform.parent = null; //set the rocket parent to null
+            rocket.transform.parent = rocketOriginalParent; //set the rocket parent to null
+            Debug.Log($"Missile {this.GetInstanceID().ToString()}: Rocket position: {rocket.transform.position.ToString()} localposition:" +
+                      $" {rocket.transform.localPosition.ToString()}");
+            Debug.Log($"Missile {this.GetInstanceID().ToString()}: Rocket rotation: {rocket.transform.rotation.ToString()} localrotation:" +
+                      $" {rocket.transform.localRotation.ToString()}");
 
-            rocket.GetComponent<GameDevHQ.FileBase.Missle_Launcher.Missle.Missle>().AssignMissleRules(
-                _launchSpeed, _power, _fuseDelay, _destroyTime); //assign missle properties 
+            Missle.Missle missile =
+                rocket.GetComponent<GameDevHQ.FileBase.Missle_Launcher.Missle.Missle>();
+            missile.AssignMissleRules(
+                _launchSpeed, _power, _fuseDelay, _destroyTime); //assign missile properties 
+            StartCoroutine(missile.Start());
 
             _misslePositions[i].SetActive(false); //turn off the rocket sitting in the turret to make it look like it fired
 

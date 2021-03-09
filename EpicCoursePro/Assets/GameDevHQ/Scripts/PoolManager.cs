@@ -28,6 +28,15 @@ namespace GameDevHQ.Scripts
         [SerializeField]
         private int _numberOfTowersToPool = 5;
         private List<GameObject> _towerPool = new List<GameObject>();
+        
+        [Header("Missile turret missile pool settings")]
+        [SerializeField] 
+        private GameObject _missileContainer;
+        [SerializeField] 
+        private GameObject _missilePrefab;
+        [SerializeField]
+        private int _numberOfMissilesToPool = 6;
+        private List<GameObject> _missilePool = new List<GameObject>();
 
         
         
@@ -42,6 +51,10 @@ namespace GameDevHQ.Scripts
             {
                 Debug.LogError("Tower prefabs have not been specified in Pool Manager.");
             }
+            if (_missilePrefab == null) 
+            {
+                Debug.LogError("Missile prefab has not been specified in Pool Manager.");
+            }
 
             foreach (GameObject enemyPrefab in _allEnemyPrefabs)
             {
@@ -53,6 +66,8 @@ namespace GameDevHQ.Scripts
                 GeneratePooledObjects(
                     _numberOfTowersToPool, towerPrefab, _towerPool, _towerContainer.transform);
             }
+            GeneratePooledObjects(
+                _numberOfMissilesToPool, _missilePrefab, _missilePool, _missileContainer.transform);
         }
         
         private void GeneratePooledObjects(int numObjects, GameObject objectType,
@@ -76,12 +91,17 @@ namespace GameDevHQ.Scripts
             {
                 return RequestTowerType(objType);
             }
+            if (_missilePrefab.CompareTag(objType.tag))
+            {
+                return RequestMissile(objType);
+            }
 
             Debug.LogError($"Pool manager couldn't find object of type {objType.name} in a" +
                            $"pool.");
             return null;
         }
 
+        // TODO: Collapse all the Request types into generic methods that can find any type.
         // Provides one inactivated enemy from the pool of the type that was specified.
         private GameObject RequestEnemyType(GameObject enemyType)
         {
@@ -119,6 +139,20 @@ namespace GameDevHQ.Scripts
             
             GeneratePooledObjects(1, towerType, _towerPool, _towerContainer.transform);
             return RequestTowerType(towerType);
+        }
+        
+        private GameObject RequestMissile(GameObject missilePrefab)
+        {
+            var inactiveMissile = _missilePool.FirstOrDefault(
+                m => !m.activeInHierarchy);
+            
+            if (inactiveMissile != null)
+            {
+                return inactiveMissile;
+            }
+            
+            GeneratePooledObjects(1, missilePrefab, _missilePool, _missileContainer.transform);
+            return RequestMissile(missilePrefab);
         }
         
         public void RecyclePooledObj(GameObject obj)

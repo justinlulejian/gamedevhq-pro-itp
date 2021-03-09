@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using GameDevHQ.Scripts;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GameDevHQ.FileBase.Missle_Launcher.Missle
 {
@@ -28,12 +31,21 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
         private bool _fuseOut = false; //bool for if the rocket fuse
         private bool _trackRotation = false; //bool to track rotation of the rocket
 
-
-        // Use this for initialization
-        IEnumerator Start()
+        private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>(); //assign the rigidbody component 
             _audioSource = GetComponent<AudioSource>(); //assign the audiosource component
+        }
+
+        // Use this for initialization
+        public IEnumerator Start()
+        {
+            Debug.Log($"Initial values for missile: _initialLaunchTime: {_initialLaunchTime.ToString()}" +
+                      $" _fuseOut: {_fuseOut.ToString()}, _launched: {_launched.ToString()}" +
+                      $" _thrust: {_thrust.ToString()}, _rigidbody.useGravity: {_rigidbody.useGravity.ToString()}" +
+                      $", _trackRotation: {_trackRotation.ToString()}, _rigidbody.velocity: {_rigidbody.velocity.ToString()}");
+
+            
             _audioSource.pitch = Random.Range(0.7f, 1.9f); //randomize the pitch of the rocket audio
             _particle.Play(); //play the particles of the rocket
             _audioSource.Play(); //play the rocket sound
@@ -44,7 +56,28 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
             _fuseOut = true; //set fuseOut to true
             _launched = true; //set the launch bool to true 
             _thrust = false; //set thrust bool to false
+            
+            Debug.Log("Missile {this.GetInstanceID().ToString()}: After initial setup values for missile: _initialLaunchTime: {_initialLaunchTime.ToString()}" +
+                      $" _fuseOut: {_fuseOut.ToString()}, _launched: {_launched.ToString()}" +
+                      $" _thrust: {_thrust.ToString()}, _rigidbody.useGravity: {_rigidbody.useGravity.ToString()}" +
+                      $", _trackRotation: {_trackRotation.ToString()}, _rigidbody.velocity: {_rigidbody.velocity.ToString()}");
 
+        }
+
+        private void OnDisable()
+        {
+            _particle.Stop(); //play the particles of the rocket
+            _audioSource.Stop(); //play the rocket sound
+            _rigidbody.useGravity = false;
+            _fuseOut = false; //set fuseOut to true
+            _launched = false; //set the launch bool to true 
+            _thrust = true; //set thrust bool to false
+            _trackRotation = false;
+            
+            Debug.Log($"Missile {this.GetInstanceID().ToString()}: After disable values for missile: _initialLaunchTime: {_initialLaunchTime.ToString()}" +
+                      $" _fuseOut: {_fuseOut.ToString()}, _launched: {_launched.ToString()}" +
+                      $" _thrust: {_thrust.ToString()}, _rigidbody.useGravity: {_rigidbody.useGravity.ToString()}" +
+                      $", _trackRotation: {_trackRotation.ToString()}, _rigidbody.velocity: {_rigidbody.velocity.ToString()}");
         }
 
 
@@ -76,9 +109,15 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
             if (_trackRotation == true) //check track rotation bool
             {
                 _rigidbody.rotation = Quaternion.LookRotation(_rigidbody.velocity); // adjust rotation of rocket based on velocity
-                _rigidbody.AddForce(transform.forward * 100f); //add force to the rocket
+                _rigidbody.AddForce(transform.forward * 1f); //add force to the rocket
             }
 
+        }
+
+        private IEnumerator RecycleLaunchedRocket(float waitTime)
+        {
+            yield return new WaitForSeconds(waitTime);
+            PoolManager.Instance.RecyclePooledObj(this.gameObject);
         }
 
         /// <summary>
@@ -89,8 +128,14 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
             _launchSpeed = launchSpeed; //set the launch speed
             _power = power; //set the power
             _fuseDelay = fuseDelay; //set the fuse delay
-            Destroy(this.gameObject, destroyTimer); //destroy the rocket after destroyTimer 
+            StartCoroutine(RecycleLaunchedRocket(destroyTimer));
+            // Destroy(this.gameObject, destroyTimer); //destroy the rocket after destroyTimer 
         }
+
+        // public void LaunchRocket()
+        // {
+        //     _launched = true;
+        // }
     }
 }
 

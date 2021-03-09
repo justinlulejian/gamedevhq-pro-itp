@@ -329,12 +329,12 @@ MonoBehaviour:
   - {fileID: 1590850670322093909}
   - {fileID: 1591416252504888379}
   - {fileID: 1590751455907329735}
-  _fireDelay: 2
+  _fireDelay: 4
   _launchSpeed: 10
   _power: 20
   _fuseDelay: 0
   _reloadTime: 0
-  _destroyTime: 10
+  _destroyTime: 2
 --- !u!1 &1589898110320522319
 GameObject:
   m_ObjectHideFlags: 0
