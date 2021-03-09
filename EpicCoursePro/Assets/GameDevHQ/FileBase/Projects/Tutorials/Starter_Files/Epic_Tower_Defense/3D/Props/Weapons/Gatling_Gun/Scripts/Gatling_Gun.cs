@@ -81,6 +81,7 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                 yield return null;
             }
 
+            // Reset firing state to idle.
             if (_currentTargetedEnemy == null)
             {
                 Muzzle_Flash.SetActive(false);
@@ -124,29 +125,9 @@ namespace GameDevHQ.FileBase.Gatling_Gun
 
         }
 
-        protected override void StartFiringAtEnemy(Enemy enemy)
-        {
-        }
-
-        // private IEnumerator RotateBarrelWhileFiring()
-        // {
-        //     while (_currentTargetedEnemy != null)
-        //     {
-        //         SpinBarrel();
-        //         yield return null;
-        //     }
-        // }
-
         protected override void StopAttacking()
         {
             _currentTargetedEnemy = null;
-            _firingAtEnemy = false;
-            Muzzle_Flash.SetActive(false);
-            _audioSource.Stop();
-        }
-
-        protected override void ResetFiringState()
-        {
             _firingAtEnemy = false;
             Muzzle_Flash.SetActive(false);
             _audioSource.Stop();

@@ -26,23 +26,33 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         [SerializeField]
         private float _destroyTime = 10.0f; //how long till the rockets get cleaned up
         private bool _launched; //bool to check if we launched the rockets
+        
+        // Coroutines
+        private Coroutine _enemyTrackingCoroutine;
+        private Coroutine _fireAndReloadCoroutine;
+        private int _nextAvailableRocketMissilePosition;
 
-        protected override void Update()
+        // protected override void Update()
+        // {
+        //     base.Update();
+        //     // TODO: This is duplicated with Gatling impl for now, but missile collision damage
+        //     // feature will remove this.
+        //     if (Time.time > _canFire && _currentTargetedEnemy && !_currentTargetedEnemy.IsDead)
+        //     {
+        //         _currentTargetedEnemy.PlayerDamageEnemy(_damageValue);
+        //         _canFire = Time.time + _damageRate;
+        //     }
+        //
+        //     if (_currentTargetedEnemy && !_launched)
+        //     {
+        //         StartCoroutine(FireRocketsRoutine());
+        //         _launched = true;
+        //     }
+        // }
+
+        private void Start()
         {
-            base.Update();
-            // TODO: This is duplicated with Gatling impl for now, but missile collision damage
-            // feature will remove this.
-            if (Time.time > _canFire && _currentTargetedEnemy && !_currentTargetedEnemy.IsDead)
-            {
-                _currentTargetedEnemy.PlayerDamageEnemy(_damageValue);
-                _canFire = Time.time + _damageRate;
-            }
-
-            if (_currentTargetedEnemy && !_launched)
-            {
-                StartCoroutine(FireRocketsRoutine());
-                _launched = true;
-            }
+            StartCoroutine(FiringRoutine());
         }
 
         private void FireRocket(int i)
@@ -61,51 +71,106 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             _misslePositions[i].SetActive(false); //turn off the rocket sitting in the turret to make it look like it fired
 
         }
-        
-        IEnumerator FireRocketsRoutine()
-        {
-            // TODO: When we detect collisions, should this be more dynamic so we're more certain
-            // the rocket will collide? Otherwise it'll always miss sometimes (if rot is large).
-            // This also has the problem where a rocket will fire late after enemy exits and rocket
-            // will fire later.
-            // Wait a moment for the turret to get some rotation towards target before firing.
-            yield return new WaitForSeconds(.5f);
-            for (int i = 0; i < _misslePositions.Length; i++) //for loop to iterate through each missle position
-            {
-                // If we switch enemies mid-routine then stop firing, reload, and then start
-                // shooting again. TODO: this'll need to change once it's not called in update anymore?
-                if (_currentTargetedEnemy == null)
-                {
-                    break;
-                }
-                FireRocket(i);
-                yield return new WaitForSeconds(_fireDelay); //wait for the firedelay
-            }
 
-            // Reset/reload rockets after firing.
-            for (int i = 0; i < _misslePositions.Length; i++) //itterate through missle positions
+        private IEnumerator FireAndReloadRoutine()
+        {
+            while (true)
+            {
+                for (int i = 0; i < _misslePositions.Length; i++)
+                {
+                    FireRocket(i);
+                    yield return new WaitForSeconds(_fireDelay);
+                }
+            
+                // Reload rockets.
+                yield return StartCoroutine(ReloadRockets());
+            }
+        }
+
+        private IEnumerator ReloadRockets()
+        {
+            foreach (GameObject missile in _misslePositions)
             {
                 yield return new WaitForSeconds(_reloadTime); //wait for reload time
-                _misslePositions[i].SetActive(true); //enable fake rocket to show ready to fire
+                missile.SetActive(true); //enable fake rocket to show ready to fire
             }
-
-            _launched = false; //set launch bool to false
         }
 
-
-        protected override void StartFiringAtEnemy(Enemy enemy)
+        private IEnumerator TrackEnemyRoutine()
         {
+            while (_currentTargetedEnemy != null)
+            {
+                RotateTowardsTarget();
+                yield return null;
+            }
         }
+
+        private IEnumerator FiringRoutine()
+        {
+            yield return new WaitUntil(() => _currentTargetedEnemy != null);
+            Enemy originalEnemyTarget = _currentTargetedEnemy;
+
+            this.StartCoroutine(TrackEnemyRoutine(), ref _enemyTrackingCoroutine);
+            // TODO: Maybe do a raycast instead of static wait so that turret points at enemy
+            // before firing. Won't be an issue once they work with homing.
+            // Wait a moment for the turret to get some rotation towards target before firing.
+            yield return new WaitForSeconds(.5f);
+            this.StartCoroutine(FireAndReloadRoutine(), ref _fireAndReloadCoroutine);
+
+            while (true)
+            {
+                if (_currentTargetedEnemy != originalEnemyTarget)
+                {
+                    this.TryStopCoroutine(ref _enemyTrackingCoroutine);
+                    this.TryStopCoroutine(ref _fireAndReloadCoroutine);
+                    yield return StartCoroutine(ReloadRockets());
+                    // TODO: Could this be refactored to be a continuously running coroutine?
+                    StartCoroutine(FiringRoutine());
+                    break;
+                }
+                
+                RotateTowardsTarget();
+                yield return null;
+            }
+        }
+        
+        // IEnumerator FireRocketsRoutine()
+        // {
+        //     // TODO: Maybe do a raycast instead of static wait so that turret points at enemy
+        //     // before firing. Won't be an issue once they work with homing.
+        //     // Wait a moment for the turret to get some rotation towards target before firing.
+        //     yield return new WaitForSeconds(.5f);
+        //     for (int i = 0; i < _misslePositions.Length; i++) //for loop to iterate through each missle position
+        //     {
+        //         // If we switch enemies mid-routine then stop firing, reload, and then start
+        //         // shooting again. TODO: this'll need to change once it's not called in update anymore?
+        //         if (_currentTargetedEnemy == null)
+        //         {
+        //             break;
+        //         }
+        //         FireRocket(i);
+        //         yield return new WaitForSeconds(_fireDelay); //wait for the firedelay
+        //     }
+        //
+        //     // Reset/reload rockets after firing.
+        //     for (int i = 0; i < _misslePositions.Length; i++) //itterate through missle positions
+        //     {
+        //         yield return new WaitForSeconds(_reloadTime); //wait for reload time
+        //         _misslePositions[i].SetActive(true); //enable fake rocket to show ready to fire
+        //     }
+        //
+        //     _launched = false; //set launch bool to false
+        // }
 
         protected override void StopAttacking()
         {
             _currentTargetedEnemy = null;
         }
 
-        protected override void ResetFiringState()
-        {
-            _firingAtEnemy = false;
-        }
+        // protected override void ResetFiringState()
+        // {
+        //     _firingAtEnemy = false;
+        // }
     }
 }
 

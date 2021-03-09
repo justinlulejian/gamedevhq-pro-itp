@@ -104,8 +104,14 @@ public class AttackRadius : MonoBehaviour
     {
         if (!_tower.IsPlaced) return;
         if (!other.CompareTag("Enemy")) return;
+        Debug.Log($"Tower {_tower.GetInstanceID().ToString()} should now start targeting enemy {other.GetInstanceID().ToString()}");
         TrackTarget(other.gameObject);
         UpdateTarget();
+        
+        if (_enemiesInAttackRadius.Count > 0)
+        {
+            Debug.DrawRay(transform.position, transform.position - other.gameObject.transform.position, Color.magenta);
+        }
     }
 
     // Add target for tower to attack and remove it from attack radius if it dies.
@@ -118,6 +124,23 @@ public class AttackRadius : MonoBehaviour
             TrackTarget(other.gameObject);
             UpdateTarget();
         }
+        
+        if (_enemiesInAttackRadius.Count > 0) {
+            Debug.DrawRay(
+                transform.position, _enemiesInAttackRadius.First().Value.transform.position - transform.position,
+                Color.red);
+            if (_enemiesInAttackRadius.Count > 1)
+            {
+                for (int i = 1; i < _enemiesInAttackRadius.Count; i++)
+                {
+                    Debug.DrawRay(
+                        transform.position,
+                        _enemiesInAttackRadius.ElementAt(i).Value.transform.position -
+                        transform.position,
+                        Color.blue);
+                }
+            }
+        }
     }
 
     // Remove enemy from attack radius tracking if it exits.
@@ -125,5 +148,11 @@ public class AttackRadius : MonoBehaviour
     {
         if (!other.CompareTag("Enemy")) return;
         RemoveTargetFromTrackingAndMaybeUpdate(other.gameObject);
+        
+        if (_enemiesInAttackRadius.Count > 0)
+        {
+            Debug.DrawRay(transform.position, transform.position - other.gameObject.transform.position, Color.green);
+            Debug.Log($"Mech {other.gameObject.GetInstanceID().ToString()} exited tower {this.GetInstanceID().ToString()}");
+        }
     }
 }

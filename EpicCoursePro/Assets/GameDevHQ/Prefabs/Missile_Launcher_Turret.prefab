@@ -314,7 +314,8 @@ MonoBehaviour:
   TowerType: 2
   WarFundValue: 200
   AttackRadiusObj: {fileID: 368257725}
-  _targetedEnemy: {fileID: 0}
+  _currentTargetedEnemy: {fileID: 0}
+  _previousTargetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
   _damageValue: 1
   _damageRate: 1
@@ -333,7 +334,7 @@ MonoBehaviour:
   _launchSpeed: 10
   _power: 20
   _fuseDelay: 0
-  _reloadTime: 0
+  _reloadTime: 0.5
   _destroyTime: 10
 --- !u!1 &1589898110320522319
 GameObject:

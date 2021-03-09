@@ -32,11 +32,8 @@ namespace GameDevHQ.Scripts
         private Transform _rotationTransform;
         private Quaternion _originalRotation;
 
-        protected abstract void StartFiringAtEnemy(Enemy enemy);
         protected abstract void StopAttacking();
 
-        protected abstract void ResetFiringState();
-        
         protected override void Awake()
         {
             base.Awake();
