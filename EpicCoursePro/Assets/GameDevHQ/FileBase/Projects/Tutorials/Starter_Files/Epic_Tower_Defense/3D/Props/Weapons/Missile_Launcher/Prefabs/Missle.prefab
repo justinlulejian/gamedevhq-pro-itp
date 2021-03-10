@@ -4881,7 +4881,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d017e3c5e28da4c9d9245a644d893c53, type: 2}
-  - {fileID: 2100000, guid: d017e3c5e28da4c9d9245a644d893c53, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9644,7 +9643,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f69708dc0754e4d4aa552e9d0e982690, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9699,6 +9697,7 @@ GameObject:
   - component: {fileID: 4443573438559350}
   - component: {fileID: 33407440297859564}
   - component: {fileID: 23114689471388686}
+  - component: {fileID: 8072486197210953875}
   m_Layer: 0
   m_Name: Missle_model
   m_TagString: Untagged
@@ -9769,3 +9768,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!136 &8072486197210953875
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986400093045310}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.11397437
+  m_Height: 1.2339631
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

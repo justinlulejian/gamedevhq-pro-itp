@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using GameDevHQ.Scripts;
 using UnityEngine;
+using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
 namespace GameDevHQ.FileBase.Missle_Launcher.Missle
 {
@@ -11,6 +15,13 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
         [SerializeField]
         private ParticleSystem _particle; //reference to the particle system
 
+        [SerializeField] 
+        private CapsuleCollider _missileCollider;
+        [SerializeField] 
+        private MeshRenderer _meshRenderer;
+        public int RocketDamageValue = 100;
+        private bool _collidedWithEnemy;
+
         [SerializeField]
         private float _launchSpeed; //launch speed of the rocket
         [SerializeField]
@@ -20,13 +31,34 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
 
         private Rigidbody _rigidbody; //reference to the rigidbody of the rocket
         private AudioSource _audioSource; //reference to the audiosource of the rocket
-        
+
+        private bool _firing;  // Whether rocket has been "armed"/launched to fire at enemy.
         private bool _launched = false; //bool for if the rocket has launched
         private float _initialLaunchTime = 2.0f; //initial launch time for the rocket
         private bool _thrust; //bool to enable the rocket thrusters
 
         private bool _fuseOut = false; //bool for if the rocket fuse
         private bool _trackRotation = false; //bool to track rotation of the rocket
+
+        public static event Action<Missle, GameObject> onMissileHitEnemy; 
+
+        private void Awake()
+        {
+            _missileCollider = GetComponentInChildren<CapsuleCollider>();
+            _meshRenderer = GetComponentInChildren<MeshRenderer>();
+            if (_missileCollider == null)
+            {
+                Debug.LogError(
+                    $"Collider on missile {this.GetInstanceID().ToString()} is " +
+                    $"not present, enemy hit detection may break.");
+            }
+            if (_meshRenderer == null)
+            {
+                Debug.LogError(
+                    $"Mesh renderer on missile {this.GetInstanceID().ToString()} is " +
+                    $"not present, enemy hit detection may break.");
+            }
+        }
 
 
         // Use this for initialization
@@ -56,6 +88,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
 
             if (_launched == true) //check if launched is true
             {
+                _firing = true;
                 _rigidbody.AddForce(transform.forward * _launchSpeed); //add force to the rocket in the forward direction
 
                 if (Time.time > _initialLaunchTime + _fuseDelay) //check if the initial launch + fuse delay has passed
@@ -72,13 +105,46 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
                 _thrust = false; //set thrust bool to false
                 _trackRotation = true; //track rotation bool set to true
             }
-             
+            
+            // TODO: Turn this into homing towards a target.
             if (_trackRotation == true) //check track rotation bool
             {
                 _rigidbody.rotation = Quaternion.LookRotation(_rigidbody.velocity); // adjust rotation of rocket based on velocity
                 _rigidbody.AddForce(transform.forward * 100f); //add force to the rocket
             }
+        }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!_firing) return;
+            if (!other.CompareTag("Enemy")) return;
+            if (_collidedWithEnemy) return;
+            _collidedWithEnemy = true;
+
+            DamageEnemy(other.gameObject);
+            StopMissileInteractions();
+            
+            // Convert to pooling
+            Destroy(this.gameObject, 5f); //destroy the rocket after anim should finish playing. 
+        }
+        
+        private void DamageEnemy(GameObject enemyObj)
+        {
+            Enemy enemy = enemyObj.GetComponent<Enemy>();
+            enemy.PlayerDamageEnemy(RocketDamageValue);
+        }
+        
+        private void StopMissileInteractions()
+        {
+            _particle.Stop(); 
+            _audioSource.Stop();
+            _meshRenderer.enabled = false;
+            _missileCollider.enabled = false;
+            _launched = false;
+            _thrust = false;
+            _trackRotation = false;
+            _fuseOut = false;
+            _firing = false;
         }
 
         /// <summary>
