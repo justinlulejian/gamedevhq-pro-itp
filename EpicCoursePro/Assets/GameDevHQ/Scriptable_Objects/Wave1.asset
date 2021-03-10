@@ -21,4 +21,4 @@ MonoBehaviour:
   - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
   - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
   randomSpawnOn: 0
-  timeBeforeStart: 0
+  timeBeforeStart: 30

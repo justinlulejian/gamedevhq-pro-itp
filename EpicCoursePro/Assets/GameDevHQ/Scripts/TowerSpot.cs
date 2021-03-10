@@ -10,11 +10,12 @@ public class TowerSpot : MonoBehaviour
     private ParticleSystem _availableParticleSystem;
 
     [SerializeField] 
-    private GameObject _towerPlaced;
+    private Tower _towerPlaced;
 
     public static event Action<TowerSpot> onUserMouseEnterTowerSpot; 
     public static event Action onUserMouseExitTowerSpot; 
     public static event Action<TowerSpot> onUserMouseDownTowerSpot;
+    public static event Action<TowerSpot> onMouseDownUpgradeTowerSpot;
     
     private void OnEnable()
     {
@@ -78,7 +79,28 @@ public class TowerSpot : MonoBehaviour
     {
         if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
         {
-            onUserMouseDownTowerSpot.Invoke(this);
+            onUserMouseDownTowerSpot?.Invoke(this);
+            return;
+        }
+
+        if (_towerPlaced)
+        {
+            onMouseDownUpgradeTowerSpot?.Invoke(this);
+            return;
+        }
+    }
+
+    public Tower GetTowerPlacedOnSpot()
+    {
+        if (_towerPlaced)
+        {
+            return _towerPlaced;
+        }
+        else
+        {
+            Debug.LogError($"Requested placed tower from Tower spot ID" +
+                           $" {this.GetInstanceID().ToString()} but it is not set.");
+            return null;
         }
     }
     
@@ -92,7 +114,7 @@ public class TowerSpot : MonoBehaviour
                            $"not be placed.");
             return;
         }
-        _towerPlaced = towerToPlace;
+        _towerPlaced = tower;
         tower.IsPlaced = true;
         tower.EnableAttackRadiusCollider();
         IsAvailableForPlacement = false;

@@ -39,6 +39,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         TowerSpot.onUserMouseEnterTowerSpot += ActivateTowerPlacementPreview;
         TowerSpot.onUserMouseExitTowerSpot += DeactivateTowerPlacementPreview;
         TowerSpot.onUserMouseDownTowerSpot += PlaceTower;
+        UpgradeGunUIManager.onPlayerCanPlaceUpgrade += PlayerUpgradeTowerOnSpot;
     }
 
     private void OnDisable()
@@ -46,6 +47,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         TowerSpot.onUserMouseEnterTowerSpot -= ActivateTowerPlacementPreview;
         TowerSpot.onUserMouseExitTowerSpot -= DeactivateTowerPlacementPreview;
         TowerSpot.onUserMouseDownTowerSpot -= PlaceTower;
+        UpgradeGunUIManager.onPlayerCanPlaceUpgrade -= PlayerUpgradeTowerOnSpot;
     }
     
     protected override void Awake()
@@ -145,6 +147,28 @@ public class TowerManager : MonoSingleton<TowerManager>
         {
             DeactivateTowerPlacementMode();
         }
+    }
+    
+    private void PlayerUpgradeTowerOnSpot(TowerSpot towerSpot, GameObject _upgradedTowerPrefab)
+    {
+        Debug.Log($"User is able to place tower on tower" +
+                  $" {towerSpot.GetInstanceID().ToString()} in TM with prefab {_upgradedTowerPrefab.name}");
+        // OG placetower logic I'll need to modify for this to work.
+        // AbstractTower towerToPlace = _instantiatedPreviewTowerOnSpot.GetComponent<AbstractTower>();
+        // GameManager gM = GameManager.Instance;
+        // if (gM.PlayerCanPurchaseItem(towerToPlace.WarFundValue))
+        // {
+        //     gM.PurchaseItem(towerToPlace.WarFundValue);
+        //     towerSpot.PlaceTower(_instantiatedPreviewTowerOnSpot);
+        //     _instantiatedPreviewTowerOnSpot = null;
+        //     EnableDecoy();
+        //     onTowerPlaced?.Invoke();
+        // }
+        //
+        // if (gM.GetWarFunds() == 0)
+        // {
+        //     DeactivateTowerPlacementMode();
+        // }
     }
 
     private void EnableDecoy()
