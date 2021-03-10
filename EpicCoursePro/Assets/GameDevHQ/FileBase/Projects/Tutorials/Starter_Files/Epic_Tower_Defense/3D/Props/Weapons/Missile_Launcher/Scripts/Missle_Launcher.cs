@@ -30,14 +30,6 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         protected override void Update()
         {
             base.Update();
-            // TODO: This is duplicated with Gatling impl for now, but missile collision damage
-            // feature will remove this.
-            if (Time.time > _canFire && _targetedEnemy && !_targetedEnemy.IsDead)
-            {
-                _targetedEnemy.PlayerDamageEnemy(_damageValue);
-                _canFire = Time.time + _damageRate;
-            }
-
             if (_targetedEnemy && !_launched)
             {
                 StartCoroutine(FireRocketsRoutine());

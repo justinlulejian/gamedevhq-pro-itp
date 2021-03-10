@@ -149,7 +149,7 @@ namespace GameDevHQ.Scripts
 
         public void PlayerDamageEnemy(int damageValue)
         {
-            Mathf.Min(0, _currentHealth -= damageValue);
+            Mathf.Clamp(_currentHealth -= damageValue, 0, _maxHealth);
             
             if (_currentHealth == 0)
             {
