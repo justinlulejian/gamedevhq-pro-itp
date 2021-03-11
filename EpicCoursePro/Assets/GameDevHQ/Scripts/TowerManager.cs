@@ -25,6 +25,7 @@ public class TowerManager : MonoSingleton<TowerManager>
     public static event Action<bool> onTowerPlacementModeStatusChange;
     public static event Action onTowerPreview;
     public static event Action onTowerPlaced;
+    public static event Action<GameObject> onTowerReplaced;
     public static event Action onDecoyEnabled;
     
     private bool _towerPlacementModeActivated;
@@ -40,6 +41,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         TowerSpot.onUserMouseExitTowerSpot += DeactivateTowerPlacementPreview;
         TowerSpot.onUserMouseDownTowerSpot += PlaceTower;
         UpgradeGunUIManager.onPlayerCanPlaceUpgrade += PlayerUpgradeTowerOnSpot;
+        UpgradeGunUIManager.onUpgradeUIActivated += DeactivateTowerPlacementMode;
     }
 
     private void OnDisable()
@@ -48,6 +50,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         TowerSpot.onUserMouseExitTowerSpot -= DeactivateTowerPlacementPreview;
         TowerSpot.onUserMouseDownTowerSpot -= PlaceTower;
         UpgradeGunUIManager.onPlayerCanPlaceUpgrade -= PlayerUpgradeTowerOnSpot;
+        UpgradeGunUIManager.onUpgradeUIActivated -= DeactivateTowerPlacementMode;
     }
     
     protected override void Awake()
@@ -67,6 +70,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         {
             GameObject spawnedDecoyTowerType =
                 Instantiate(decoyTowerPrefab, _decoyTowerContainer.transform);
+            spawnedDecoyTowerType.transform.rotation = TowerSpot.TowerFacingEnemiesRotation;
             spawnedDecoyTowerType.SetActive(false);
             DecoyTower spawnedDecoyTower = spawnedDecoyTowerType.GetComponent<DecoyTower>();
             _instantiatedDecoyTowers.Add(spawnedDecoyTower);
@@ -110,9 +114,8 @@ public class TowerManager : MonoSingleton<TowerManager>
             Transform towerSpotTransform = towerSpot.transform;
             GameObject tower = PoolManager.Instance.RequestObjOfType(towerToPlace.gameObject);
             tower.SetActive(true);
-            Transform towerTransform = tower.transform;
-            towerTransform.position = towerSpotTransform.position;
-            towerTransform.rotation = Quaternion.identity;
+            tower.transform.SetPositionAndRotation(
+                towerSpotTransform.position, TowerSpot.TowerFacingEnemiesRotation);
             _instantiatedPreviewTowerOnSpot = tower;
             onTowerPreview?.Invoke();
         }
@@ -152,23 +155,18 @@ public class TowerManager : MonoSingleton<TowerManager>
     private void PlayerUpgradeTowerOnSpot(TowerSpot towerSpot, GameObject _upgradedTowerPrefab)
     {
         Debug.Log($"User is able to place tower on tower" +
-                  $" {towerSpot.GetInstanceID().ToString()} in TM with prefab {_upgradedTowerPrefab.name}");
-        // OG placetower logic I'll need to modify for this to work.
-        // AbstractTower towerToPlace = _instantiatedPreviewTowerOnSpot.GetComponent<AbstractTower>();
-        // GameManager gM = GameManager.Instance;
-        // if (gM.PlayerCanPurchaseItem(towerToPlace.WarFundValue))
-        // {
-        //     gM.PurchaseItem(towerToPlace.WarFundValue);
-        //     towerSpot.PlaceTower(_instantiatedPreviewTowerOnSpot);
-        //     _instantiatedPreviewTowerOnSpot = null;
-        //     EnableDecoy();
-        //     onTowerPlaced?.Invoke();
-        // }
-        //
-        // if (gM.GetWarFunds() == 0)
-        // {
-        //     DeactivateTowerPlacementMode();
-        // }
+                  $" {towerSpot.GetInstanceID().ToString()} in TM with prefab" +
+                  $" {_upgradedTowerPrefab.name}");
+        // TODO: Convert to pooling.
+        GameObject spawnedUpgradedTower = Instantiate(_upgradedTowerPrefab);
+        if (spawnedUpgradedTower == null)
+        {
+            Debug.LogError($"Upgraded tower for tower spot " +
+                           $"{towerSpot.GetInstanceID().ToString()} was null when attempting to " +
+                           $"be placed by Tower Manager.");
+        }
+        towerSpot.PlaceTower(spawnedUpgradedTower, upgrade:true);
+        
     }
 
     private void EnableDecoy()

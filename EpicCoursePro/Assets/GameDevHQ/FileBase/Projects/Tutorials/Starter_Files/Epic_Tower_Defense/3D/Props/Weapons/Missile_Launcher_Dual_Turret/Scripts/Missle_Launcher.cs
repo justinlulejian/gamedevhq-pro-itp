@@ -5,35 +5,36 @@ using GameDevHQ.FileBase.Missle_Launcher_Dual_Turret.Missle;
 
 namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
 {
-    public class Missle_Launcher : MonoBehaviour
+    public class Missle_Launcher : FileBase.Missle_Launcher.Missle_Launcher
     {
-        [SerializeField]
-        private GameObject _missilePrefab; //holds the missle gameobject to clone
+        // [SerializeField]
+        // private GameObject _missilePrefab; //holds the missle gameobject to clone
         [SerializeField]
         private GameObject[] _misslePositionsLeft; //array to hold the rocket positions on the turret
         [SerializeField]
         private GameObject[] _misslePositionsRight; //array to hold the rocket positions on the turret
-        [SerializeField]
-        private float _fireDelay; //fire delay between rockets
-        [SerializeField]
-        private float _launchSpeed; //initial launch speed of the rocket
-        [SerializeField]
-        private float _power; //power to apply to the force of the rocket
-        [SerializeField]
-        private float _fuseDelay; //fuse delay before the rocket launches
-        [SerializeField]
-        private float _reloadTime; //time in between reloading the rockets
-        [SerializeField]
-        private float _destroyTime = 10.0f; //how long till the rockets get cleaned up
-        private bool _launched; //bool to check if we launched the rockets
+        // [SerializeField]
+        // private float _fireDelay; //fire delay between rockets
+        // [SerializeField]
+        // private float _launchSpeed; //initial launch speed of the rocket
+        // [SerializeField]
+        // private float _power; //power to apply to the force of the rocket
+        // [SerializeField]
+        // private float _fuseDelay; //fuse delay before the rocket launches
+        // [SerializeField]
+        // private float _reloadTime; //time in between reloading the rockets
+        // [SerializeField]
+        // private float _destroyTime = 10.0f; //how long till the rockets get cleaned up
+        // private bool _launched; //bool to check if we launched the rockets
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && _launched == false) //check for space key and if we launched the rockets
-            {
-                _launched = true; //set the launch bool to true
-                StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets. 
-            }
+            // TODO: Disabling for now to get upgrade logic working.
+            // if (Input.GetKeyDown(KeyCode.Space) && _launched == false) //check for space key and if we launched the rockets
+            // {
+            //     _launched = true; //set the launch bool to true
+            //     StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets. 
+            // }
         }
 
         IEnumerator FireRocketsRoutine()

@@ -4710,7 +4710,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 226f26ff30f1e4211895fc3029e34d96, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29201,7 +29200,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 226f26ff30f1e4211895fc3029e34d96, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29386,6 +29384,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4394015268124526}
+  - {fileID: 7818263952305720419}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -29401,16 +29400,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa87186eb31905c4fa207e5970b35579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gunBarrel:
-  - {fileID: 4739561172089730}
-  - {fileID: 4629738807768366}
-  _muzzleFlash:
-  - {fileID: 1760864000073236}
-  - {fileID: 1614428210295162}
-  _bulletCasings:
-  - {fileID: 198195836669371088}
-  - {fileID: 198825845797523540}
-  _fireSound: {fileID: 8300000, guid: ebcd7ceac90454c1e9dc458cb87b6f75, type: 3}
+  TowerType: 3
+  WarFundValue: 200
+  AttackRadiusObj: {fileID: 7818263952305720416}
+  _targetedEnemy: {fileID: 0}
+  _firingAtEnemy: 0
+  _damageValue: 20
+  _damageRate: 1
+  _rotationObject: {fileID: 1193411258393432}
+  _rotationSpeed: 5
+  _gunBarrelObj: {fileID: 1709006267372880}
+  Muzzle_Flash: {fileID: 1760864000073236}
+  bulletCasings: {fileID: 198195836669371088}
+  fireSound: {fileID: 8300000, guid: ebcd7ceac90454c1e9dc458cb87b6f75, type: 3}
 --- !u!82 &82127826341503972
 AudioSource:
   m_ObjectHideFlags: 0
@@ -29617,3 +29619,89 @@ Transform:
   m_Father: {fileID: 4802098303277968}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &7190804856963806423
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4321718789516178}
+    m_Modifications:
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101925397132982455, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_Name
+      value: Gatling_Gun_Attack_Radius
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520339947606797025, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: _towerObj
+      value: 
+      objectReference: {fileID: 1873819670802014}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5f9f0f4a8febe2c418afe60aade9da88, type: 3}
+--- !u!1 &7818263952305720416 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1101925397132982455, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+    type: 3}
+  m_PrefabInstance: {fileID: 7190804856963806423}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7818263952305720419 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+    type: 3}
+  m_PrefabInstance: {fileID: 7190804856963806423}
+  m_PrefabAsset: {fileID: 0}

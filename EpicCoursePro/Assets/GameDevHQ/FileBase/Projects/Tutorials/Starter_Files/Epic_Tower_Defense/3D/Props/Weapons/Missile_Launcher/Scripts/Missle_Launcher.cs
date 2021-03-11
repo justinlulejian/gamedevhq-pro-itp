@@ -10,22 +10,22 @@ namespace GameDevHQ.FileBase.Missle_Launcher
     public class Missle_Launcher : Tower
     {
         [SerializeField]
-        private GameObject _missilePrefab; //holds the missle gameobject to clone
+        protected GameObject _missilePrefab; //holds the missle gameobject to clone
         [SerializeField]
         private GameObject[] _misslePositions; //array to hold the rocket positions on the turret
         [SerializeField]
-        private float _fireDelay; //fire delay between rockets
+        protected float _fireDelay; //fire delay between rockets
         [SerializeField]
-        private float _launchSpeed; //initial launch speed of the rocket
+        protected float _launchSpeed; //initial launch speed of the rocket
         [SerializeField]
-        private float _power; //power to apply to the force of the rocket
+        protected float _power; //power to apply to the force of the rocket
         [SerializeField]
-        private float _fuseDelay; //fuse delay before the rocket launches
+        protected float _fuseDelay; //fuse delay before the rocket launches
         [SerializeField]
-        private float _reloadTime; //time in between reloading the rockets
+        protected float _reloadTime; //time in between reloading the rockets
         [SerializeField]
-        private float _destroyTime = 10.0f; //how long till the rockets get cleaned up
-        private bool _launched; //bool to check if we launched the rockets
+        protected float _destroyTime = 10.0f; //how long till the rockets get cleaned up
+        protected bool _launched; //bool to check if we launched the rockets
 
         protected override void Update()
         {

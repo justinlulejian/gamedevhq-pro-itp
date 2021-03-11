@@ -1228,6 +1228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &153817132
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -6614,8 +6615,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _upgradeCostText: {fileID: 1754727288}
-  _upgradeConfirmButton: {fileID: 984625344}
-  _upgradeCancelButton: {fileID: 738874618}
+  _confirmButton: {fileID: 0}
+  _cancelButton: {fileID: 0}
   _upgradedTowerPrefab: {fileID: 1815566672332072, guid: db95df206f8d65d4ab93dc17ed20e522,
     type: 3}
   _towerToUpgradePrefab: {fileID: 1589799907309799649, guid: 87f6de024d1535e4287acb0fb289aa50,
@@ -7047,6 +7048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &319901679
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -13673,6 +13675,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &694986684
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -19513,6 +19516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &898983006
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -26199,6 +26203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &1179278920
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -32106,8 +32111,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _upgradeCostText: {fileID: 1872218051}
-  _upgradeConfirmButton: {fileID: 252280475}
-  _upgradeCancelButton: {fileID: 1211568187}
+  _confirmButton: {fileID: 0}
+  _cancelButton: {fileID: 0}
   _upgradedTowerPrefab: {fileID: 1873819670802014, guid: 46e6e478c60d1824aacd2c5a982b6bf5,
     type: 3}
   _towerToUpgradePrefab: {fileID: 2363984451845793099, guid: 1c0f8e288365b1043a83ccf4fad55b71,
@@ -32440,7 +32445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7035cb2d430bedc48b314a3f856af20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerWarFunds: 500
+  _playerWarFunds: 1000
   _playerMaximumWarFunds: 100000
   CurrentTimeScale: 0
 --- !u!4 &1387163928
@@ -32728,6 +32733,135 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1394219128}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1400067172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1400067173}
+  - component: {fileID: 1400067176}
+  - component: {fileID: 1400067175}
+  - component: {fileID: 1400067174}
+  m_Layer: 5
+  m_Name: Cancel_Dismantle_Tower_Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1400067173
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400067172}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1624499974}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -39.34, y: -59.571}
+  m_SizeDelta: {x: 78.6718, y: 80.06346}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1400067174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400067172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1400067175}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1624499977}
+        m_MethodName: TurnOffUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1400067175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400067172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1400067176
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400067172}
+  m_CullTransparentMesh: 0
 --- !u!1 &1401617932
 GameObject:
   m_ObjectHideFlags: 0
@@ -33321,6 +33455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &1466275940
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -39095,13 +39230,14 @@ GameObject:
   - component: {fileID: 1624499974}
   - component: {fileID: 1624499976}
   - component: {fileID: 1624499975}
+  - component: {fileID: 1624499977}
   m_Layer: 5
   m_Name: Dismantle_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1624499974
 RectTransform:
   m_ObjectHideFlags: 0
@@ -39116,6 +39252,8 @@ RectTransform:
   - {fileID: 1700177797}
   - {fileID: 1586007435}
   - {fileID: 1596089905}
+  - {fileID: 1752673756}
+  - {fileID: 1400067173}
   m_Father: {fileID: 592720672}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -39161,6 +39299,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1624499973}
   m_CullTransparentMesh: 0
+--- !u!114 &1624499977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624499973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a873bdca90cf5c449770757f897dcf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _confirmButton: {fileID: 1752673757}
+  _cancelButton: {fileID: 1400067174}
+  _dismantleValueText: {fileID: 1700177798}
 --- !u!1001 &1637803658
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39506,7 +39659,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 750
+  m_Text: 0
 --- !u!222 &1700177799
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -39625,6 +39778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &1704899316
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -44534,6 +44688,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &1711412565
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -49680,6 +49835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &1752546306
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -54402,6 +54558,135 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!1 &1752673755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1752673756}
+  - component: {fileID: 1752673759}
+  - component: {fileID: 1752673758}
+  - component: {fileID: 1752673757}
+  m_Layer: 5
+  m_Name: Dismantle_Tower_Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1752673756
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752673755}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1624499974}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -159.3, y: -60.23}
+  m_SizeDelta: {x: 80.26042, y: 78.744965}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1752673757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752673755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1752673758}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1624499977}
+        m_MethodName: DismantleTower
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1752673758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752673755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1752673759
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752673755}
+  m_CullTransparentMesh: 0
 --- !u!1 &1754352302
 GameObject:
   m_ObjectHideFlags: 0
@@ -54512,6 +54797,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &1754352308
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -60887,6 +61173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &1997197504
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -65719,6 +66006,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &2017145774
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -70630,6 +70918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableParticleSystem: {fileID: 0}
   _towerPlaced: {fileID: 0}
+  IsUpgraded: 0
 --- !u!198 &2097060458
 ParticleSystem:
   m_ObjectHideFlags: 0

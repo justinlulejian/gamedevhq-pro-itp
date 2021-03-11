@@ -33,8 +33,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         public ParticleSystem bulletCasings; //reference to the bullet casing effect to play when firing
         public AudioClip fireSound; //Reference to the audio clip
 
-        private AudioSource _audioSource; //reference to the audio source component
-        private bool _startWeaponNoise = true;
+        protected AudioSource _audioSource; //reference to the audio source component
+        protected bool _startWeaponNoise = true;
         
         // Use this for initialization
         void Start()

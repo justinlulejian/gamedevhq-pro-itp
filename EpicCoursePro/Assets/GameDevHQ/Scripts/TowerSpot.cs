@@ -1,6 +1,7 @@
 ﻿using System;
 using GameDevHQ.Scripts;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TowerSpot : MonoBehaviour
 {
@@ -12,6 +13,12 @@ public class TowerSpot : MonoBehaviour
     [SerializeField] 
     private Tower _towerPlaced;
 
+    [SerializeField] 
+    public bool IsUpgraded;
+    
+    // This rotation faces towers towards enemy start position.
+    public static Quaternion TowerFacingEnemiesRotation = Quaternion.Euler(0, -90, 0);
+
     public static event Action<TowerSpot> onUserMouseEnterTowerSpot; 
     public static event Action onUserMouseExitTowerSpot; 
     public static event Action<TowerSpot> onUserMouseDownTowerSpot;
@@ -20,11 +27,13 @@ public class TowerSpot : MonoBehaviour
     private void OnEnable()
     {
         TowerManager.onTowerPlacementModeStatusChange += OnTowerPlacementModeChange;
+        DismantleTowerUIManager.onDismantleTower += RemoveTower;
     }
 
     private void OnDisable()
     {
         TowerManager.onTowerPlacementModeStatusChange -= OnTowerPlacementModeChange;
+        DismantleTowerUIManager.onDismantleTower -= RemoveTower;
     }
 
     private void Awake()
@@ -77,16 +86,31 @@ public class TowerSpot : MonoBehaviour
     // Place tower in spot, don't allow it to be removed by mouse exit.
     private void OnMouseDown()
     {
-        if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
+        // TODO(checkpoint): switch this to onmouseover and then check for mouse button down to 
+        // either call placement/upgrade or dismantle. Then swithc upgradegunui to not call dismantle UI
+        // then make sure dismantle UI is started from here as monosingleton, or from an event.
+        if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
         {
-            onUserMouseDownTowerSpot?.Invoke(this);
+            Debug.Log($"tower spot OnMouseDown Left");
+            if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
+            {
+                onUserMouseDownTowerSpot?.Invoke(this);
+                return;
+            }
+
+            if (_towerPlaced)
+            {
+                onMouseDownUpgradeTowerSpot?.Invoke(this);
+                return;
+            }
+
             return;
         }
 
-        if (_towerPlaced)
+        if (Input.GetMouseButtonDown((int) MouseButton.RightMouse))
         {
-            onMouseDownUpgradeTowerSpot?.Invoke(this);
-            return;
+            Debug.Log($"tower spot OnMouseDown Right");
+            // then engage dismantle UI
         }
     }
 
@@ -104,7 +128,7 @@ public class TowerSpot : MonoBehaviour
         }
     }
     
-    public void PlaceTower(GameObject towerToPlace)
+    public void PlaceTower(GameObject towerToPlace, bool upgrade = false)
     {
         Tower tower = towerToPlace.GetComponent<Tower>();
         if (tower == null)
@@ -114,10 +138,24 @@ public class TowerSpot : MonoBehaviour
                            $"not be placed.");
             return;
         }
+        if (upgrade)
+        {
+            PoolManager.Instance.RecyclePooledObj(_towerPlaced.gameObject);
+        }
+        
         _towerPlaced = tower;
+        _towerPlaced.transform.SetPositionAndRotation(
+            transform.position, TowerFacingEnemiesRotation);
         tower.IsPlaced = true;
+        IsUpgraded = true;
         tower.EnableAttackRadiusCollider();
         IsAvailableForPlacement = false;
     }
+
+    private void RemoveTower(GameObject towerToRemove)
+    {
+        Debug.Log($"Removing tower through event on spot {GetInstanceID().ToString()}");
+    }
+    
 }
  
