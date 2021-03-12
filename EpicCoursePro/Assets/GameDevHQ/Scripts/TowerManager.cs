@@ -37,18 +37,18 @@ public class TowerManager : MonoSingleton<TowerManager>
     
     private void OnEnable()
     {
-        TowerSpot.onUserMouseEnterTowerSpot += ActivateTowerPlacementPreview;
-        TowerSpot.onUserMouseExitTowerSpot += DeactivateTowerPlacementPreview;
-        TowerSpot.onUserMouseDownTowerSpot += PlaceTower;
+        TowerSpot.onUserPreviewTowerOnSpotIntent += ActivateTowerOnPlacementPreview;
+        TowerSpot.onUserNoLongerPlaceTowerOnSpotPreviewIntent += DeactivateTowerOnPlacementPreview;
+        TowerSpot.onUserPlaceTowerIntent += PlaceTower;
         UpgradeGunUIManager.onPlayerCanPlaceUpgrade += PlayerUpgradeTowerOnSpot;
         UpgradeGunUIManager.onUpgradeUIActivated += DeactivateTowerPlacementMode;
     }
 
     private void OnDisable()
     {
-        TowerSpot.onUserMouseEnterTowerSpot -= ActivateTowerPlacementPreview;
-        TowerSpot.onUserMouseExitTowerSpot -= DeactivateTowerPlacementPreview;
-        TowerSpot.onUserMouseDownTowerSpot -= PlaceTower;
+        TowerSpot.onUserPreviewTowerOnSpotIntent -= ActivateTowerOnPlacementPreview;
+        TowerSpot.onUserNoLongerPlaceTowerOnSpotPreviewIntent -= DeactivateTowerOnPlacementPreview;
+        TowerSpot.onUserPlaceTowerIntent -= PlaceTower;
         UpgradeGunUIManager.onPlayerCanPlaceUpgrade -= PlayerUpgradeTowerOnSpot;
         UpgradeGunUIManager.onUpgradeUIActivated -= DeactivateTowerPlacementMode;
     }
@@ -105,7 +105,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         }
     }
     
-    private void ActivateTowerPlacementPreview(TowerSpot towerSpot)
+    private void ActivateTowerOnPlacementPreview(TowerSpot towerSpot)
     {
         {
             _currentDecoyTower.gameObject.SetActive(false);
@@ -121,7 +121,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         }
     }
 
-    private void DeactivateTowerPlacementPreview()
+    private void DeactivateTowerOnPlacementPreview()
     {
         if (_towerPlacementModeActivated && _currentDecoyTower != null)
         {
@@ -154,9 +154,6 @@ public class TowerManager : MonoSingleton<TowerManager>
     
     private void PlayerUpgradeTowerOnSpot(TowerSpot towerSpot, GameObject _upgradedTowerPrefab)
     {
-        Debug.Log($"User is able to place tower on tower" +
-                  $" {towerSpot.GetInstanceID().ToString()} in TM with prefab" +
-                  $" {_upgradedTowerPrefab.name}");
         // TODO: Convert to pooling.
         GameObject spawnedUpgradedTower = Instantiate(_upgradedTowerPrefab);
         if (spawnedUpgradedTower == null)
@@ -205,14 +202,14 @@ public class TowerManager : MonoSingleton<TowerManager>
         // TODO: Switching between tower placement types requires mouse to move out of spot and
         // return before it'll display preview.
         _towerPlacementModeActivated = true;
-        DeactivateTowerPlacementPreview();
+        DeactivateTowerOnPlacementPreview();
         onTowerPlacementModeStatusChange.Invoke(true);
         SetCurrentDecoyTower(towerType);
     }
 
     private void DeactivateTowerPlacementMode()
     {
-        DeactivateTowerPlacementPreview();
+        DeactivateTowerOnPlacementPreview();
         ResetCurrentDecoyTower();
         _towerPlacementModeActivated = false;
         onTowerPlacementModeStatusChange.Invoke(false);

@@ -19,21 +19,21 @@ public class TowerSpot : MonoBehaviour
     // This rotation faces towers towards enemy start position.
     public static Quaternion TowerFacingEnemiesRotation = Quaternion.Euler(0, -90, 0);
 
-    public static event Action<TowerSpot> onUserMouseEnterTowerSpot; 
-    public static event Action onUserMouseExitTowerSpot; 
-    public static event Action<TowerSpot> onUserMouseDownTowerSpot;
-    public static event Action<TowerSpot> onMouseDownUpgradeTowerSpot;
+    public static event Action<TowerSpot> onUserPreviewTowerOnSpotIntent; 
+    public static event Action onUserNoLongerPlaceTowerOnSpotPreviewIntent; 
+    public static event Action<TowerSpot> onUserPlaceTowerIntent;
+    public static event Action<PlayerUIManager.UIStates, TowerSpot> onUserTowerInteractIntent;
     
     private void OnEnable()
     {
         TowerManager.onTowerPlacementModeStatusChange += OnTowerPlacementModeChange;
-        DismantleTowerUIManager.onDismantleTower += RemoveTower;
+        DismantleTowerUIManager.onDismantleTower += DismantleTower;
     }
 
     private void OnDisable()
     {
         TowerManager.onTowerPlacementModeStatusChange -= OnTowerPlacementModeChange;
-        DismantleTowerUIManager.onDismantleTower -= RemoveTower;
+        DismantleTowerUIManager.onDismantleTower -= DismantleTower;
     }
 
     private void Awake()
@@ -68,7 +68,7 @@ public class TowerSpot : MonoBehaviour
     {
         if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
         {
-            onUserMouseEnterTowerSpot.Invoke(this);
+            onUserPreviewTowerOnSpotIntent.Invoke(this);
             _availableParticleSystem.Stop();
         }
     }
@@ -78,7 +78,7 @@ public class TowerSpot : MonoBehaviour
     {
         if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
         {
-            onUserMouseExitTowerSpot?.Invoke();
+            onUserNoLongerPlaceTowerOnSpotPreviewIntent?.Invoke();
             _availableParticleSystem.Play();
         }
     }
@@ -91,20 +91,27 @@ public class TowerSpot : MonoBehaviour
         // then make sure dismantle UI is started from here as monosingleton, or from an event.
         if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
         {
-            if (TowerManager.Instance.IsTowerPlacementModeActivated())
+            if (TowerManager.Instance.IsTowerPlacementModeActivated() && !_towerPlaced)
             {
-                Debug.Log($"tower spot OnMouseDown Left");
-                DismantleTowerUIManager.Instance.TurnOffUI();
                 if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
                 {
-                    onUserMouseDownTowerSpot?.Invoke(this);
+                    onUserPlaceTowerIntent?.Invoke(this);
                     return;
                 } 
             }
 
             if (_towerPlaced)
             {
-                onMouseDownUpgradeTowerSpot?.Invoke(this);
+                // TODO: Change this to be dynamic check for different tower types.
+                if (_towerPlaced.TowerType == 1)
+                {
+                    onUserTowerInteractIntent?.Invoke(
+                        PlayerUIManager.UIStates.UpgradeGatlingTowerUIState, this);
+                } else if (_towerPlaced.TowerType == 2)
+                {
+                    onUserTowerInteractIntent?.Invoke(
+                        PlayerUIManager.UIStates.UpgradeMissileTowerUIState, this);
+                }
                 return;
             }
         }
@@ -112,9 +119,8 @@ public class TowerSpot : MonoBehaviour
         if (Input.GetMouseButtonDown((int) MouseButton.RightMouse) &&
             !TowerManager.Instance.IsTowerPlacementModeActivated())
         {
-            Debug.Log($"tower spot OnMouseDown Right");
-            DismantleTowerUIManager.Instance.PresentDismantleUI(this);
-            // then engage dismantle UI
+            onUserTowerInteractIntent?.Invoke(
+                PlayerUIManager.UIStates.DismantleTowerUIState, this);
         }
     }
 
@@ -156,15 +162,26 @@ public class TowerSpot : MonoBehaviour
         IsAvailableForPlacement = false;
     }
 
-    private void RemoveTower(TowerSpot towerSpot)
+    private void DismantleTower(TowerSpot towerSpot)
     {
         if (gameObject == towerSpot.gameObject)
         {
-            // TODO: Implement tower removal once dismantled.
-            Debug.Log($"Removing tower through event on spot {GetInstanceID().ToString()}");
+            IsUpgraded = false;
+            OnTowerPlacementModeChange(true);
+            IsAvailableForPlacement = true;
+            
+            // TODO: make first condition the default once upgraded towers are pooled.
+            if (_towerPlaced.TowerType == 1 || _towerPlaced.TowerType == 2)
+            {
+                PoolManager.Instance.RecyclePooledObj(_towerPlaced.gameObject);
+                _towerPlaced.IsPlaced = false;
+                
+            } else if (_towerPlaced.TowerType == 3 || _towerPlaced.TowerType == 4)
+            {
+                Destroy(_towerPlaced.gameObject);
+            }
+            _towerPlaced = null;
         }
-        Debug.Log($"Towerspot {GetInstanceID().ToString()} is not dismantle tower.");
     }
-    
 }
  
