@@ -1,6 +1,7 @@
 ﻿using System;
 using GameDevHQ.Scripts;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TowerSpot : MonoBehaviour
 {
@@ -10,20 +11,29 @@ public class TowerSpot : MonoBehaviour
     private ParticleSystem _availableParticleSystem;
 
     [SerializeField] 
-    private GameObject _towerPlaced;
+    private Tower _towerPlaced;
+
+    [SerializeField] 
+    public bool IsUpgraded;
+    
+    // This rotation faces towers towards enemy start position.
+    public static Quaternion TowerFacingEnemiesRotation = Quaternion.Euler(0, -90, 0);
 
     public static event Action<TowerSpot> onUserMouseEnterTowerSpot; 
     public static event Action onUserMouseExitTowerSpot; 
     public static event Action<TowerSpot> onUserMouseDownTowerSpot;
+    public static event Action<TowerSpot> onMouseDownUpgradeTowerSpot;
     
     private void OnEnable()
     {
         TowerManager.onTowerPlacementModeStatusChange += OnTowerPlacementModeChange;
+        DismantleTowerUIManager.onDismantleTower += RemoveTower;
     }
 
     private void OnDisable()
     {
         TowerManager.onTowerPlacementModeStatusChange -= OnTowerPlacementModeChange;
+        DismantleTowerUIManager.onDismantleTower -= RemoveTower;
     }
 
     private void Awake()
@@ -74,15 +84,55 @@ public class TowerSpot : MonoBehaviour
     }
     
     // Place tower in spot, don't allow it to be removed by mouse exit.
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
-        if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
+        // TODO(checkpoint): switch this to onmouseover and then check for mouse button down to 
+        // either call placement/upgrade or dismantle. Then swithc upgradegunui to not call dismantle UI
+        // then make sure dismantle UI is started from here as monosingleton, or from an event.
+        if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
         {
-            onUserMouseDownTowerSpot.Invoke(this);
+            if (TowerManager.Instance.IsTowerPlacementModeActivated())
+            {
+                Debug.Log($"tower spot OnMouseDown Left");
+                DismantleTowerUIManager.Instance.TurnOffUI();
+                if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
+                {
+                    onUserMouseDownTowerSpot?.Invoke(this);
+                    return;
+                } 
+            }
+
+            if (_towerPlaced)
+            {
+                onMouseDownUpgradeTowerSpot?.Invoke(this);
+                return;
+            }
+        }
+
+        if (Input.GetMouseButtonDown((int) MouseButton.RightMouse) &&
+            !TowerManager.Instance.IsTowerPlacementModeActivated())
+        {
+            Debug.Log($"tower spot OnMouseDown Right");
+            DismantleTowerUIManager.Instance.PresentDismantleUI(this);
+            // then engage dismantle UI
+        }
+    }
+
+    public Tower GetTowerPlacedOnSpot()
+    {
+        if (_towerPlaced)
+        {
+            return _towerPlaced;
+        }
+        else
+        {
+            Debug.LogError($"Requested placed tower from Tower spot ID" +
+                           $" {this.GetInstanceID().ToString()} but it is not set.");
+            return null;
         }
     }
     
-    public void PlaceTower(GameObject towerToPlace)
+    public void PlaceTower(GameObject towerToPlace, bool upgrade = false)
     {
         Tower tower = towerToPlace.GetComponent<Tower>();
         if (tower == null)
@@ -92,10 +142,29 @@ public class TowerSpot : MonoBehaviour
                            $"not be placed.");
             return;
         }
-        _towerPlaced = towerToPlace;
+        if (upgrade)
+        {
+            PoolManager.Instance.RecyclePooledObj(_towerPlaced.gameObject);
+        }
+        
+        _towerPlaced = tower;
+        _towerPlaced.transform.SetPositionAndRotation(
+            transform.position, TowerFacingEnemiesRotation);
         tower.IsPlaced = true;
+        IsUpgraded = true;
         tower.EnableAttackRadiusCollider();
         IsAvailableForPlacement = false;
     }
+
+    private void RemoveTower(TowerSpot towerSpot)
+    {
+        if (gameObject == towerSpot.gameObject)
+        {
+            // TODO: Implement tower removal once dismantled.
+            Debug.Log($"Removing tower through event on spot {GetInstanceID().ToString()}");
+        }
+        Debug.Log($"Towerspot {GetInstanceID().ToString()} is not dismantle tower.");
+    }
+    
 }
  

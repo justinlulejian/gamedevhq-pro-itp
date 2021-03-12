@@ -29,8 +29,6 @@ namespace GameDevHQ.Scripts
         private int _numberOfTowersToPool = 5;
         private List<GameObject> _towerPool = new List<GameObject>();
 
-        
-        
         protected override void Awake()
         {
             base.Awake();
