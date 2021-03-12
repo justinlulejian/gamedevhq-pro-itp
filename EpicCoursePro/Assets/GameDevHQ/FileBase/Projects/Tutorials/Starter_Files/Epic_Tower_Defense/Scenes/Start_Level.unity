@@ -6396,7 +6396,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 252280473}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -6578,7 +6578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &263893909
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6599,7 +6599,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 654, y: 554}
+  m_AnchoredPosition: {x: -106, y: 554}
   m_SizeDelta: {x: 590, y: 216}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &263893910
@@ -6614,12 +6614,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0107fcd706f48d945a3f0d13333a88ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _upgradeCostText: {fileID: 1754727288}
   _confirmButton: {fileID: 984625344}
   _cancelButton: {fileID: 738874618}
+  _warFundsValueText: {fileID: 1754727288}
   _upgradedTowerPrefab: {fileID: 1815566672332072, guid: db95df206f8d65d4ab93dc17ed20e522,
     type: 3}
   _towerToUpgradePrefab: {fileID: 1589799907309799649, guid: 87f6de024d1535e4287acb0fb289aa50,
+    type: 3}
+  TowerToUpgrade: {fileID: 1693876067634074311, guid: 87f6de024d1535e4287acb0fb289aa50,
     type: 3}
   _upgradeCost: 200
 --- !u!114 &263893911
@@ -6629,7 +6631,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263893908}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -13159,6 +13161,7 @@ GameObject:
   - component: {fileID: 592720671}
   - component: {fileID: 592720670}
   - component: {fileID: 592720669}
+  - component: {fileID: 592720673}
   m_Layer: 5
   m_Name: Canvas-UI
   m_TagString: Untagged
@@ -13254,6 +13257,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &592720673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592720668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff90405d37fd2144b3cb2d07d80bc2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _warFundsUIObject: {fileID: 350660922}
+  _upgradeTowerUIObjects:
+  - {fileID: 1364565713}
+  - {fileID: 263893908}
+  _dismantleUIObject: {fileID: 1624499973}
 --- !u!1001 &595690249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18622,7 +18642,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 738874616}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -18750,7 +18770,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 753981261}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -25082,7 +25102,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 984625342}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -31064,7 +31084,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211568185}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -32037,7 +32057,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1364565714
 RectTransform:
   m_ObjectHideFlags: 0
@@ -32058,7 +32078,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -635, y: 554}
+  m_AnchoredPosition: {x: -106, y: 554}
   m_SizeDelta: {x: 590, y: 216}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1364565715
@@ -32068,7 +32088,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364565713}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -32110,12 +32130,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0107fcd706f48d945a3f0d13333a88ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _upgradeCostText: {fileID: 1872218051}
   _confirmButton: {fileID: 252280475}
   _cancelButton: {fileID: 1211568187}
+  _warFundsValueText: {fileID: 1872218051}
   _upgradedTowerPrefab: {fileID: 1873819670802014, guid: 46e6e478c60d1824aacd2c5a982b6bf5,
     type: 3}
   _towerToUpgradePrefab: {fileID: 2363984451845793099, guid: 1c0f8e288365b1043a83ccf4fad55b71,
+    type: 3}
+  TowerToUpgrade: {fileID: 2404002120479024713, guid: 1c0f8e288365b1043a83ccf4fad55b71,
     type: 3}
   _upgradeCost: 100
 --- !u!1 &1366069834
@@ -32778,7 +32800,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1400067172}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -32832,7 +32854,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1400067172}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -38776,7 +38798,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1586007434}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -38919,7 +38941,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1596089904}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -39237,7 +39259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1624499974
 RectTransform:
   m_ObjectHideFlags: 0
@@ -39259,7 +39281,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 36, y: 633}
+  m_AnchoredPosition: {x: -106, y: 554}
   m_SizeDelta: {x: 580, y: 272}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1624499975
@@ -39269,7 +39291,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1624499973}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -39313,7 +39335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _confirmButton: {fileID: 1752673757}
   _cancelButton: {fileID: 1400067174}
-  _dismantleValueText: {fileID: 1700177798}
+  _warFundsValueText: {fileID: 1700177798}
 --- !u!1001 &1637803658
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39634,7 +39656,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700177796}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -54603,7 +54625,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1752673755}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -54657,7 +54679,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1752673755}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -59564,7 +59586,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1754727286}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -60164,7 +60186,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1872218049}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -75923,7 +75945,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2128074887}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
