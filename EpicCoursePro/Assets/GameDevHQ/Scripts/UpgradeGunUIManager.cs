@@ -132,21 +132,21 @@ public class UpgradeGunUIManager : MonoBehaviour
             return;
         }
 
-        if (towerSpot.IsUpgraded)
-        {
-            TurnOffUI();
-            DivertToTowerDismantleUI(towerSpot);
-            return;
-        }
+        // if (towerSpot.IsUpgraded)
+        // {
+        //     TurnOffUI();
+        //     DivertToTowerDismantleUI(towerSpot);
+        //     return;
+        // }
         onUpgradeUIActivated?.Invoke();
         _towerSpotUpgrade = towerSpot;
         TurnOnUI();
     }
 
-    private void DivertToTowerDismantleUI(TowerSpot towerSpot)
-    {
-        DismantleTowerUIManager.Instance.PresentDismantleUI(towerSpot);
-    }
+    // private void DivertToTowerDismantleUI(TowerSpot towerSpot)
+    // {
+    //     DismantleTowerUIManager.Instance.PresentDismantleUI(towerSpot);
+    // }
     
     public void TryBuyUpgrade()
     {

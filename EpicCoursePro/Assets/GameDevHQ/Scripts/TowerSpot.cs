@@ -84,18 +84,22 @@ public class TowerSpot : MonoBehaviour
     }
     
     // Place tower in spot, don't allow it to be removed by mouse exit.
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
         // TODO(checkpoint): switch this to onmouseover and then check for mouse button down to 
         // either call placement/upgrade or dismantle. Then swithc upgradegunui to not call dismantle UI
         // then make sure dismantle UI is started from here as monosingleton, or from an event.
         if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
         {
-            Debug.Log($"tower spot OnMouseDown Left");
-            if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
+            if (TowerManager.Instance.IsTowerPlacementModeActivated())
             {
-                onUserMouseDownTowerSpot?.Invoke(this);
-                return;
+                Debug.Log($"tower spot OnMouseDown Left");
+                DismantleTowerUIManager.Instance.TurnOffUI();
+                if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
+                {
+                    onUserMouseDownTowerSpot?.Invoke(this);
+                    return;
+                } 
             }
 
             if (_towerPlaced)
@@ -103,13 +107,13 @@ public class TowerSpot : MonoBehaviour
                 onMouseDownUpgradeTowerSpot?.Invoke(this);
                 return;
             }
-
-            return;
         }
 
-        if (Input.GetMouseButtonDown((int) MouseButton.RightMouse))
+        if (Input.GetMouseButtonDown((int) MouseButton.RightMouse) &&
+            !TowerManager.Instance.IsTowerPlacementModeActivated())
         {
             Debug.Log($"tower spot OnMouseDown Right");
+            DismantleTowerUIManager.Instance.PresentDismantleUI(this);
             // then engage dismantle UI
         }
     }
@@ -152,9 +156,14 @@ public class TowerSpot : MonoBehaviour
         IsAvailableForPlacement = false;
     }
 
-    private void RemoveTower(GameObject towerToRemove)
+    private void RemoveTower(TowerSpot towerSpot)
     {
-        Debug.Log($"Removing tower through event on spot {GetInstanceID().ToString()}");
+        if (gameObject == towerSpot.gameObject)
+        {
+            // TODO: Implement tower removal once dismantled.
+            Debug.Log($"Removing tower through event on spot {GetInstanceID().ToString()}");
+        }
+        Debug.Log($"Towerspot {GetInstanceID().ToString()} is not dismantle tower.");
     }
     
 }

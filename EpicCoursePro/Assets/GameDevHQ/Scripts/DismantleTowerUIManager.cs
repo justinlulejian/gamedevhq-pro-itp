@@ -22,10 +22,11 @@ namespace GameDevHQ.Scripts
         private TowerSpot _towerSpotUpgrade;
         private Image _image;
 
-        public static event Action<GameObject> onDismantleTower;
+        public static event Action<TowerSpot> onDismantleTower;
         
-        private void Awake()
+        protected override void Awake()
             {
+                base.Awake();
                 _image = GetComponent<Image>();
                 _texts = GetComponentsInChildren<Text>().ToList();
                 _buttons.Add(_confirmButton);
@@ -101,10 +102,11 @@ namespace GameDevHQ.Scripts
             Tower tower = _towerSpotUpgrade.GetTowerPlacedOnSpot();
             // TODO: create a new property that stores the dismantle value.
             GameManager.Instance.AddWarFunds(tower.WarFundValue);
-            
+            onDismantleTower?.Invoke(_towerSpotUpgrade);
             // TODO: once upgrade towers are pooled switch to pooling.
             Destroy(tower.gameObject);
             // PoolManager.Instance.RecyclePooledObj(tower.gameObject);
+            _towerSpotUpgrade = null;
         }
     }
 }
