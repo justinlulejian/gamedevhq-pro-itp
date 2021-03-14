@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using GameDevHQ.Scripts;
-using UnityEditor.Rendering;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 
-namespace GameDevHQ.FileBase.Gatling_Gun
+namespace GameDevHQ.Scripts
 {
     /// <summary>
     /// This script will allow you to view the presentation of the Turret and use it within your project.
