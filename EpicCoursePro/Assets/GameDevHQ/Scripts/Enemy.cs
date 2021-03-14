@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -29,7 +31,6 @@ namespace GameDevHQ.Scripts
         private int _currentHealth; 
         public bool IsDead => _currentHealth == 0;
         
-
         [Header("Currency Settings")]
         [SerializeField] 
         [Tooltip("The currency value provided when the enemy is killed by player.")]
@@ -47,13 +48,15 @@ namespace GameDevHQ.Scripts
         public float DeathAnimWaitTime = 5f;
         private Animator _animator;
         public GameObject _deathExplosionPrefab;
+        [SerializeField]
+        protected List<Renderer> _dissolveMeshRenderers = new List<Renderer>();
         
         // When an enemy is enabled it will invoke this event.
         public static event Action<Transform, NavMeshAgent> onSpawnStart;
         public static event Action<Enemy> onEnemyKilledByPlayer;
         public static event Action<Enemy> onEnemyCompletedDeathAnimation;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if (EnemyType == 0)
             {
@@ -62,7 +65,6 @@ namespace GameDevHQ.Scripts
             }
             
             WeaponTargetTransform = _weaponTarget.transform;
-
             if (WeaponTargetTransform == null)
             {
                 Debug.LogError($"Enemy {name} does not have a valid weapon target. Make " +
@@ -70,12 +72,18 @@ namespace GameDevHQ.Scripts
             }
 
             _animator = GetComponent<Animator>();
+            _dissolveMeshRenderers = GetComponentsInChildren<Renderer>().ToList();
+            _dissolveMeshRenderers.RemoveAll(
+                r => r is SpriteRenderer);
 
             if (_animator == null)
             {
                 Debug.LogError($"Animator is null on enemy {name}");
             }
-            
+            if (_dissolveMeshRenderers.Count < 0)
+            {
+                Debug.LogError($"Mesh renderer is non-existent on enemy {name}");
+            }
             if (_deathExplosionPrefab == null)
             {
                 Debug.LogError($"Death explosion prefab is null on enemy {name}");
@@ -94,6 +102,13 @@ namespace GameDevHQ.Scripts
             _animator.SetTrigger("OnEnemyDeath");
             _animator.WriteDefaultValues(); // Reset position of mech to upright.
             _navMeshAgent.enabled = true;
+            
+            // Reset dissolve shader value to opaque.
+            foreach (var meshRenderer in _dissolveMeshRenderers)        
+            {
+                meshRenderer.material.SetFloat(
+                    "_fillAmount", 0.0f);
+            }
         }
 
         private void OnDisable()
@@ -128,15 +143,37 @@ namespace GameDevHQ.Scripts
             private set => _weaponTargetTransform = value;
         }
 
+        private IEnumerator DissolveRoutine(float dissolveTime)
+        {
+            // TODO: static value to wait for explosion to finish. Change to check for explosion
+            // finish.
+            yield return new WaitForSeconds(1.5f);
+            // TODO: Change this to do in steps across the death/dissolveTime vs statically like
+            // this.
+            float dissolveValue = 0;
+            while (dissolveValue < 1)
+            {
+                dissolveValue += 0.01f;
+                foreach (var meshRenderer in _dissolveMeshRenderers)        
+                {
+                    meshRenderer.material.SetFloat("_fillAmount", dissolveValue);
+                }
+
+                yield return new WaitForEndOfFrame();
+            }
+        }
+
         private void PlayDeathExplosion()
         {
             GameObject deathExplosion = Instantiate(
                 _deathExplosionPrefab, transform.position, Quaternion.identity);
-            Destroy(deathExplosion, DeathAnimWaitTime);
+            // 1.5 is static value I've set the particle to run for on prefab.
+            Destroy(deathExplosion, 1.5f);
         }
         
         private IEnumerator WaitBeforeDespawn(Enemy enemy)
         {
+            StartCoroutine(DissolveRoutine(enemy.DeathAnimWaitTime));
             yield return new WaitForSeconds(enemy.DeathAnimWaitTime);
             onEnemyCompletedDeathAnimation?.Invoke(this);
         }
