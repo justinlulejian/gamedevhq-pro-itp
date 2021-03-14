@@ -4790,7 +4790,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: e452c20f0c1a04e4bb39908ed6686f98, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14578,7 +14577,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2363984451845793099}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11c7edd4816764b2cb111ea15f8f117a, type: 3}
+  m_Script: {fileID: 11500000, guid: b88e3ebce6afb1e41b180c87dce4f207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TowerType: 1
@@ -14586,14 +14585,17 @@ MonoBehaviour:
   AttackRadiusObj: {fileID: 386667129}
   _targetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
-  _damageValue: 1
+  _damageValue: 20
   _damageRate: 1
   _rotationObject: {fileID: 2364340935526984089}
   _rotationSpeed: 5
-  _gunBarrelObj: {fileID: 2363862936723575029}
-  Muzzle_Flash: {fileID: 2363646036695275949}
-  bulletCasings: {fileID: 2453288935817963951}
-  fireSound: {fileID: 8300000, guid: 08e0cb88300e54b09aa0deb684c3a3de, type: 3}
+  _gunBarrels:
+  - {fileID: 2361269802245620831}
+  _muzzleFlashes:
+  - {fileID: 2363646036695275949}
+  _bulletCasings:
+  - {fileID: 2453288935817963951}
+  _fireSound: {fileID: 8300000, guid: 08e0cb88300e54b09aa0deb684c3a3de, type: 3}
 --- !u!82 &2444854602020924281
 AudioSource:
   m_ObjectHideFlags: 0

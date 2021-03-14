@@ -1028,7 +1028,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4992100544793712}
-  - component: {fileID: 114922831511488930}
+  - component: {fileID: 9178892510803800714}
   m_Layer: 0
   m_Name: Missile_Launcher_Dual_Turret
   m_TagString: Untagged
@@ -1052,7 +1052,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114922831511488930
+--- !u!114 &9178892510803800714
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1061,7 +1061,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1815566672332072}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 441abd9413f41a943bfae1f9d5de828d, type: 3}
+  m_Script: {fileID: 11500000, guid: 723e77f7ecd6f114daff78abe1708cbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TowerType: 4
@@ -1069,19 +1069,12 @@ MonoBehaviour:
   AttackRadiusObj: {fileID: 5684529106496217653}
   _targetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
-  _damageValue: 20
+  _damageValue: 40
   _damageRate: 1
   _rotationObject: {fileID: 1319434493914340}
   _rotationSpeed: 5
-  _missilePrefab: {fileID: 1909211218276452, guid: 5c6948683bd97124a91ca4af6a7ed8b4,
+  _missilePrefab: {fileID: 1408549652012730, guid: 966c178ed0997fd4689c8fd816ed35a0,
     type: 3}
-  _misslePositions: []
-  _fireDelay: 1
-  _launchSpeed: 10
-  _power: 20
-  _fuseDelay: 0
-  _reloadTime: 0
-  _destroyTime: 10
   _misslePositionsLeft:
   - {fileID: 1568099262073704}
   - {fileID: 1891850004438186}
@@ -1089,13 +1082,19 @@ MonoBehaviour:
   - {fileID: 1897688784281268}
   - {fileID: 1239570504970028}
   - {fileID: 1678957458711370}
-  _misslePositionsRight:
+  _missilePositionsRight:
   - {fileID: 1995317900301310}
   - {fileID: 1157582731368434}
   - {fileID: 1086171424697458}
   - {fileID: 1255499207706544}
   - {fileID: 1441933424927852}
   - {fileID: 1770064571432884}
+  _fireDelay: 1
+  _launchSpeed: 5
+  _power: 5
+  _fuseDelay: 0.5
+  _reloadTime: 1
+  _destroyTime: 10
 --- !u!1 &1891850004438186
 GameObject:
   m_ObjectHideFlags: 0

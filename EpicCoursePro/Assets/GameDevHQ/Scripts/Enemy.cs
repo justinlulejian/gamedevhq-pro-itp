@@ -25,6 +25,7 @@ namespace GameDevHQ.Scripts
         [Header("Health Settings")]
         [SerializeField] 
         private int _maxHealth = 100;
+        [SerializeField]
         private int _currentHealth; 
         public bool IsDead => _currentHealth == 0;
         
@@ -149,7 +150,7 @@ namespace GameDevHQ.Scripts
 
         public void PlayerDamageEnemy(int damageValue)
         {
-            Mathf.Clamp(_currentHealth -= damageValue, 0, _maxHealth);
+            _currentHealth = Mathf.Clamp(_currentHealth - damageValue, 0, _maxHealth);
             
             if (_currentHealth == 0)
             {
