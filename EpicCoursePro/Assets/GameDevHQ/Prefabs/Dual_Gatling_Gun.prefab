@@ -24415,7 +24415,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: fdbaa274f62e74a23b90855541dd06c9, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29363,7 +29362,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4321718789516178}
-  - component: {fileID: 114783078296505704}
+  - component: {fileID: 3049429100829553588}
   - component: {fileID: 82127826341503972}
   m_Layer: 0
   m_Name: Dual_Gatling_Gun
@@ -29388,7 +29387,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114783078296505704
+--- !u!114 &3049429100829553588
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -29397,7 +29396,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1873819670802014}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa87186eb31905c4fa207e5970b35579, type: 3}
+  m_Script: {fileID: 11500000, guid: b88e3ebce6afb1e41b180c87dce4f207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TowerType: 3
@@ -29405,14 +29404,20 @@ MonoBehaviour:
   AttackRadiusObj: {fileID: 7818263952305720416}
   _targetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
-  _damageValue: 20
+  _damageValue: 40
   _damageRate: 1
   _rotationObject: {fileID: 1193411258393432}
   _rotationSpeed: 5
-  _gunBarrelObj: {fileID: 1709006267372880}
-  Muzzle_Flash: {fileID: 1760864000073236}
-  bulletCasings: {fileID: 198195836669371088}
-  fireSound: {fileID: 8300000, guid: ebcd7ceac90454c1e9dc458cb87b6f75, type: 3}
+  _gunBarrels:
+  - {fileID: 4583063125038268}
+  - {fileID: 4010926618165518}
+  _muzzleFlashes:
+  - {fileID: 1760864000073236}
+  - {fileID: 1614428210295162}
+  _bulletCasings:
+  - {fileID: 198195836669371088}
+  - {fileID: 198825845797523540}
+  _fireSound: {fileID: 8300000, guid: ebcd7ceac90454c1e9dc458cb87b6f75, type: 3}
 --- !u!82 &82127826341503972
 AudioSource:
   m_ObjectHideFlags: 0

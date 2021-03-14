@@ -12,7 +12,10 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         [SerializeField]
         protected GameObject _missilePrefab; //holds the missle gameobject to clone
         [SerializeField]
-        private GameObject[] _misslePositions; //array to hold the rocket positions on the turret
+        private GameObject[] _misslePositionsLeft; //array to hold the rocket positions on the turret
+        [SerializeField]
+        private GameObject[] _missilePositionsRight; //array to hold the rocket positions on the turret
+        private int _missilePositionsLength;
         [SerializeField]
         protected float _fireDelay; //fire delay between rockets
         [SerializeField]
@@ -27,6 +30,24 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         protected float _destroyTime = 10.0f; //how long till the rockets get cleaned up
         protected bool _launched; //bool to check if we launched the rockets
 
+        protected override void Awake()
+        {
+            base.Awake();
+            if (_misslePositionsLeft == null && _missilePositionsRight == null)
+            {
+                Debug.LogError($"Tower {name} id: {this.GetInstanceID().ToString()} has " +
+                               "no missile position lengths so firing will not work.");
+            }
+            
+            if (_misslePositionsLeft.Length > 0 && _missilePositionsRight.Length > 0 &&
+                _misslePositionsLeft.Length != _missilePositionsRight.Length)
+            {
+                Debug.LogError($"Tower {name} id: {this.GetInstanceID().ToString()} has " +
+                               "mismatching missile position lengths so firing might not work.");
+            }
+            _missilePositionsLength = _misslePositionsLeft.Length;
+        }
+
         protected override void Update()
         {
             base.Update();
@@ -37,21 +58,43 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             }
         }
 
-        private void FireRocket(int i)
+        private void FireRockets(int position)
+        {
+            if (_misslePositionsLeft.Length > 0)
+            {
+                FireRocket(_misslePositionsLeft, position);
+            }
+            if (_missilePositionsRight.Length > 0)
+            {
+                FireRocket(_missilePositionsRight, position);
+            }
+            
+        }
+
+        private void FireRocket(GameObject[] missilePositions, int position)
         {
             // TODO: Pool rockets
-            GameObject rocket = Instantiate(_missilePrefab) as GameObject; //instantiate a rocket
+            GameObject rocket = Instantiate(_missilePrefab); //instantiate a rocket
 
-            rocket.transform.parent = _misslePositions[i].transform; //set the rockets parent to the missle launch position 
+            rocket.transform.parent = missilePositions[position].transform; //set the rockets parent to the missle launch position 
             rocket.transform.localPosition = Vector3.zero; //set the rocket position values to zero
-            rocket.transform.localEulerAngles = new Vector3(-90, 0, 0); //set the rotation values to be properly aligned with the rockets forward direction
+            // TODO(hack): Base missile launcher has missiles offset 90, but dual does not, how can
+            // I make them consistent?
+            if (TowerType == 2) // 
+            {
+                rocket.transform.localEulerAngles = new Vector3(-90, 0, 0); //set the rotation values to be properly aligned with the rockets forward direction
+            }
+
+            if (TowerType == 4)
+            {
+                rocket.transform.localEulerAngles = new Vector3(0, 0, 0); //set the rotation values to be properly aligned with the rockets forward direction
+            }
             rocket.transform.parent = null; //set the rocket parent to null
 
             rocket.GetComponent<GameDevHQ.FileBase.Missle_Launcher.Missle.Missle>().AssignMissleRules(
                 _launchSpeed, _power, _fuseDelay, _destroyTime); //assign missle properties 
 
-            _misslePositions[i].SetActive(false); //turn off the rocket sitting in the turret to make it look like it fired
-
+            missilePositions[position].SetActive(false); //turn off the rocket sitting in the turret to make it look like it fired
         }
         
         IEnumerator FireRocketsRoutine()
@@ -62,7 +105,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             // will fire later.
             // Wait a moment for the turret to get some rotation towards target before firing.
             yield return new WaitForSeconds(.5f);
-            for (int i = 0; i < _misslePositions.Length; i++) //for loop to iterate through each missle position
+            for (int i = 0; i < _missilePositionsLength; i++) //for loop to iterate through each missle position
             {
                 // If we switch enemies mid-routine then stop firing, reload, and then start
                 // shooting again. TODO: this'll need to change once it's not called in update anymore?
@@ -70,15 +113,17 @@ namespace GameDevHQ.FileBase.Missle_Launcher
                 {
                     break;
                 }
-                FireRocket(i);
+                FireRockets(i);
                 yield return new WaitForSeconds(_fireDelay); //wait for the firedelay
             }
 
             // Reset/reload rockets after firing.
-            for (int i = 0; i < _misslePositions.Length; i++) //itterate through missle positions
+            for (int i = 0; i < _missilePositionsLength; i++) //itterate through missle positions
             {
                 yield return new WaitForSeconds(_reloadTime); //wait for reload time
-                _misslePositions[i].SetActive(true); //enable fake rocket to show ready to fire
+                //enable fake rocket to show ready to fire
+                if(_misslePositionsLeft.Length > 0) _misslePositionsLeft[i].SetActive(true);
+                if(_missilePositionsRight.Length > 0) _missilePositionsRight[i].SetActive(true);
             }
 
             _launched = false; //set launch bool to false

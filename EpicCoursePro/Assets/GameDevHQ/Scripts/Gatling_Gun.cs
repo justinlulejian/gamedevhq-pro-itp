@@ -27,32 +27,48 @@ namespace GameDevHQ.FileBase.Gatling_Gun
     public class Gatling_Gun : Tower
     {
         [SerializeField] 
-        private GameObject _gunBarrelObj;
-        private Transform _gunBarrel; //Reference to hold the gun barrel
-        public GameObject Muzzle_Flash; //reference to the muzzle flash effect to play when firing
-        public ParticleSystem bulletCasings; //reference to the bullet casing effect to play when firing
-        public AudioClip fireSound; //Reference to the audio clip
+        private List<Transform> _gunBarrels = new List<Transform>(); //Reference to hold the gun barrel
+        [SerializeField] 
+        private List<GameObject> _muzzleFlashes = new List<GameObject>(); //reference to the muzzle flash effect to play when firing
+        [SerializeField] 
+        private List<ParticleSystem> _bulletCasings = new List<ParticleSystem>(); //reference to the bullet casing effect to play when firing
+        [SerializeField] 
+        private AudioClip _fireSound; //Reference to the audio clip
 
-        protected AudioSource _audioSource; //reference to the audio source component
-        protected bool _startWeaponNoise = true;
+        private AudioSource _audioSource; //reference to the audio source component
         
-        // Use this for initialization
         void Start()
         {
-            
-            _gunBarrel = _gunBarrelObj.GetComponent<Transform>(); //assigning the transform of the gun barrel to the variable
-
-            if (_gunBarrel == null)
+            if (_gunBarrels.Count < 1 )
             {
                 Debug.LogError($"Tower {name} id: {this.GetInstanceID().ToString()} is " +
-                               $"missing it's gun barrel transform.");
+                               $"missing it's gun barrel transform(s).");
             }
-            
-            Muzzle_Flash.SetActive(false); //setting the initial state of the muzzle flash effect to off
+            if (_muzzleFlashes.Count < 1 )
+            {
+                Debug.LogError($"Tower {name} id: {this.GetInstanceID().ToString()} is " +
+                               $"missing it's muzzle flash object(s).");
+            }
+            if (_bulletCasings.Count < 1 )
+            {
+                Debug.LogError($"Tower {name} id: {this.GetInstanceID().ToString()} is " +
+                               $"missing it's bullet case particle system object(s).");
+            }
+            if (_fireSound == null)
+            {
+                Debug.LogError($"Tower {name} id: {this.GetInstanceID().ToString()} is " +
+                               $"missing it's firing sound.");
+            }
+
+            //setting the initial state of the muzzle flash effect to off
+            foreach (var muzzleFlash in _muzzleFlashes)
+            {
+                muzzleFlash.SetActive(false);
+            }
             _audioSource = GetComponent<AudioSource>(); // assign the Audio Source to the reference variable
             _audioSource.playOnAwake = false; //disabling play on awake
             _audioSource.loop = true; //making sure our sound effect loops
-            _audioSource.clip = fireSound; //assign the clip to play
+            _audioSource.clip = _fireSound; //assign the clip to play
         }
 
         protected override void Update()
@@ -68,12 +84,19 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             if (_targetedEnemy != null) 
             {
                 RotateBarrel();
-                bulletCasings.Emit(1); //Emit the bullet casing particle effect 
+                foreach (var bulletCasing in _bulletCasings)
+                {
+                    bulletCasing.Emit(1); //Emit the bullet casing particle effect 
+                }
+               
             }
             
             if (_targetedEnemy && !_firingAtEnemy)
             {
-                Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
+                foreach (var muzzleFlash in _muzzleFlashes)
+                {
+                    muzzleFlash.SetActive(true); //enable muzzle effect particle effect
+                }
                 _audioSource.Play(); //play audio clip attached to audio source
                 _firingAtEnemy = true;  // Only initiate this one per firing instance.
             }
@@ -86,8 +109,10 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         {
             // TODO: Make this a slower spin up effect with lerp?
             //rotate the gun barrel along the "forward" (z) axis at 500 meters per second
-            _gunBarrel.transform.Rotate(Vector3.forward * (Time.deltaTime * -500.0f));
-
+            foreach (var gunBarrel in _gunBarrels)
+            {
+                gunBarrel.transform.Rotate(Vector3.forward * (Time.deltaTime * -500.0f));
+            }
         }
 
         protected override void StartFiringAtEnemy(Enemy enemy)
@@ -107,14 +132,20 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         {
             _targetedEnemy = null;
             _firingAtEnemy = false;
-            Muzzle_Flash.SetActive(false);
+            foreach (var muzzleFlash in _muzzleFlashes)
+            {
+                muzzleFlash.SetActive(false);
+            }
             _audioSource.Stop();
         }
 
         protected override void ResetFiringState()
         {
             _firingAtEnemy = false;
-            Muzzle_Flash.SetActive(false);
+            foreach (var muzzleFlash in _muzzleFlashes)
+            {
+                muzzleFlash.SetActive(false);
+            }
             _audioSource.Stop();
         }
     }

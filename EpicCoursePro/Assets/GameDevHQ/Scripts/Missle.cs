@@ -13,7 +13,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
     public class Missle : MonoBehaviour
     {
         [SerializeField]
-        private ParticleSystem _particle; //reference to the particle system
+        private List<ParticleSystem> _particleSystems; //reference to the particle system
 
         [SerializeField] 
         private CapsuleCollider _missileCollider;
@@ -67,7 +67,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
             _rigidbody = GetComponent<Rigidbody>(); //assign the rigidbody component 
             _audioSource = GetComponent<AudioSource>(); //assign the audiosource component
             _audioSource.pitch = Random.Range(0.7f, 1.9f); //randomize the pitch of the rocket audio
-            _particle.Play(); //play the particles of the rocket
+            _particleSystems.ForEach(p => p.Play()); //play the particles of the rocket
             _audioSource.Play(); //play the rocket sound
 
             yield return new WaitForSeconds(_fuseDelay); //wait for the fuse delay
@@ -136,7 +136,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
         
         private void StopMissileInteractions()
         {
-            _particle.Stop(); 
+            _particleSystems.ForEach(p => p.Stop());
             _audioSource.Stop();
             _meshRenderer.enabled = false;
             _missileCollider.enabled = false;
