@@ -40,7 +40,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
         private bool _fuseOut = false; //bool for if the rocket fuse
         private bool _trackRotation = false; //bool to track rotation of the rocket
 
-        public static event Action<Missle, GameObject> onMissileHitEnemy; 
+        // public static event Action<Missle, GameObject> onMissileHitEnemy; 
 
         private void Awake()
         {

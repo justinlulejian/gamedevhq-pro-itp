@@ -14585,7 +14585,7 @@ MonoBehaviour:
   AttackRadiusObj: {fileID: 386667129}
   _targetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
-  _damageValue: 20
+  _damageValue: 1
   _damageRate: 1
   _rotationObject: {fileID: 2364340935526984089}
   _rotationSpeed: 5
@@ -14969,6 +14969,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2367743917456287135}
     m_Modifications:
+    - target: {fileID: 1101925397132982450, guid: 5f9f0f4a8febe2c418afe60aade9da88,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1101925397132982452, guid: 5f9f0f4a8febe2c418afe60aade9da88,
         type: 3}
       propertyPath: m_RootOrder

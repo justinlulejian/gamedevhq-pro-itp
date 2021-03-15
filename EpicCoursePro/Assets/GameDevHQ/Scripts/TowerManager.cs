@@ -25,7 +25,7 @@ public class TowerManager : MonoSingleton<TowerManager>
     public static event Action<bool> onTowerPlacementModeStatusChange;
     public static event Action onTowerPreview;
     public static event Action onTowerPlaced;
-    public static event Action<GameObject> onTowerReplaced;
+    // public static event Action<GameObject> onTowerReplaced;
     public static event Action onDecoyEnabled;
     
     private bool _towerPlacementModeActivated;
