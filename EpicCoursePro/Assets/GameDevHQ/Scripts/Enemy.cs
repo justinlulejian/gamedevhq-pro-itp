@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Rock.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -40,7 +41,13 @@ namespace GameDevHQ.Scripts
         [SerializeField]
         [Tooltip(
             "The object player weapons will target when firing. Must have transform attached.")]
-        private GameObject _weaponTarget;
+        private GameObject _playerWeaponTarget;
+        [SerializeField] 
+        private  GameObject _currentTarget;
+        private OrderedHashSet<GameObject> _targetList = new OrderedHashSet<GameObject>();
+        [SerializeField] 
+        private GameObject _waistToTurnTowardsTarget;
+        private Quaternion _waistOriginalRotation;
         private Transform _weaponTargetTransform;
 
         [Header("Animation Settings")]
@@ -55,7 +62,29 @@ namespace GameDevHQ.Scripts
         public static event Action<Transform, NavMeshAgent> onSpawnStart;
         public static event Action<Enemy> onEnemyKilledByPlayer;
         public static event Action<Enemy> onEnemyCompletedDeathAnimation;
-
+        
+        private void OnEnable()
+        {
+            AttackRadius.OnEnemyEnterTowerRadius += AddTarget;
+            AttackRadius.OnEnemyExitTowerRadius += RemoveTarget;
+            
+            if (_navMeshAgent == null)
+            {
+                _navMeshAgent = GetComponent<NavMeshAgent>();
+            }
+            onSpawnStart?.Invoke(this.transform, _navMeshAgent);
+            _navDestinationPosition = _navMeshAgent.destination;
+        }
+        
+        private void OnDisable()
+        {
+            AttackRadius.OnEnemyEnterTowerRadius -= AddTarget;
+            AttackRadius.OnEnemyExitTowerRadius -= RemoveTarget;
+            
+            // Reset health so if recycled they'll start with
+            PrepareEnemyForRecycling();
+        }
+        
         protected virtual void Awake()
         {
             if (EnemyType == 0)
@@ -64,7 +93,15 @@ namespace GameDevHQ.Scripts
                                $" proper usage in-game.");
             }
             
-            WeaponTargetTransform = _weaponTarget.transform;
+            _waistOriginalRotation = _waistToTurnTowardsTarget.transform.rotation;
+            if (_waistToTurnTowardsTarget == null)
+            {
+                Debug.LogError($"Enemy {name} does not have a waist to rotate while " +
+                               $"firing. Attach one to allow firing to work.");
+            }
+            
+            
+            WeaponTargetTransform = _playerWeaponTarget.transform;
             if (WeaponTargetTransform == null)
             {
                 Debug.LogError($"Enemy {name} does not have a valid weapon target. Make " +
@@ -72,6 +109,12 @@ namespace GameDevHQ.Scripts
             }
 
             _animator = GetComponent<Animator>();
+            // TODO: Had to move animation to child of mech2 due to https://forum.unity.com/threads/animation-stops-object-movement.184084/ 
+            if (_animator == null)
+            {
+                _animator = GetComponentInChildren<Animator>();
+            }
+            
             _dissolveMeshRenderers = GetComponentsInChildren<Renderer>().ToList();
             _dissolveMeshRenderers.RemoveAll(
                 r => r is SpriteRenderer);
@@ -99,6 +142,7 @@ namespace GameDevHQ.Scripts
         {
             // Reset health so if recycled they'll start with
             _currentHealth = _maxHealth;
+            _animator.ResetTrigger("IsEnemyFiring");
             _animator.SetTrigger("OnEnemyDeath");
             _animator.WriteDefaultValues(); // Reset position of mech to upright.
             _navMeshAgent.enabled = true;
@@ -111,24 +155,7 @@ namespace GameDevHQ.Scripts
             }
         }
 
-        private void OnDisable()
-        {
-            // Reset health so if recycled they'll start with
-            PrepareEnemyForRecycling();
-        }
-
-        private void OnEnable()
-        {
-            if (_navMeshAgent == null)
-            {
-                _navMeshAgent = GetComponent<NavMeshAgent>();
-            }
-            onSpawnStart?.Invoke(this.transform, _navMeshAgent);
-            _navDestinationPosition = _navMeshAgent.destination;
-            
-        }
-
-        private void Start()
+        protected virtual void Start()
         {
             if (_navMeshAgent == null)
             {
@@ -137,12 +164,53 @@ namespace GameDevHQ.Scripts
             _navMeshAgent.speed = _navigationSpeed;
         }
 
+        private void Update()
+        {
+            // TODO: Move from Update to a coroutine?
+            if (_currentTarget != null)
+            {
+                // TODO: Change to slerp to make the tracking look smoother.
+                _waistToTurnTowardsTarget.transform.LookAt(_currentTarget.transform.position);
+            }
+        }
+
+        private void AddTarget(GameObject enemy, GameObject target)
+        {
+            if (!(enemy == gameObject)) return;
+            _animator.SetTrigger("IsEnemyFiring");
+            if (!_targetList.Contains(target))
+            {
+                _targetList.Add(target);
+                _currentTarget = _targetList.First();
+;            }
+        }
+
+        private void RemoveTarget(GameObject enemy, GameObject target)
+        {
+            if (!(enemy == gameObject)) return;
+            _targetList.Remove(target);
+            if (_targetList.Count == 0)
+            {
+                _currentTarget = null;
+                ResetRotation();
+                return;
+            }
+
+            _currentTarget = _targetList.First();
+        }
+
+        private void ResetRotation()
+        {
+            _animator.ResetTrigger("IsEnemyFiring");
+            _waistToTurnTowardsTarget.transform.rotation = transform.rotation;
+        }
+
         public Transform WeaponTargetTransform
         {
             get => _weaponTargetTransform;
             private set => _weaponTargetTransform = value;
         }
-
+        
         private IEnumerator DissolveRoutine(float dissolveTime)
         {
             // TODO: static value to wait for explosion to finish. Change to check for explosion

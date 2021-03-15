@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using GameDevHQ.Scripts;
 using Rock.Collections;
 using UnityEditor.Rendering;
@@ -14,6 +15,9 @@ public class AttackRadius : MonoBehaviour
     // TODO: Consider since Enemy has the GO, can't that be the single key in an ordered HashSet?
     private OrderedDictionary<GameObject, Enemy> _enemiesInAttackRadius =
         new OrderedDictionary<GameObject, Enemy>();
+    
+    public static event Action<GameObject, GameObject> OnEnemyEnterTowerRadius;
+    public static event Action<GameObject, GameObject> OnEnemyExitTowerRadius;
     
     private void OnEnable()
     {
@@ -41,7 +45,8 @@ public class AttackRadius : MonoBehaviour
             Debug.LogError($"Mesh collider is not available from attack radius" +
                            $" {name}");
         }
-        _sphereCollider.enabled = false;
+        // _sphereCollider.enabled = false;
+        _sphereCollider.enabled = true;
 
     }
 
@@ -104,7 +109,9 @@ public class AttackRadius : MonoBehaviour
     {
         if (!_tower.IsPlaced) return;
         if (!other.CompareTag("Enemy")) return;
-        TrackTarget(other.gameObject);
+        GameObject enemy = other.gameObject;
+        OnEnemyEnterTowerRadius?.Invoke(enemy, _tower.gameObject);
+        TrackTarget(enemy);
         UpdateTarget();
     }
 
@@ -117,6 +124,8 @@ public class AttackRadius : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Enemy")) return;
-        RemoveTargetFromTrackingAndMaybeUpdate(other.gameObject);
+        GameObject enemy = other.gameObject;
+        OnEnemyExitTowerRadius?.Invoke(enemy, _tower.gameObject);
+        RemoveTargetFromTrackingAndMaybeUpdate(enemy);
     }
 }

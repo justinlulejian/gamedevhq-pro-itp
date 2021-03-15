@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using GameDevHQ.Scripts;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UpgradeGunUIManager : AbstractTowerUIManager
 {

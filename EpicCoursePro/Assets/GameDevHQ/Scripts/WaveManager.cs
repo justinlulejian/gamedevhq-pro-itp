@@ -22,7 +22,7 @@ public class WaveManager : MonoSingleton<WaveManager>
     private Enemy _lastEnemySpawnedInWave;
 
     // When a wave has started. Will later likely be used to provide info to UI about wave.
-    public static event Action<Wave> onWaveStart; 
+    // public static event Action<Wave> onWaveStart; 
     // When a wave requested has finished.
     public static event Action onWaveFinish;
     // When all waves have completed spawning. Will later likely be used to provide info to UI.

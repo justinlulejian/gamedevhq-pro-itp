@@ -8,7 +8,7 @@ namespace GameDevHQ.Scripts
 
         // Note: This currently needs to be Start vs Awake so that _parentTurretY can init it's mesh
         // renderers.
-        private void Start()
+        protected override void Start()
         {
             base.Awake();
             _parentTurretY = GetComponentInChildren<Parent_Turret_Y>();
