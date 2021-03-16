@@ -86,9 +86,6 @@ public class TowerSpot : MonoBehaviour
     // Place tower in spot, don't allow it to be removed by mouse exit.
     private void OnMouseOver()
     {
-        // TODO(checkpoint): switch this to onmouseover and then check for mouse button down to 
-        // either call placement/upgrade or dismantle. Then swithc upgradegunui to not call dismantle UI
-        // then make sure dismantle UI is started from here as monosingleton, or from an event.
         if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
         {
             if (TowerManager.Instance.IsTowerPlacementModeActivated() && !_towerPlaced)
@@ -169,17 +166,8 @@ public class TowerSpot : MonoBehaviour
             IsUpgraded = false;
             OnTowerPlacementModeChange(true);
             IsAvailableForPlacement = true;
-            
-            // TODO: make first condition the default once upgraded towers are pooled.
-            if (_towerPlaced.TowerType == 1 || _towerPlaced.TowerType == 2)
-            {
-                PoolManager.Instance.RecyclePooledObj(_towerPlaced.gameObject);
-                _towerPlaced.IsPlaced = false;
-                
-            } else if (_towerPlaced.TowerType == 3 || _towerPlaced.TowerType == 4)
-            {
-                Destroy(_towerPlaced.gameObject);
-            }
+            _towerPlaced.IsPlaced = false;
+            PoolManager.Instance.RecyclePooledObj(_towerPlaced.gameObject);
             _towerPlaced = null;
         }
     }
