@@ -84,7 +84,6 @@ public class PlayerUIManager : MonoSingleton<PlayerUIManager>
             return;
         }
         
-        // TODO(checkpoint): How will I communicate the tower spot to the 
         AbstractTowerUIManager uiManager = _uiStateToUIMap[uiState];
         uiManager.Spot = towerSpot;
         uiManager.gameObject.SetActive(true);
