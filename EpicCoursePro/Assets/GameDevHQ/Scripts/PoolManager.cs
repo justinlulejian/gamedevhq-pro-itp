@@ -106,8 +106,8 @@ namespace GameDevHQ.Scripts
             var inactiveTowerOfType = _towerPool.FirstOrDefault(
                 t => 
                     // TODO(optimization): Is there a faster way than this double GetComponent call?
-                    t.GetComponent<AbstractTower>().TowerType ==
-                    towerType.GetComponent<AbstractTower>().TowerType &&
+                    t.GetComponent<Tower>().TowerType ==
+                    towerType.GetComponent<Tower>().TowerType &&
                     !t.activeInHierarchy);
             
             if (inactiveTowerOfType != null)

@@ -3,7 +3,7 @@ using GameDevHQ.Scripts;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WarFundsUIManager : MonoBehaviour
+public class WarFundsUIManager : MonoSingleton<WarFundsUIManager>
 {
     [SerializeField] 
     private Text _warFundsText;
@@ -16,13 +16,11 @@ public class WarFundsUIManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.onWarFundsChange += SetWarFundsText;
-        UpgradeGunUIManager.onPlayerNotEnoughWarFundsForUpgrade += WarFundsOutAnim;
     }
 
     private void OnDisable()
     {
         GameManager.onWarFundsChange -= SetWarFundsText;
-        UpgradeGunUIManager.onPlayerNotEnoughWarFundsForUpgrade -= WarFundsOutAnim;
     }
 
     private void SetWarFundsText(int currentWarFunds)
@@ -30,7 +28,7 @@ public class WarFundsUIManager : MonoBehaviour
         _warFundsText.text = $"{currentWarFunds.ToString()}";
     }
 
-    private void WarFundsOutAnim()
+    public void WarFundsOutAnim()
     {
         StartCoroutine(FlashTextCoroutine(_warFundsText));
 

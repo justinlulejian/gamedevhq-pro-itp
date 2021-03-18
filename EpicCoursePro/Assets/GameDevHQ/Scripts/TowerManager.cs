@@ -40,8 +40,6 @@ public class TowerManager : MonoSingleton<TowerManager>
         TowerSpot.onUserPreviewTowerOnSpotIntent += ActivateTowerOnPlacementPreview;
         TowerSpot.onUserNoLongerPlaceTowerOnSpotPreviewIntent += DeactivateTowerOnPlacementPreview;
         TowerSpot.onUserPlaceTowerIntent += PlaceTower;
-        UpgradeGunUIManager.onPlayerCanPlaceUpgrade += PlayerUpgradeTowerOnSpot;
-        UpgradeGunUIManager.onUpgradeUIActivated += DeactivateTowerPlacementMode;
     }
 
     private void OnDisable()
@@ -49,8 +47,6 @@ public class TowerManager : MonoSingleton<TowerManager>
         TowerSpot.onUserPreviewTowerOnSpotIntent -= ActivateTowerOnPlacementPreview;
         TowerSpot.onUserNoLongerPlaceTowerOnSpotPreviewIntent -= DeactivateTowerOnPlacementPreview;
         TowerSpot.onUserPlaceTowerIntent -= PlaceTower;
-        UpgradeGunUIManager.onPlayerCanPlaceUpgrade -= PlayerUpgradeTowerOnSpot;
-        UpgradeGunUIManager.onUpgradeUIActivated -= DeactivateTowerPlacementMode;
     }
     
     protected override void Awake()
@@ -137,9 +133,9 @@ public class TowerManager : MonoSingleton<TowerManager>
     {
         AbstractTower towerToPlace = _instantiatedPreviewTowerOnSpot.GetComponent<AbstractTower>();
         GameManager gM = GameManager.Instance;
-        if (gM.PlayerCanPurchaseItem(towerToPlace.WarFundValue))
+        if (gM.PlayerCanPurchaseItem(towerToPlace.TowerInfo.WarFundsValue))
         {
-            gM.PurchaseItem(towerToPlace.WarFundValue);
+            gM.PurchaseItem(towerToPlace.TowerInfo.WarFundsValue);
             towerSpot.PlaceTower(_instantiatedPreviewTowerOnSpot);
             _instantiatedPreviewTowerOnSpot = null;
             EnableDecoy();
@@ -152,10 +148,10 @@ public class TowerManager : MonoSingleton<TowerManager>
         }
     }
     
-    private void PlayerUpgradeTowerOnSpot(TowerSpot towerSpot, GameObject _upgradedTowerPrefab)
+    public void PlayerUpgradeTowerOnSpot(TowerSpot towerSpot, GameObject upgradedTowerPrefab)
     {
         // TODO: Convert to pooling.
-        GameObject spawnedUpgradedTower = Instantiate(_upgradedTowerPrefab);
+        GameObject spawnedUpgradedTower = Instantiate(upgradedTowerPrefab);
         if (spawnedUpgradedTower == null)
         {
             Debug.LogError($"Upgraded tower for tower spot " +
@@ -207,7 +203,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         SetCurrentDecoyTower(towerType);
     }
 
-    private void DeactivateTowerPlacementMode()
+    public void DeactivateTowerPlacementMode()
     {
         DeactivateTowerOnPlacementPreview();
         ResetCurrentDecoyTower();

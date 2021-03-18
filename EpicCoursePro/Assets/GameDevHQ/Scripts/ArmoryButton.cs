@@ -49,12 +49,12 @@ public class ArmoryButton : MonoBehaviour
                            $" prefab.");
         }
 
-        _priceText.text = $"${_tower.WarFundValue.ToString()}";
+        _priceText.text = $"${_tower.TowerInfo.WarFundsValue.ToString()}";
     }
 
     private void ChangeButtonStateIfInsufficientFunds(int currentWarFunds)
     {
-        if (_tower.WarFundValue > currentWarFunds)
+        if (_tower.TowerInfo.WarFundsValue > currentWarFunds)
         {
             _button.interactable = false;
         }

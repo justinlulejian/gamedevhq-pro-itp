@@ -45,6 +45,7 @@ public class AttackRadius : MonoBehaviour
             Debug.LogError($"Mesh collider is not available from attack radius" +
                            $" {name}");
         }
+        // TODO: Why'd I do this? To test something?
         // _sphereCollider.enabled = false;
         _sphereCollider.enabled = true;
 
@@ -112,12 +113,18 @@ public class AttackRadius : MonoBehaviour
         GameObject enemy = other.gameObject;
         OnEnemyEnterTowerRadius?.Invoke(enemy, _tower.gameObject);
         TrackTarget(enemy);
-        UpdateTarget();
+        
     }
 
-    // Add target for tower to attack and remove it from attack radius if it dies.
+    // If enemy is in trigger already, then track them for attacking as well.
     private void OnTriggerStay(Collider other)
     {
+        if (!_tower.IsPlaced) return;
+        if (!other.CompareTag("Enemy")) return;
+        GameObject enemy = other.gameObject;
+        if (_enemiesInAttackRadius.ContainsKey(enemy)) return;
+        TrackTarget(enemy);
+        UpdateTarget();
     }
 
     // Remove enemy from attack radius tracking if it exits.

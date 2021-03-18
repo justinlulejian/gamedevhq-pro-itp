@@ -1125,8 +1125,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fa85caec271402484580b58583bf025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TowerInfo:
+    WarFundsValue: 0
+    DismantleValue: 0
+    UpgradeSprite: {fileID: 0}
+    DismantleSprite: {fileID: 0}
   TowerType: 4
-  WarFundValue: 0
   AttackRadiusObj: {fileID: 942222705045416369}
 --- !u!1 &4897264247578122872
 GameObject:

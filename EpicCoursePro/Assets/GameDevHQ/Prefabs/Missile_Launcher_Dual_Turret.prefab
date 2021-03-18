@@ -1067,6 +1067,12 @@ MonoBehaviour:
   TowerType: 4
   WarFundValue: 300
   AttackRadiusObj: {fileID: 5684529106496217653}
+  TowerInfo:
+    TowerType: 4
+    WarFundsValue: 300
+    DismantleValue: 150
+    UpgradeSprite: {fileID: 0}
+    DismantleSprite: {fileID: 21300000, guid: 56de8f0edfebfa142b49f31e81f4750c, type: 3}
   _targetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
   _damageValue: 25
