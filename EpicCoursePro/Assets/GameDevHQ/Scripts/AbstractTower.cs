@@ -1,13 +1,15 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GameDevHQ.Scripts
 {
     public abstract class AbstractTower : MonoBehaviour
     {
-        // TODO: Fix the visibility of these to only what's necessary.
+        [Header("Tower Info")]
+        [SerializeField]
+        public TowerInfo TowerInfo;
         public int TowerType;
-        public int WarFundValue;
+        
+        // TODO: Fix the visibility of these to only what's necessary.
         public GameObject AttackRadiusObj;
         protected MeshRenderer _attackRadiusMeshRenderer;
 
@@ -37,6 +39,17 @@ namespace GameDevHQ.Scripts
             if (_attackRadiusMeshRenderer == null)
             {
                 Debug.LogError($"Attack radius mesh renderer was null on tower {this.name}.");
+            }
+
+            VerifyTowerInfo();
+        }
+
+        protected virtual void VerifyTowerInfo()
+        {
+            if (TowerInfo.Equals(default(TowerInfo)))
+            {
+                Debug.LogError($"Tower {name} id: {this.GetInstanceID().ToString()} is " +
+                               $"missing it's TowerInfo.");
             }
         }
         

@@ -1,5 +1,6 @@
 ﻿using System;
 using GameDevHQ.Scripts;
+using GameDevHQ.Scripts.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,18 +23,18 @@ public class TowerSpot : MonoBehaviour
     public static event Action<TowerSpot> onUserPreviewTowerOnSpotIntent; 
     public static event Action onUserNoLongerPlaceTowerOnSpotPreviewIntent; 
     public static event Action<TowerSpot> onUserPlaceTowerIntent;
-    public static event Action<PlayerUIManager.UIStates, TowerSpot> onUserTowerInteractIntent;
+    // public static event Action<PlayerUIManager.UIStates, TowerSpot> onUserTowerInteractIntent;
 
     private void OnEnable()
     {
         TowerManager.onTowerPlacementModeStatusChange += OnTowerPlacementModeChange;
-        DismantleTowerUIManager.onDismantleTower += DismantleTower;
+        // DismantleTowerInteractableChoiceUIManager.onDismantleTower += DismantleTower;
     }
 
     private void OnDisable()
     {
         TowerManager.onTowerPlacementModeStatusChange -= OnTowerPlacementModeChange;
-        DismantleTowerUIManager.onDismantleTower -= DismantleTower;
+        // DismantleTowerInteractableChoiceUIManager.onDismantleTower -= DismantleTower;
     }
 
     private void Awake()
@@ -83,7 +84,8 @@ public class TowerSpot : MonoBehaviour
         }
     }
     
-    // Place tower in spot, don't allow it to be removed by mouse exit.
+    // Left click places tower if none is placed. Otherwise it will attempt upgrade. Right-click
+    // open dismantle tower UI if tower is present
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
@@ -99,25 +101,15 @@ public class TowerSpot : MonoBehaviour
 
             if (_towerPlaced)
             {
-                // TODO: Change this to be dynamic check for different tower types.
-                if (_towerPlaced.TowerType == 1)
-                {
-                    onUserTowerInteractIntent?.Invoke(
-                        PlayerUIManager.UIStates.UpgradeGatlingTowerUIState, this);
-                } else if (_towerPlaced.TowerType == 2)
-                {
-                    onUserTowerInteractIntent?.Invoke(
-                        PlayerUIManager.UIStates.UpgradeMissileTowerUIState, this);
-                }
-                return;
+               PlayerUIManager.Instance.EnableTowerUpgradeUI(this, _towerPlaced.TowerInfo);
+               return;
             }
         }
-
+        
         if (Input.GetMouseButtonDown((int) MouseButton.RightMouse) &&
-            !TowerManager.Instance.IsTowerPlacementModeActivated())
+            !TowerManager.Instance.IsTowerPlacementModeActivated() && _towerPlaced)
         {
-            onUserTowerInteractIntent?.Invoke(
-                PlayerUIManager.UIStates.DismantleTowerUIState, this);
+            PlayerUIManager.Instance.EnableTowerDismantleUI(this, _towerPlaced.TowerInfo);
         }
     }
 
@@ -127,12 +119,10 @@ public class TowerSpot : MonoBehaviour
         {
             return _towerPlaced;
         }
-        else
-        {
-            Debug.LogError($"Requested placed tower from Tower spot ID" +
-                           $" {this.GetInstanceID().ToString()} but it is not set.");
-            return null;
-        }
+
+        Debug.LogError($"Requested placed tower from Tower spot ID" +
+                       $" {this.GetInstanceID().ToString()} but it is not set.");
+        return null;
     }
     
     public void PlaceTower(GameObject towerToPlace, bool upgrade = false)
@@ -159,17 +149,14 @@ public class TowerSpot : MonoBehaviour
         IsAvailableForPlacement = false;
     }
 
-    private void DismantleTower(TowerSpot towerSpot)
+    public void DismantleTower()
     {
-        if (gameObject == towerSpot.gameObject)
-        {
-            IsUpgraded = false;
-            OnTowerPlacementModeChange(true);
-            IsAvailableForPlacement = true;
-            _towerPlaced.IsPlaced = false;
-            PoolManager.Instance.RecyclePooledObj(_towerPlaced.gameObject);
-            _towerPlaced = null;
-        }
+        IsUpgraded = false;
+        OnTowerPlacementModeChange(true);
+        IsAvailableForPlacement = true;
+        _towerPlaced.IsPlaced = false;
+        PoolManager.Instance.RecyclePooledObj(_towerPlaced.gameObject);
+        _towerPlaced = null;
     }
 }
  

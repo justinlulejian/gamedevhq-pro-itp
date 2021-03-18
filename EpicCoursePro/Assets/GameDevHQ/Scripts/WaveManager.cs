@@ -114,8 +114,8 @@ public class WaveManager : MonoSingleton<WaveManager>
         }
         else
         {
-            StartCoroutine(SpawnFixed(wave));
-        }
+            
+        }StartCoroutine(SpawnFixed(wave));
     }
 
     public void SpawnNextWave()

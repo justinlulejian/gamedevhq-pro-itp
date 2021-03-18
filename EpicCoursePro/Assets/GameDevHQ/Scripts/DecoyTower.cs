@@ -14,5 +14,9 @@
             TowerManager.onTowerPreview -= TurnOffAttackRadius;
         }
 
+        protected override void VerifyTowerInfo()
+        {
+            // Decoy's don't need to set any tower info since they are never passed around.
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -9,6 +8,9 @@ namespace GameDevHQ.Scripts
     // TODO: Still needs to be abstract or can be regular class?
     public abstract class Tower : AbstractTower
     {
+        public bool IsPlaced { get; set; }
+        public bool IsUpgradeAble => TowerInfo.UpgradeSprite != null;
+        
         [Header("Target Settings")]
         private AttackRadius _attackRadius;
         [SerializeField]
@@ -20,8 +22,8 @@ namespace GameDevHQ.Scripts
         [SerializeField] 
         protected float _damageRate = 1f;
         protected float _canFire;
+        
 
-        public bool IsPlaced { get; set; }
         [Header("Rotation Settings")]
         [SerializeField] 
         private GameObject _rotationObject;
@@ -47,9 +49,10 @@ namespace GameDevHQ.Scripts
             {
                 Debug.LogError($"Attack radius was null on tower {this.name}.");
             }
-            if (_rotationTransform == null)
+            
+            if (_attackRadius == null)
             {
-                Debug.LogError($"Rotation transform was null on tower {this.name}.");
+                Debug.LogError($"Attack radius was null on tower {this.name}.");
             }
         }
 
