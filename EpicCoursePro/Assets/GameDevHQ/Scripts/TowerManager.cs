@@ -30,6 +30,8 @@ public class TowerManager : MonoSingleton<TowerManager>
     
     private bool _towerPlacementModeActivated;
 
+    private GameObject _myObject = null;
+
     public bool IsTowerPlacementModeActivated()
     {
         return _towerPlacementModeActivated;
@@ -124,6 +126,7 @@ public class TowerManager : MonoSingleton<TowerManager>
             EnableDecoy();
             if (_instantiatedPreviewTowerOnSpot != null)
             {
+                _instantiatedPreviewTowerOnSpot = _myObject;
                 PoolManager.Instance.RecyclePooledObj(_instantiatedPreviewTowerOnSpot);
             }
         }
