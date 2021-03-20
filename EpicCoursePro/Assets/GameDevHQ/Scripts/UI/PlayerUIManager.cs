@@ -36,6 +36,22 @@ namespace GameDevHQ.Scripts.UI
 
         private readonly List<MonoBehaviour> _userInterfaces =
             new List<MonoBehaviour>();
+        
+        private void OnEnable()
+        {
+            LevelStatusUIManager.onCountdownFinished += StartCountdownFinished;
+        }
+
+        private void OnDisable()
+        {
+            LevelStatusUIManager.onCountdownFinished += StartCountdownFinished;
+        }
+
+        private void StartCountdownFinished()
+        {
+            GameManager.Instance.StartCountdownFinished();
+            _levelStatusUIObject.SetActive(false);
+        }
 
         protected override void Awake()
         {
@@ -101,6 +117,12 @@ namespace GameDevHQ.Scripts.UI
         public void UpgradeFailedAnim()
         {
             WarFundsUIManager.Instance.WarFundsOutAnim();
+        }
+
+        public void PresentStartUI()
+        {
+            _levelStatusUIObject.SetActive(true);
+            _levelStatusUI.PresentStartUI();
         }
     }
 }

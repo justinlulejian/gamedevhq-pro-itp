@@ -1,5 +1,7 @@
 ﻿using System;
+using GameDevHQ.Scripts.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GameDevHQ.Scripts
 {
@@ -18,11 +20,13 @@ namespace GameDevHQ.Scripts
         private void OnEnable()
         {
             Enemy.onEnemyKilledByPlayer += AddWarFundsForEnemy;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private void OnDisable()
         {
             Enemy.onEnemyKilledByPlayer -= AddWarFundsForEnemy;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         private void Update()
@@ -41,6 +45,29 @@ namespace GameDevHQ.Scripts
                 }
                 CurrentTimeScale = Time.timeScale;
             #endif
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name.Equals("Start_Level") && scene.isLoaded)
+            {
+                StartGame();
+            }
+        }
+
+        private void StartGame()
+        {
+           PlayerUIManager.Instance.PresentStartUI();
+        }
+
+        public void StartCountdownFinished()
+        {
+            StartWaves();
+        }
+
+        private void StartWaves()
+        {
+            SpawnManager.Instance.StartWaves();
         }
 
         public int GetWarFunds()
