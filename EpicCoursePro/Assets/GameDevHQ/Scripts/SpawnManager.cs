@@ -45,7 +45,7 @@ public class SpawnManager : MonoSingleton<SpawnManager>
         }
     }
 
-    private void Start()
+    public void StartWaves()
     {
         WaveManager.Instance.SpawnNextWave();
     }

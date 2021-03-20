@@ -72,6 +72,8 @@ namespace GameDevHQ.Scripts
             {
                 _navMeshAgent = GetComponent<NavMeshAgent>();
             }
+
+            _navMeshAgent.enabled = true;
             onSpawnStart?.Invoke(this.transform, _navMeshAgent);
             _navDestinationPosition = _navMeshAgent.destination;
         }
@@ -145,7 +147,7 @@ namespace GameDevHQ.Scripts
             _animator.ResetTrigger("IsEnemyFiring");
             _animator.SetTrigger("OnEnemyDeath");
             _animator.WriteDefaultValues(); // Reset position of mech to upright.
-            _navMeshAgent.enabled = true;
+            _navMeshAgent.enabled = false;
             
             // Reset dissolve shader value to opaque.
             foreach (var meshRenderer in _dissolveMeshRenderers)        
