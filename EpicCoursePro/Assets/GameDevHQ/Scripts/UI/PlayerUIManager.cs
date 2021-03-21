@@ -6,8 +6,7 @@ namespace GameDevHQ.Scripts.UI
 {
     public class PlayerUIManager : MonoSingleton<PlayerUIManager>
     {
-        [Header("UI Components - Game Info and Manipulation")] 
-    
+        [Header("UI Components - Game Info and Manipulation")]
         [SerializeField] 
         private GameObject _warFundsUIObject;
         private WarFundsUIManager _warFundsUI;
@@ -124,5 +123,25 @@ namespace GameDevHQ.Scripts.UI
             _levelStatusUIObject.SetActive(true);
             _levelStatusUI.PresentStartUI();
         }
+
+        #region Control Speed State UI
+
+        public void PauseClicked()
+        {
+            GameManager.Instance.PauseGameSpeed();
+        }
+
+        public void PlayClicked()
+        {
+            GameManager.Instance.ResetGameSpeed();
+        }
+
+        public void FastForwardClicked()
+        {
+            GameManager.Instance.DoubleGameSpeed();
+        }
+        
+
+        #endregion
     }
 }

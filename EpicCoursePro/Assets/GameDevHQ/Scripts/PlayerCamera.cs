@@ -93,19 +93,19 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
     {
         // Move the camera forwards and backwards on the scroll wheel.
         float zoomForwardBackwardMovement = (Input.GetAxis("Mouse ScrollWheel") * _zoomSpeed *
-                                             Time.deltaTime);
+                                             Time.unscaledDeltaTime);
         _cam.fieldOfView =  Mathf.Clamp(
             _cam.fieldOfView - zoomForwardBackwardMovement, CameraFovMin, CameraFovMax);
     }
 
     private void CalculateKeyboardMovement(ref Vector3 position)
     {
+        // GetAxisRaw otherwise it's zero with GetAxis when Time.timeScale is 0.
         float forwardBackwardMoveSpeed = (
-            Input.GetAxis("Vertical") * _keyboardMovementSpeed * Time.deltaTime);
+            Input.GetAxisRaw("Vertical") * _keyboardMovementSpeed * Time.unscaledDeltaTime);
         position +=  new Vector3(0, forwardBackwardMoveSpeed, forwardBackwardMoveSpeed);
-        
         float horizontalMovementSpeed = (
-            Input.GetAxis("Horizontal") * _keyboardMovementSpeed * Time.deltaTime);
+            Input.GetAxisRaw("Horizontal") * _keyboardMovementSpeed * Time.unscaledDeltaTime);
         position += new Vector3(horizontalMovementSpeed, 0, 0);
     }
 
@@ -115,22 +115,22 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
         if (CheckFloatInIntRange(
             Input.mousePosition.y, _mouseCamMovementForwardTrigger, Screen.height))
         {
-            position += (_moveForward * (Time.deltaTime * _mouseMovementSpeed));
+            position += (_moveForward * (Time.unscaledDeltaTime * _mouseMovementSpeed));
         }
         if (CheckFloatInIntRange(
             Input.mousePosition.y, 0, _mouseCamMovementBackwardTrigger))
         {
-            position += (_moveBackward * (Time.deltaTime * _mouseMovementSpeed));
+            position += (_moveBackward * (Time.unscaledDeltaTime * _mouseMovementSpeed));
         }
         if (CheckFloatInIntRange(
             Input.mousePosition.x, _mouseCamMovementRightTrigger, Screen.width))
         {
-            position += (Vector3.right * (Time.deltaTime * _mouseMovementSpeed));
+            position += (Vector3.right * (Time.unscaledDeltaTime * _mouseMovementSpeed));
         }
         if (CheckFloatInIntRange(
             Input.mousePosition.x, 0, _mouseCamMovementLeftTrigger))
         {
-            position += (Vector3.left * (Time.deltaTime * _mouseMovementSpeed));
+            position += (Vector3.left * (Time.unscaledDeltaTime * _mouseMovementSpeed));
         }
     }
 

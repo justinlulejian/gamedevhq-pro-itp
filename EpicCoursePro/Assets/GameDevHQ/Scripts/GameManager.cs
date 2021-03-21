@@ -11,11 +11,13 @@ namespace GameDevHQ.Scripts
         private int _playerWarFunds = 500;
         [SerializeField] 
         private int _playerMaximumWarFunds = 100000;
-        #if UNITY_EDITOR
-            public float CurrentTimeScale;
-        #endif
+        private float _currentTimeScale;
+        private float _fixedDeltaTime;
+        [SerializeField]
+        private bool _skipIntoAckAndCountdown;
     
         public static event Action<int> onWarFundsChange;
+        
         
         private void OnEnable()
         {
@@ -29,9 +31,14 @@ namespace GameDevHQ.Scripts
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+            _fixedDeltaTime = Time.fixedDeltaTime;
+        }
+
         private void Update()
         {
-            // Debug timescale slow down function.
             #if UNITY_EDITOR
                 if (Input.GetKey(KeyCode.H))
                 {
@@ -43,7 +50,7 @@ namespace GameDevHQ.Scripts
                 {
                     Time.timeScale = 1.0f;
                 }
-                CurrentTimeScale = Time.timeScale;
+                _currentTimeScale = Time.timeScale;
             #endif
         }
 
@@ -57,7 +64,12 @@ namespace GameDevHQ.Scripts
 
         private void StartGame()
         {
-           PlayerUIManager.Instance.PresentStartUI();
+            if (!_skipIntoAckAndCountdown)
+            {
+                PlayerUIManager.Instance.PresentStartUI(); 
+                return;
+            }
+            StartWaves();
         }
 
         public void StartCountdownFinished()
@@ -101,5 +113,27 @@ namespace GameDevHQ.Scripts
         {
             AddWarFunds(enemy.WarFundValue);
         }
+
+        #region Control Game Speed
+
+        public void PauseGameSpeed()
+        {
+            Time.timeScale = 0.0f;
+            Time.fixedDeltaTime = _fixedDeltaTime * Time.timeScale;
+        }
+
+        public void DoubleGameSpeed()
+        {
+            Time.timeScale = 2.0f;
+            Time.fixedDeltaTime = _fixedDeltaTime * Time.timeScale;
+        }
+
+        public void ResetGameSpeed()
+        {
+            Time.timeScale = 1.0f;
+            Time.fixedDeltaTime = _fixedDeltaTime * Time.timeScale;
+        }
+
+        #endregion
     }
 }
