@@ -15,19 +15,31 @@ namespace GameDevHQ.Scripts
         private float _fixedDeltaTime;
         [SerializeField]
         private bool _skipIntoAckAndCountdown;
-    
+
+        [SerializeField]
+        private int _currentPlayerLives;
+        [SerializeField] 
+        private int _startingPlayerLives;
+
+        // TODO: Have this incremented automatically as part of commit/build process.
+        [SerializeField] 
+        private float _versionNumber = 0.1f;
+
         public static event Action<int> onWarFundsChange;
         
         
         private void OnEnable()
         {
             Enemy.onEnemyKilledByPlayer += AddWarFundsForEnemy;
+            EnemyNavEnd.onEnemyCollision += PlayerLosesLifeForEnemy;
             SceneManager.sceneLoaded += OnSceneLoaded;
+            
         }
 
         private void OnDisable()
         {
             Enemy.onEnemyKilledByPlayer -= AddWarFundsForEnemy;
+            EnemyNavEnd.onEnemyCollision -= PlayerLosesLifeForEnemy;
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
@@ -35,6 +47,7 @@ namespace GameDevHQ.Scripts
         {
             base.Awake();
             _fixedDeltaTime = Time.fixedDeltaTime;
+            _currentPlayerLives = _startingPlayerLives;
         }
 
         private void Update()
@@ -64,6 +77,9 @@ namespace GameDevHQ.Scripts
 
         private void StartGame()
         {
+            PlayerUIManager.Instance.UpdatePlayerLives(_currentPlayerLives);
+            PlayerUIManager.Instance.UpdateVersionNumber(_versionNumber);
+            
             if (!_skipIntoAckAndCountdown)
             {
                 PlayerUIManager.Instance.PresentStartUI(); 
@@ -112,6 +128,24 @@ namespace GameDevHQ.Scripts
         private void AddWarFundsForEnemy(Enemy enemy)
         {
             AddWarFunds(enemy.WarFundValue);
+        }
+
+
+        private void PlayerLosesLifeForEnemy(GameObject enemy)
+        {
+            // In the future we may want to reduce lives differently for different enemies.
+            _currentPlayerLives = Mathf.Clamp(
+                _currentPlayerLives - 1, 0, _startingPlayerLives);
+            PlayerUIManager.Instance.UpdatePlayerLives(_currentPlayerLives);
+            if (_currentPlayerLives == 0)
+            {
+                PlayerDied();
+            }
+        }
+
+        private void PlayerDied()
+        {
+            // TODO: Add game over logic here.
         }
 
         #region Control Game Speed

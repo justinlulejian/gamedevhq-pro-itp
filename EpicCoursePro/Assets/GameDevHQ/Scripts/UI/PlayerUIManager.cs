@@ -39,11 +39,13 @@ namespace GameDevHQ.Scripts.UI
         private void OnEnable()
         {
             LevelStatusUIManager.onCountdownFinished += StartCountdownFinished;
+            WaveManager.onWaveStart += UpdateWaveCountUI;
         }
 
         private void OnDisable()
         {
             LevelStatusUIManager.onCountdownFinished += StartCountdownFinished;
+            WaveManager.onWaveStart -= UpdateWaveCountUI;
         }
 
         private void StartCountdownFinished()
@@ -89,7 +91,6 @@ namespace GameDevHQ.Scripts.UI
             _upgradeTowerChoiceUI.Initialize(towerSpot, towerInfo);
             if (!_upgradeTowerChoiceUI.ReadyToDisplay)
             {
-                Debug.Log($"Upgrade UI was not ready to display, skipping.");
                 // TODO: Necessary? Or can active be false and script will still run when called?
                 _upgradeTowerUIObject.SetActive(false);
                 return;
@@ -105,7 +106,6 @@ namespace GameDevHQ.Scripts.UI
             _dismantleUI.Initialize(towerSpot, towerInfo);
             if (!_dismantleUI.ReadyToDisplay)
             {
-                Debug.Log($"Dismantle UI was not ready to display, skipping.");
                 // TODO: Necessary? Or can active be false and script will still run when called?
                 _dismantleUIObject.SetActive(false);
                 return;
@@ -124,6 +124,27 @@ namespace GameDevHQ.Scripts.UI
             _levelStatusUI.PresentStartUI();
         }
 
+        #region Lives, Waves, and Version
+
+        public void UpdatePlayerLives(int livesRemaining)
+        {
+            _livesWaveUI.UpdateLivesCount(livesRemaining);
+        }
+
+        private void UpdateWaveCountUI(int currentWaveNumber, int totalWavesNumber)
+        {
+            _livesWaveUI.UpdateWaveCount(currentWaveNumber, totalWavesNumber);
+        }
+
+        public void UpdateVersionNumber(float versionNumber)
+        {
+            _livesWaveUI.UpdateVersionNumber(versionNumber);
+        }
+
+        #endregion
+
+       
+
         #region Control Speed State UI
 
         public void PauseClicked()
@@ -141,7 +162,6 @@ namespace GameDevHQ.Scripts.UI
             GameManager.Instance.DoubleGameSpeed();
         }
         
-
         #endregion
     }
 }

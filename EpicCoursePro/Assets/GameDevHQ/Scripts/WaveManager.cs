@@ -12,6 +12,10 @@ public class WaveManager : MonoSingleton<WaveManager>
     [SerializeField] 
     [Header("Wave Settings")]
     private List<Wave> _waves;
+    [SerializeField]
+    private int _currentWaveNumber = 1;
+
+    private int _totalWavesNumber;
     [SerializeField] 
     private float _baseTimeToWaitBetweenEnemySpawns = 10f;
 
@@ -21,8 +25,8 @@ public class WaveManager : MonoSingleton<WaveManager>
 
     private Enemy _lastEnemySpawnedInWave;
 
-    // When a wave has started. Will later likely be used to provide info to UI about wave.
-    // public static event Action<Wave> onWaveStart; 
+    // When a wave has started.
+    public static event Action<int, int> onWaveStart; 
     // When a wave requested has finished.
     public static event Action onWaveFinish;
     // When all waves have completed spawning. Will later likely be used to provide info to UI.
@@ -44,6 +48,7 @@ public class WaveManager : MonoSingleton<WaveManager>
     {
         base.Awake();
         _wavesToSpawn = new Queue<Wave>(_waves);
+        _totalWavesNumber = _wavesToSpawn.Count;
 
         if (_wavesToSpawn.Count < 1)
         {
@@ -56,6 +61,8 @@ public class WaveManager : MonoSingleton<WaveManager>
         for (int i = 0; i < wave.amountToSpawn; i++)
         {
             List<GameObject> enemyTypes = wave.enemyTypesToSpawn;
+            if (wave.enemyTypesToSpawn.Count < 1) Debug.LogError($"Wave {wave} has no " +
+                                                                 $"enemies to spawn.");
             GameObject randomEnemyType = enemyTypes.ElementAt(
                 UnityEngine.Random.Range(0, enemyTypes.Count));
             yield return new WaitForSeconds(TimeToWaitBetweenEnemySpawnInWave(randomEnemyType));
@@ -65,7 +72,7 @@ public class WaveManager : MonoSingleton<WaveManager>
         _lastEnemySpawnedInWave = null;
     }
 
-    // TODO(improvement): Rather than do this with static time values, try dynamically spacing
+    // TODO(improvement): Rather than do this with static time va   lues, try dynamically spacing
     // enemies even if they have different speeds.
     private float TimeToWaitBetweenEnemySpawnInWave(GameObject enemyTypeToSpawn)
     {
@@ -108,14 +115,8 @@ public class WaveManager : MonoSingleton<WaveManager>
     private IEnumerator SpawnWave(Wave wave)
     {
         yield return new WaitForSeconds(wave.timeBeforeStart);
-        if (wave.randomSpawnOn)
-        {
-            StartCoroutine(SpawnRandom(wave));
-        }
-        else
-        {
-            
-        }StartCoroutine(SpawnFixed(wave));
+        onWaveStart?.Invoke(_currentWaveNumber, _totalWavesNumber);
+        StartCoroutine(wave.randomSpawnOn ? SpawnRandom(wave) : SpawnFixed(wave));
     }
 
     public void SpawnNextWave()
@@ -141,6 +142,7 @@ public class WaveManager : MonoSingleton<WaveManager>
         if (enemiesSpawnedInWave == 0)
         {
             onWaveFinish?.Invoke();
+            _currentWaveNumber++;
         }
     }
     

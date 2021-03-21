@@ -1,18 +1,48 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class LivesWaveUIManager : MonoBehaviour
+namespace GameDevHQ.Scripts.UI
 {
-    // Start is called before the first frame update
-    void Start()
+    public class LivesWaveUIManager : MonoBehaviour
     {
-        
-    }
+        [SerializeField] 
+        private Text _livesCountText;
+        [SerializeField] 
+        private Text _waveCountText;
+        [SerializeField] 
+        private Text _versionNumberText;
 
-    // Update is called once per frame
-    void Update()
-    {
+
+        private void Awake()
+        {
+            if (_livesCountText == null)
+            {
+                Debug.LogError("Lives/Waves UI manager is missing the lives count text.");
+            }
+            if (_waveCountText == null)
+            {
+                Debug.LogError("Lives/Waves UI manager is missing the waves count text.");
+            }
+            if (_versionNumberText == null)
+            {
+                Debug.LogError("Lives/Waves UI manager is missing the version number text.");
+            }
+        }
+
+        public void UpdateLivesCount(int livesRemaining)
+        {
+            _livesCountText.text = livesRemaining.ToString();
+        }
         
+        public void UpdateWaveCount(int wave, int totalWaves)
+        {
+            _waveCountText.text = $"{wave.ToString()}/ {totalWaves.ToString()}";
+        }
+        
+        public void UpdateVersionNumber(float version)
+        {
+            _waveCountText.text = $"v{version.ToString()}";
+        }
     }
 }
