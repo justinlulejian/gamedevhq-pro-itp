@@ -12116,6 +12116,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b2c9767ed01b31543b5dac7f691d4b0c, type: 2}
   - {fileID: 11400000, guid: 0a54c558062e4d74a88a03e44f6056d2, type: 2}
   - {fileID: 11400000, guid: 6845e5c08717a01418e0928308100187, type: 2}
+  _currentWaveNumber: 1
   _baseTimeToWaitBetweenEnemySpawns: 2
 --- !u!4 &365295940
 Transform:
@@ -12190,7 +12191,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 375435850}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 241.85, y: 0.516, z: 250}
+  m_LocalPosition: {x: 242.79, y: 0.516, z: 250}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 534497538}
@@ -13596,7 +13597,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2 / 10
+  m_Text: 1 / 10
 --- !u!222 &640746103
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18874,7 +18875,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 20
+  m_Text: 0
 --- !u!222 &783571178
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -32244,7 +32245,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: v0.1
+  m_Text: v0.0
 --- !u!222 &1367709904
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -32377,7 +32378,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerWarFunds: 1000
   _playerMaximumWarFunds: 100000
-  _skipIntoAckAndCountdown: 0
+  _skipIntoAckAndCountdown: 1
+  _currentPlayerLives: 0
+  _startingPlayerLives: 100
+  _versionNumber: 0.1
 --- !u!4 &1387163928
 Transform:
   m_ObjectHideFlags: 0
@@ -76502,6 +76506,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4126caba1c5dc4095b9cc4ce2f1214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _livesCountText: {fileID: 783571177}
+  _waveCountText: {fileID: 640746102}
+  _versionNumberText: {fileID: 1367709903}
 --- !u!1 &2106290996
 GameObject:
   m_ObjectHideFlags: 0
