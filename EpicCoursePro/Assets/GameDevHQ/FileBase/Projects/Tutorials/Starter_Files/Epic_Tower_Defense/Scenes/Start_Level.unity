@@ -32377,7 +32377,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerWarFunds: 1000
   _playerMaximumWarFunds: 100000
-  _skipIntoAckAndCountdown: 1
+  _skipIntoAckAndCountdown: 0
 --- !u!4 &1387163928
 Transform:
   m_ObjectHideFlags: 0
