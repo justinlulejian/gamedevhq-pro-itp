@@ -33,7 +33,8 @@ namespace GameDevHQ.Scripts
             Enemy.onEnemyKilledByPlayer += AddWarFundsForEnemy;
             EnemyNavEnd.onEnemyCollision += PlayerLosesLifeForEnemy;
             SceneManager.sceneLoaded += OnSceneLoaded;
-            
+            WaveManager.onWavesComplete += PlayerWonLevel;
+
         }
 
         private void OnDisable()
@@ -41,6 +42,7 @@ namespace GameDevHQ.Scripts
             Enemy.onEnemyKilledByPlayer -= AddWarFundsForEnemy;
             EnemyNavEnd.onEnemyCollision -= PlayerLosesLifeForEnemy;
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            WaveManager.onWavesComplete -= PlayerWonLevel;
         }
 
         protected override void Awake()
@@ -90,12 +92,13 @@ namespace GameDevHQ.Scripts
 
         public void StartCountdownFinished()
         {
+            PlayerUIManager.Instance.TurnOffIntroUI();
             StartWaves();
         }
 
         private void StartWaves()
         {
-            SpawnManager.Instance.StartWaves();
+            SpawnManager.Instance.RequestNextWave();
         }
 
         public int GetWarFunds()
@@ -143,11 +146,37 @@ namespace GameDevHQ.Scripts
             }
         }
 
+        #region LevelControl
+
         private void PlayerDied()
         {
-            // TODO: Add game over logic here.
+            EnableDisableLevel(false);
+            PlayerUIManager.Instance.PresentPlayerDiedUI();
+        }
+        
+        private void PlayerWonLevel()
+        {
+            EnableDisableLevel(false);
+            PlayerUIManager.Instance.PresentPlayerWonLevelUI();
         }
 
+        public void PlayerRequestRestartLevel()
+        {
+            EnableDisableLevel(true);
+            SceneManager.LoadSceneAsync("GameDevHQ/Scenes/Start_Level");
+            PlayerUIManager.Instance.ResetRestartClicked();
+            ResetGameSpeed();
+            PlayerUIManager.Instance.ResetPlaySpeedUI();
+        }
+
+        private void EnableDisableLevel(bool enable)
+        {
+            PlayerUIManager.Instance.EnableDisableTowerPlacementUI(enable);
+            SpawnManager.Instance.SpawningEnabled = enable;
+        }
+
+        #endregion
+        
         #region Control Game Speed
 
         public void PauseGameSpeed()

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace GameDevHQ.Scripts.UI
 {
@@ -51,7 +52,6 @@ namespace GameDevHQ.Scripts.UI
         private void StartCountdownFinished()
         {
             GameManager.Instance.StartCountdownFinished();
-            _levelStatusUIObject.SetActive(false);
         }
 
         protected override void Awake()
@@ -80,6 +80,11 @@ namespace GameDevHQ.Scripts.UI
                     "UI Manager does not have reference all UI components. Missing:" +
                     $" {nullUIs}");
             }
+        }
+
+        public void EnableDisableTowerPlacementUI(bool enable)
+        {
+            _armoryUI.EnableDisableArmoryButtons(enable);
         }
 
         // Tower upgrade and dismantle are mutually exclusive UIs.
@@ -118,11 +123,44 @@ namespace GameDevHQ.Scripts.UI
             WarFundsUIManager.Instance.WarFundsOutAnim();
         }
 
+        #region Game state changes UI
+
         public void PresentStartUI()
         {
             _levelStatusUIObject.SetActive(true);
             _levelStatusUI.PresentStartUI();
         }
+        
+        public void TurnOffIntroUI()
+        {
+            _levelStatusUIObject.SetActive(false);
+        }
+
+        public void PresentPlayerDiedUI()
+        {
+            _levelStatusUIObject.SetActive(true);
+            _levelStatusUI.PresentGameOverUI();
+        }
+
+        public void PresentPlayerWonLevelUI()
+        {
+            _levelStatusUIObject.SetActive(true);
+            _levelStatusUI.PresentPlayerWonUI();
+        }
+
+        public void RestartClicked()
+        {
+            _levelStatusUIObject.SetActive(false);
+            GameManager.Instance.PlayerRequestRestartLevel();
+        }
+
+        public void ResetRestartClicked()
+        {
+            _restartUI.ResetClickedRestart();
+        }
+
+        #endregion
+
 
         #region Lives, Waves, and Version
 
@@ -143,8 +181,6 @@ namespace GameDevHQ.Scripts.UI
 
         #endregion
 
-       
-
         #region Control Speed State UI
 
         public void PauseClicked()
@@ -160,6 +196,11 @@ namespace GameDevHQ.Scripts.UI
         public void FastForwardClicked()
         {
             GameManager.Instance.DoubleGameSpeed();
+        }
+
+        public void ResetPlaySpeedUI()
+        {
+            _playbackSpeedUI.ResetClicked();
         }
         
         #endregion

@@ -69,4 +69,11 @@ public class PlaybackSpeedUIManager : MonoBehaviour
         PlayerUIManager.Instance.FastForwardClicked();
     }
 
+    public void ResetClicked()
+    {
+        _pauseClickedImage.enabled = false;
+        _playClickedImage.enabled = false;
+        _fastForwardImage.enabled = false;
+    }
+
 }

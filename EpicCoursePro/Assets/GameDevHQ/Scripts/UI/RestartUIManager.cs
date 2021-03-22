@@ -1,18 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using GameDevHQ.Scripts.UI;
 using UnityEngine;
 
 public class RestartUIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] 
+    private GameObject _restartPressedGameObject;
+
+    private void Awake()
     {
-        
+        if (_restartPressedGameObject == null)
+        {
+            Debug.LogError("Restart UI does not have access to clicked object.");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnClickRestart()
     {
-        
+        _restartPressedGameObject.SetActive(true);
+        PlayerUIManager.Instance.RestartClicked();
     }
+
+    public void ResetClickedRestart()
+    {
+        _restartPressedGameObject.SetActive(false);
+    }
+
 }

@@ -1,18 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class ArmoryUIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private List<Button> _armoryButtons = new List<Button>();
+
+    private void Awake()
     {
-        
+        _armoryButtons = GetComponentsInChildren<Button>().ToList();
+
+        if (_armoryButtons.Count == 0)
+        {
+            Debug.LogError($"Armory UI is missing it's buttons components.");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void EnableDisableArmoryButtons(bool enable)
     {
-        
+        _armoryButtons.ForEach(b => b.enabled = enable);
     }
+
+    
 }

@@ -10,12 +10,14 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     [SerializeField]
     private GameObject _enemySpawnEndPoint;
 
-    public GameObject GetEnemySpawnStartPoint()
+    public bool SpawningEnabled { get; set; } = true;
+
+    private GameObject GetEnemySpawnStartPoint()
     {
         return _enemySpawnStartPoint;
     }
-    
-    public GameObject GetEnemySpawnEndPoint()
+
+    private GameObject GetEnemySpawnEndPoint()
     {
         return _enemySpawnEndPoint;
     }
@@ -45,14 +47,12 @@ public class SpawnManager : MonoSingleton<SpawnManager>
         }
     }
 
-    public void StartWaves()
+    public void RequestNextWave()
     {
-        WaveManager.Instance.SpawnNextWave();
-    }
-
-    private void RequestNextWave()
-    {
-        WaveManager.Instance.SpawnNextWave();
+        if (SpawningEnabled)
+        {
+            WaveManager.Instance.SpawnNextWave();
+        }
     }
 
     private void ResetEnemyNavOnSpawn(Transform enemyTransform, NavMeshAgent enemyNavMeshAgent)
