@@ -42,7 +42,7 @@ namespace GameDevHQ.Scripts.UI
         
         public void UpdateVersionNumber(float version)
         {
-            _waveCountText.text = $"v{version.ToString()}";
+            _versionNumberText.text = $"v{version.ToString()}";
         }
     }
 }

@@ -122,7 +122,7 @@ public class WaveManager : MonoSingleton<WaveManager>
     public void SpawnNextWave()
     {
 
-        if (_wavesToSpawn.Count < 1)
+        if (_wavesToSpawn.Count == 0)
         {
             onWavesComplete?.Invoke();
             AllWavesCompleted();
@@ -153,6 +153,6 @@ public class WaveManager : MonoSingleton<WaveManager>
 
     private void AllWavesCompleted()
     {
-        Debug.Log("All waves have been spawned. No more will spawn.");
+        onWavesComplete?.Invoke();
     }
 }

@@ -52,12 +52,36 @@ public class LevelStatusUIManager : MonoBehaviour
         PresentIntroInstructions();
         _startAcknowledgeGameObject.SetActive(true);
     }
+    
+    public void PresentGameOverUI()
+    {
+        _statusGameObject.SetActive(true);
+        PresentGameOverInstructions();
+    }
+    
+    public void PresentPlayerWonUI()
+    {
+        _statusGameObject.SetActive(true);
+        PresentPlayerWonInstructions();
+    }
 
     private void PresentIntroInstructions()
     {
         _statusText.text = "Welcome to tower defense! Hit the start button to start the game. A " +
                            "countdown will appear to give you time to place the towers and then " +
                            "the waves of enemies will start.";
+    }
+    
+    private void PresentGameOverInstructions()
+    {
+        _statusText.text = "GAME OVER.\n" +
+                           "Click the restart button to restart the level to try again.";
+    }
+    
+    private void PresentPlayerWonInstructions()
+    {
+        _statusText.text = "You won! Good job!\n" +
+                           "Click the restart button to restart the level to play again.";
     }
 
     public void StartCountdown()
