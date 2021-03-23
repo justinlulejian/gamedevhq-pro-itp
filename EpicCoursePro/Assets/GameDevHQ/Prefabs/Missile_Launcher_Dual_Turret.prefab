@@ -1064,18 +1064,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 723e77f7ecd6f114daff78abe1708cbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TowerType: 4
-  WarFundValue: 300
-  AttackRadiusObj: {fileID: 5684529106496217653}
   TowerInfo:
-    TowerType: 4
     WarFundsValue: 300
     DismantleValue: 150
     UpgradeSprite: {fileID: 0}
     DismantleSprite: {fileID: 21300000, guid: 56de8f0edfebfa142b49f31e81f4750c, type: 3}
+    UpgradedTowerPrefab: {fileID: 0}
+  TowerType: 4
+  AttackRadiusObj: {fileID: 5684529106496217653}
   _targetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
-  _damageValue: 25
+  _damageValue: 10
   _damageRate: 1
   _rotationObject: {fileID: 1319434493914340}
   _rotationSpeed: 5

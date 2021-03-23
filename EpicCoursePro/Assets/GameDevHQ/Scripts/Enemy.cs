@@ -31,6 +31,9 @@ namespace GameDevHQ.Scripts
         [SerializeField]
         private int _currentHealth; 
         public bool IsDead => _currentHealth == 0;
+        private CanvasHealthBar _healthBar;
+        [SerializeField]
+        private GameObject _healthBarGameObject;
         
         [Header("Currency Settings")]
         [SerializeField] 
@@ -74,6 +77,7 @@ namespace GameDevHQ.Scripts
             }
 
             _navMeshAgent.enabled = true;
+            _healthBar?.gameObject?.SetActive(true);
             onSpawnStart?.Invoke(this.transform, _navMeshAgent);
             _navDestinationPosition = _navMeshAgent.destination;
         }
@@ -142,8 +146,10 @@ namespace GameDevHQ.Scripts
 
         private void PrepareEnemyForRecycling()
         {
-            // Reset health so if recycled they'll start with
+            // Reset health so if recycled they'll start again with full health.
             _currentHealth = _maxHealth;
+            // TODO: Why do I need both null propogations here?
+            _healthBar?.gameObject?.SetActive(false);
             _animator.ResetTrigger("IsEnemyFiring");
             _animator.SetTrigger("OnEnemyDeath");
             _animator.WriteDefaultValues(); // Reset position of mech to upright.
@@ -164,6 +170,14 @@ namespace GameDevHQ.Scripts
                 Debug.LogError($"Nav mesh agent is null on enemy: {this.gameObject.name}");
             }
             _navMeshAgent.speed = _navigationSpeed;
+            
+            _healthBar = HealthbarUIManager.Instance.RequestHealthbar(gameObject);
+            _healthBarGameObject = _healthBar.gameObject;
+            if (_healthBar == null)
+            {
+                Debug.LogError($"Health bar is null on enemy {name}");
+            }
+            
         }
 
         private void Update()
@@ -258,6 +272,8 @@ namespace GameDevHQ.Scripts
         public void PlayerDamageEnemy(int damageValue)
         {
             _currentHealth = Mathf.Clamp(_currentHealth - damageValue, 0, _maxHealth);
+            // TODO: Make is to that healthbar only shows up when enemy has been damaged.
+            _healthBar.UpdateHealthBar(_currentHealth, _maxHealth);
             
             if (_currentHealth == 0)
             {

@@ -14591,7 +14591,7 @@ MonoBehaviour:
   AttackRadiusObj: {fileID: 386667129}
   _targetedEnemy: {fileID: 0}
   _firingAtEnemy: 0
-  _damageValue: 1
+  _damageValue: 5
   _damageRate: 1
   _rotationObject: {fileID: 2364340935526984089}
   _rotationSpeed: 5
