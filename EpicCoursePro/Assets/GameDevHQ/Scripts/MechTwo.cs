@@ -10,7 +10,7 @@ namespace GameDevHQ.Scripts
         // renderers.
         protected override void Start()
         {
-            base.Awake();
+            base.Start();
             _parentTurretY = GetComponentInChildren<Parent_Turret_Y>();
             if (_parentTurretY == null)
             {

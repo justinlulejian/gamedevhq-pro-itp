@@ -163,7 +163,7 @@ MonoBehaviour:
   - {fileID: 198062334290644472}
   _missileCollider: {fileID: 0}
   _meshRenderer: {fileID: 0}
-  RocketDamageValue: 100
+  RocketDamageValue: 10
   _launchSpeed: 0
   _power: 0
   _fuseDelay: 0
