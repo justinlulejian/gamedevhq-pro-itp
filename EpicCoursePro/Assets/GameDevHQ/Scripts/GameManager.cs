@@ -20,6 +20,10 @@ namespace GameDevHQ.Scripts
         private int _currentPlayerLives;
         [SerializeField] 
         private int _startingPlayerLives;
+        [SerializeField] 
+        private int _highLivesAmountMin = 8;
+        [SerializeField] 
+        private int _mediumLivesAmountMin = 5;
 
         // TODO: Have this incremented automatically as part of commit/build process.
         [SerializeField] 
@@ -80,6 +84,7 @@ namespace GameDevHQ.Scripts
         private void StartGame()
         {
             PlayerUIManager.Instance.UpdatePlayerLives(_currentPlayerLives);
+            SetUIColorOnLivesAmount();
             PlayerUIManager.Instance.UpdateVersionNumber(_versionNumber);
             
             if (!_skipIntoAckAndCountdown)
@@ -134,18 +139,38 @@ namespace GameDevHQ.Scripts
         }
 
 
+        #region Lives
+
         private void PlayerLosesLifeForEnemy(GameObject enemy)
         {
             // In the future we may want to reduce lives differently for different enemies.
             _currentPlayerLives = Mathf.Clamp(
                 _currentPlayerLives - 1, 0, _startingPlayerLives);
             PlayerUIManager.Instance.UpdatePlayerLives(_currentPlayerLives);
+            SetUIColorOnLivesAmount();
             if (_currentPlayerLives == 0)
             {
                 PlayerDied();
             }
         }
 
+        private void SetUIColorOnLivesAmount()
+        {
+            if (_currentPlayerLives > _highLivesAmountMin)
+            {
+                PlayerUIManager.Instance.SetHighHealthColor();
+            }
+            else if (_currentPlayerLives > _mediumLivesAmountMin)
+            {
+                PlayerUIManager.Instance.SetMediumHealthColor();
+            }
+            else
+            {
+                PlayerUIManager.Instance.SetLowHealthColor();
+            }
+        }
+        #endregion
+        
         #region LevelControl
 
         private void PlayerDied()

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class PlaybackSpeedUIManager : MonoBehaviour
+public class PlaybackSpeedUIManager : SpriteColorableUIManager
 {
     [SerializeField] 
     private GameObject _pauseGameObject;
@@ -21,8 +21,10 @@ public class PlaybackSpeedUIManager : MonoBehaviour
     private Button _fastForwardButton;
     private Image _fastForwardImage;
 
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake();
         _pauseButton = _pauseGameObject.GetComponentInChildren<Button>();
         _pauseClickedImage = _pauseGameObject.GetComponent<Image>();
         _playButton = _playGameObject.GetComponentInChildren<Button>();

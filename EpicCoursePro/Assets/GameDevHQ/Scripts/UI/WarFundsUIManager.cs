@@ -1,48 +1,50 @@
 ﻿using System.Collections;
-using GameDevHQ.Scripts;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WarFundsUIManager : MonoSingleton<WarFundsUIManager>
+namespace GameDevHQ.Scripts.UI
 {
-    [SerializeField] 
-    private Text _warFundsText;
-
-    private void Start()
+    public class WarFundsUIManager : SpriteColorableUIManager
     {
-        SetWarFundsText(GameManager.Instance.GetWarFunds());
-    }
+        [SerializeField] 
+        private Text _warFundsText;
 
-    private void OnEnable()
-    {
-        GameManager.onWarFundsChange += SetWarFundsText;
-    }
+        private void Start()
+        {
+            SetWarFundsText(GameManager.Instance.GetWarFunds());
+        }
 
-    private void OnDisable()
-    {
-        GameManager.onWarFundsChange -= SetWarFundsText;
-    }
+        private void OnEnable()
+        {
+            GameManager.onWarFundsChange += SetWarFundsText;
+        }
 
-    private void SetWarFundsText(int currentWarFunds)
-    {
-        _warFundsText.text = $"{currentWarFunds.ToString()}";
-    }
+        private void OnDisable()
+        {
+            GameManager.onWarFundsChange -= SetWarFundsText;
+        }
 
-    public void WarFundsOutAnim()
-    {
-        StartCoroutine(FlashTextCoroutine(_warFundsText));
+        private void SetWarFundsText(int currentWarFunds)
+        {
+            _warFundsText.text = $"{currentWarFunds.ToString()}";
+        }
 
-    }
+        public void WarFundsOutAnim()
+        {
+            StartCoroutine(FlashTextCoroutine(_warFundsText));
 
-    private IEnumerator FlashTextCoroutine(Text text)
-    {
-        text.enabled = false;
-        yield return new WaitForSeconds(.25f);
-        text.enabled = true;
-        yield return new WaitForSeconds(.25f);
-        text.enabled = false;
-        yield return new WaitForSeconds(.25f);
-        text.enabled = true;
-        yield return new WaitForSeconds(.25f);
+        }
+
+        private IEnumerator FlashTextCoroutine(Text text)
+        {
+            text.enabled = false;
+            yield return new WaitForSeconds(.25f);
+            text.enabled = true;
+            yield return new WaitForSeconds(.25f);
+            text.enabled = false;
+            yield return new WaitForSeconds(.25f);
+            text.enabled = true;
+            yield return new WaitForSeconds(.25f);
+        }
     }
 }

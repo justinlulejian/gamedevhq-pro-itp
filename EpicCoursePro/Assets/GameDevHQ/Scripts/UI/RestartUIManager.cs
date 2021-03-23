@@ -1,13 +1,14 @@
 ﻿using GameDevHQ.Scripts.UI;
 using UnityEngine;
 
-public class RestartUIManager : MonoBehaviour
+public class RestartUIManager : SpriteColorableUIManager
 {
     [SerializeField] 
     private GameObject _restartPressedGameObject;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (_restartPressedGameObject == null)
         {
             Debug.LogError("Restart UI does not have access to clicked object.");

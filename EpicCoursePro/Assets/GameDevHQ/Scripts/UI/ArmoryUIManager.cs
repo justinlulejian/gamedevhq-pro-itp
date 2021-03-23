@@ -2,16 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GameDevHQ.Scripts.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
-public class ArmoryUIManager : MonoBehaviour
+public class ArmoryUIManager : SpriteColorableUIManager
 {
     private List<Button> _armoryButtons = new List<Button>();
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _armoryButtons = GetComponentsInChildren<Button>().ToList();
 
         if (_armoryButtons.Count == 0)
