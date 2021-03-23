@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameDevHQ.Scripts.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelStatusUIManager : MonoBehaviour
+public class LevelStatusUIManager : SpriteColorableUIManager
 {
     [SerializeField]
     private GameObject _statusGameObject;
@@ -26,8 +27,9 @@ public class LevelStatusUIManager : MonoBehaviour
         _countdownGameObject.SetActive(false);
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _statusText = _statusGameObject.GetComponent<Text>();
         _countdownText = _countdownGameObject.GetComponent<Text>();
         _startAcknowledgeButton = _startAcknowledgeGameObject.GetComponent<Button>();

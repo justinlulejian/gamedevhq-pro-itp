@@ -12182,7 +12182,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 81aee21a41a55495598005b084e7a907, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 12d3131e26b7c3240a55768ffc6bcb9d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12212,6 +12212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1873a875f49a0484bb3de42a9782c435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteToColor: {fileID: 350660924}
   _warFundsText: {fileID: 2109062355}
 --- !u!1 &365295938
 GameObject:
@@ -24431,7 +24432,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3c6443fd96c4c4779bdbd1c789d25d89, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 01ec3b1c84ad4c9408182f98491fe0f2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -24461,6 +24462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64216d6cd335de045b7d8054b5ede6ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteToColor: {fileID: 909662581}
   _statusGameObject: {fileID: 12562994}
   _countdownGameObject: {fileID: 1671277333}
   _startAcknowledgeGameObject: {fileID: 1520021391}
@@ -32095,7 +32097,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6f9136ed224754722999a38e9a57af8b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5d2efc339cba7854a904820211d7e4d6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -32125,6 +32127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf6304516c96d3c41a4fe307bc9d4ef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteToColor: {fileID: 1353408165}
   _pauseGameObject: {fileID: 1390762800}
   _playGameObject: {fileID: 142299666}
   _fastForwardGameObject: {fileID: 230579418}
@@ -32508,10 +32511,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerWarFunds: 1000
   _playerMaximumWarFunds: 100000
-  _skipIntoAckAndCountdown: 1
+  _skipIntoAckAndCountdown: 0
   _currentPlayerLives: 0
-  _startingPlayerLives: 1
-  _versionNumber: 0.1
+  _startingPlayerLives: 10
+  _highLivesAmountMin: 7
+  _mediumLivesAmountMin: 5
+  _versionNumber: 0.2
 --- !u!4 &1387163928
 Transform:
   m_ObjectHideFlags: 0
@@ -33335,7 +33340,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3fbb60a87ef3842e99565cbb65f66dc0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ad5092788f1b8374aa8fb5a928752e8c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -33365,6 +33370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35dc07d4e9566d84a9dd59d98c3861a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteToColor: {fileID: 1432688604}
   _restartPressedGameObject: {fileID: 1861675125}
 --- !u!1001 &1442524507
 PrefabInstance:
@@ -45154,7 +45160,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6de341aed12cc40b3b3b329ba0c531b7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bfd44d72b8b2a5748a0c1acc29450196, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -45184,6 +45190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b80ad78c1a62aca41b10901028750639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteToColor: {fileID: 1706649507}
 --- !u!1 &1711412559
 GameObject:
   m_ObjectHideFlags: 0
@@ -76686,7 +76693,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7785e66c06b0a4505aa4fa95a8433fce, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cfba7e37417208b4e899f74bce7d712f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -76716,6 +76723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4126caba1c5dc4095b9cc4ce2f1214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteToColor: {fileID: 2105959597}
   _livesCountText: {fileID: 783571177}
   _waveCountText: {fileID: 640746102}
   _versionNumberText: {fileID: 1367709903}

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace GameDevHQ.Scripts.UI
 {
-    public class LivesWaveUIManager : MonoBehaviour
+    public class LivesWaveUIManager : SpriteColorableUIManager
     {
         [SerializeField] 
         private Text _livesCountText;
@@ -14,8 +14,9 @@ namespace GameDevHQ.Scripts.UI
         private Text _versionNumberText;
 
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             if (_livesCountText == null)
             {
                 Debug.LogError("Lives/Waves UI manager is missing the lives count text.");

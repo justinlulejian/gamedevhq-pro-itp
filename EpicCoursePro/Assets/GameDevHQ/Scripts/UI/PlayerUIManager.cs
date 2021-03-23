@@ -36,6 +36,11 @@ namespace GameDevHQ.Scripts.UI
 
         private readonly List<MonoBehaviour> _userInterfaces =
             new List<MonoBehaviour>();
+        private readonly List<SpriteColorableUIManager> _spriteColorableUIs =
+            new List<SpriteColorableUIManager>();
+
+        [SerializeField] 
+        private Color _defaultUIColor;
         
         private void OnEnable()
         {
@@ -57,6 +62,7 @@ namespace GameDevHQ.Scripts.UI
         protected override void Awake()
         {
             base.Awake();
+            _defaultUIColor = new Color(2 / 255.0f, 149 / 255.0f, 194 / 255.0f);
             _warFundsUI = _warFundsUIObject.GetComponent<WarFundsUIManager>();
             _playbackSpeedUI = _playbackSpeedUIObject.GetComponent<PlaybackSpeedUIManager>();
             _restartUI = _restartUIObject.GetComponent<RestartUIManager>();
@@ -71,6 +77,8 @@ namespace GameDevHQ.Scripts.UI
                 _warFundsUI, _playbackSpeedUI, _restartUI, _livesWaveUI, _levelStatusUI, _armoryUI,
                 _upgradeTowerChoiceUI, _dismantleUI
             });
+            _spriteColorableUIs.AddRange(new SpriteColorableUIManager[]
+            {_warFundsUI, _playbackSpeedUI, _restartUI, _livesWaveUI, _levelStatusUI, _armoryUI});
 
             List<MonoBehaviour> nullUIs =
                 _userInterfaces.FindAll(ui => ui == null);
@@ -120,7 +128,7 @@ namespace GameDevHQ.Scripts.UI
 
         public void UpgradeFailedAnim()
         {
-            WarFundsUIManager.Instance.WarFundsOutAnim();
+            _warFundsUI.WarFundsOutAnim();
         }
 
         #region Game state changes UI
@@ -203,6 +211,24 @@ namespace GameDevHQ.Scripts.UI
             _playbackSpeedUI.ResetClicked();
         }
         
+        #endregion
+
+        #region Health color status
+        
+        public void SetHighHealthColor()
+        {
+            _spriteColorableUIs.ForEach(ui => ui.SetSpriteColor(_defaultUIColor));
+        } 
+        
+        public void SetMediumHealthColor()
+        {
+            _spriteColorableUIs.ForEach(ui => ui.SetSpriteColor(Color.yellow));
+        }
+        
+        public void SetLowHealthColor()
+        {
+            _spriteColorableUIs.ForEach(ui => ui.SetSpriteColor(Color.red));
+        }
         #endregion
     }
 }
