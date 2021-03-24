@@ -104,46 +104,35 @@ public class TowerManager : MonoSingleton<TowerManager>
     private void ActivateTowerOnPlacementPreview(TowerSpot towerSpot)
     {
         {
-            // _currentDecoyTower.gameObject.SetActive(false);
-            // AbstractTower towerToPlace = _towerObjs.First(
-            //     t => t.TowerType == _currentDecoyTower.TowerType);
             Transform towerSpotTransform = towerSpot.transform;
-            // GameObject tower = PoolManager.Instance.RequestObjOfType(towerToPlace.gameObject);
-            // tower.SetActive(true);
-            // tower.transform.SetPositionAndRotation(
-            //     towerSpotTransform.position, TowerSpot.TowerFacingEnemiesRotation);
             _currentDecoyTower.transform.SetPositionAndRotation(
                 towerSpotTransform.position, TowerSpot.TowerFacingEnemiesRotation);
-            // _previewDecoyOnTowerSpot = tower;
             onTowerSpotPreview?.Invoke();
         }
     }
 
     private void DeactivateTowerOnPlacementPreview()
     {
-        if (_towerPlacementModeActivated && _currentDecoyTower != null)
-        {
-            EnableDecoy();
-            if (_previewDecoyOnTowerSpot != null)
-            {
-                PoolManager.Instance.RecyclePooledObj(_previewDecoyOnTowerSpot);
-            }
-        }
+        // This name doesn't make sense but it's to ensure we turn decoy radius material color
+        // back to red when we go off the tower spot.
+        onTowerDecoyPlacementPreview?.Invoke();
     }
     
     private void PlaceTower(TowerSpot towerSpot)
     {
-        AbstractTower towerToPlace = _previewDecoyOnTowerSpot.GetComponent<AbstractTower>();
+        AbstractTower towerToPlace = _towerObjs.First(
+            t => t.TowerType == _currentDecoyTower.TowerType);
         GameManager gM = GameManager.Instance;
         if (gM.PlayerCanPurchaseItem(towerToPlace.TowerInfo.WarFundsValue))
         {
             gM.PurchaseItem(towerToPlace.TowerInfo.WarFundsValue);
-            towerSpot.PlaceTower(_previewDecoyOnTowerSpot);
-            _previewDecoyOnTowerSpot = null;
-            EnableDecoy();
+            GameObject tower = PoolManager.Instance.RequestObjOfType(towerToPlace.gameObject);
+            tower.SetActive(true);
+            towerSpot.PlaceTower(tower);
             onTowerPlaced?.Invoke();
         }
 
+        // If user is now out of money then deactivate the mode too.
         if (gM.GetWarFunds() == 0)
         {
             DeactivateTowerPlacementMode();
@@ -162,15 +151,6 @@ public class TowerManager : MonoSingleton<TowerManager>
         }
         towerSpot.PlaceTower(spawnedUpgradedTower, upgrade:true);
         
-    }
-
-    private void EnableDecoy()
-    {
-        if (_towerPlacementModeActivated)
-        {
-            // _currentDecoyTower.gameObject.SetActive(true);
-            onTowerDecoyPlacementPreview?.Invoke();
-        }
     }
 
     private void SetCurrentDecoyTower(int towerType)
@@ -201,7 +181,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         // return before it'll display preview.
         _towerPlacementModeActivated = true;
         DeactivateTowerOnPlacementPreview();
-        onTowerPlacementModeStatusChange.Invoke(true);
+        onTowerPlacementModeStatusChange?.Invoke(true);
         SetCurrentDecoyTower(towerType);
     }
 
@@ -210,7 +190,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         DeactivateTowerOnPlacementPreview();
         ResetCurrentDecoyTower();
         _towerPlacementModeActivated = false;
-        onTowerPlacementModeStatusChange.Invoke(false);
+        onTowerPlacementModeStatusChange?.Invoke(false);
     }
     
 }

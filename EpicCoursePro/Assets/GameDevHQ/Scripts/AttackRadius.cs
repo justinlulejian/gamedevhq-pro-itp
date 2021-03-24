@@ -78,10 +78,9 @@ public class AttackRadius : MonoBehaviour
 
     // TODO: Implement priority queuing with _enemiesInAttackRadius so that an enemy further along
     // in the path towards the navigation end has higher priority when selecting choosing target for
-    // tower.
+    // tower vs just whichever entered the radius first.
     private void UpdateTarget()
     {
-        if (!_tower.IsPlaced) return;
         _tower.UpdateAttackTarget(_enemiesInAttackRadius.Count > 0
             ? _enemiesInAttackRadius.First().Value
             : null);
@@ -94,7 +93,6 @@ public class AttackRadius : MonoBehaviour
     
     private void RemoveTargetFromTrackingAndMaybeUpdate(GameObject enemyObj)
     {
-        if (!_tower.IsPlaced) return;
         RemoveTargetFromRadiusTracking(enemyObj);
         UpdateTarget();
     }
@@ -107,21 +105,9 @@ public class AttackRadius : MonoBehaviour
     // Enqueue the enemy and it's behavior script that enters radius.
     private void OnTriggerEnter(Collider other)
     {
-        if (!_tower.IsPlaced) return;
         if (!other.CompareTag("Enemy")) return;
         GameObject enemy = other.gameObject;
         OnEnemyEnterTowerRadius?.Invoke(enemy, _tower.gameObject);
-        TrackTarget(enemy);
-        UpdateTarget();
-    }
-
-    // If enemy is in trigger already, then track them for attacking as well.
-    private void OnTriggerStay(Collider other)
-    {
-        if (!_tower.IsPlaced) return;
-        if (!other.CompareTag("Enemy")) return;
-        GameObject enemy = other.gameObject;
-        if (_enemiesInAttackRadius.ContainsKey(enemy)) return;
         TrackTarget(enemy);
         UpdateTarget();
     }

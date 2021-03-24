@@ -93,8 +93,8 @@ namespace GameDevHQ.Scripts
             if (enemy == null)
             {
                 _targetedEnemy = null;
-                StartCoroutine(ResetRotation());
                 StopAttacking();
+                StartCoroutine(ResetRotation());
                 return;
             }
            

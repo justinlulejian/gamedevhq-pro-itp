@@ -51,9 +51,8 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         protected override void Update()
         {
             base.Update();
-            if (_targetedEnemy?.CurrentHealth == 0)
+            if (_targetedEnemy == null)
             {
-                _targetedEnemy = null; 
                 StopAttacking();
                 StartCoroutine(ResetRotation());
             }

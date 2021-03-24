@@ -71,9 +71,8 @@ namespace GameDevHQ.Scripts
             base.Update();
             // TODO: Does this need to be called in update or could it be another less updated
             // method like a coroutine?
-            if (_targetedEnemy?.CurrentHealth == 0)
+            if (_targetedEnemy == null)
             {
-                _targetedEnemy = null; 
                 StopAttacking();
                 StartCoroutine(ResetRotation());
             }
@@ -92,7 +91,7 @@ namespace GameDevHQ.Scripts
                
             }
             
-            if (_targetedEnemy && !_firingAtEnemy)
+            if (_targetedEnemy != null && !_firingAtEnemy)
             {
                 foreach (var muzzleFlash in _muzzleFlashes)
                 {

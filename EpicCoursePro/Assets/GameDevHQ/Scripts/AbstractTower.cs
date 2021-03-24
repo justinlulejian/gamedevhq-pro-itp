@@ -14,7 +14,7 @@ namespace GameDevHQ.Scripts
         protected MeshRenderer _attackRadiusMeshRenderer;
 
         protected Color _attackRadiusEnabledColor = new Color(
-            71 / 255.0f, 255 / 255.0f, 134 / 255.0f, 134/ 255.0f);
+            71 / 255.0f, 255 / 255.0f, 83 / 255.0f, 134/ 255.0f);
         protected Color _attackRadiusDisabledColor = new Color(
             255 / 255.0f, 17 / 255.0f, 0 / 255.0f, 134/ 255.0f);
 

@@ -140,7 +140,6 @@ public class TowerSpot : MonoBehaviour
         _towerPlaced = tower;
         _towerPlaced.transform.SetPositionAndRotation(
             transform.position, TowerFacingEnemiesRotation);
-        tower.IsPlaced = true;
         IsUpgraded = true;
         tower.EnableAttackRadiusCollider();
         IsAvailableForPlacement = false;
@@ -151,7 +150,6 @@ public class TowerSpot : MonoBehaviour
         IsUpgraded = false;
         OnTowerPlacementModeChange(true);
         IsAvailableForPlacement = true;
-        _towerPlaced.IsPlaced = false;
         PoolManager.Instance.RecyclePooledObj(_towerPlaced.gameObject);
         _towerPlaced = null;
     }
