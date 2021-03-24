@@ -23,16 +23,15 @@ public class HealthbarUIManager : MonoSingleton<HealthbarUIManager>
     {
         for (int i = 0; i < numBars; i++)
         {
-            GameObject spawnedBar = Instantiate(_healthbarPrefab);
+            GameObject spawnedBar = Instantiate(_healthbarPrefab, transform, false);
             spawnedBar.SetActive(false);
-            spawnedBar.transform.SetParent(transform, worldPositionStays:false);
             _healthbarContainer.Add(spawnedBar.GetComponent<CanvasHealthBar>());
         }
     }
     
     public CanvasHealthBar RequestHealthbar(GameObject parent)
     {
-        CanvasHealthBar healthBar = _healthbarContainer.First(
+        CanvasHealthBar healthBar = _healthbarContainer.FirstOrDefault(
             hb => hb.gameObject.activeSelf == false);
 
         if (healthBar == null)

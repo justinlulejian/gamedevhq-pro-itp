@@ -32,7 +32,6 @@ namespace GameDevHQ.Scripts
         private Transform _rotationTransform;
         private Quaternion _originalRotation;
 
-        protected abstract void StartFiringAtEnemy(Enemy enemy);
         protected abstract void StopAttacking();
 
         protected abstract void ResetFiringState();
@@ -75,13 +74,14 @@ namespace GameDevHQ.Scripts
         }
         
         // Resets the rotation while no targets, but will stop if a new enemy is being targeted.
-        private IEnumerator ResetRotation()
+        protected IEnumerator ResetRotation()
         {
             // comparing rotation would prevent this from running forever.
-            while (_targetedEnemy == null && _rotationTransform.rotation != _originalRotation)
+            Quaternion defaultRot = TowerSpot.TowerFacingEnemiesRotation;
+            while (_targetedEnemy == null && _rotationTransform.rotation != defaultRot)
             {
                 _rotationTransform.rotation =
-                    Quaternion.Slerp(_rotationTransform.rotation, _originalRotation,
+                    Quaternion.Slerp(_rotationTransform.rotation, defaultRot,
                         _rotationSpeed * Time.deltaTime);
                 yield return null;
             }
@@ -104,7 +104,7 @@ namespace GameDevHQ.Scripts
             // RotateTowardsTarget(enemy);  // moved to update temporarily
             // TODO: Figure out a way to start the firing process once rotation is close to being
             // done to make it look more natural.
-            StartFiringAtEnemy(enemy);
+            // StartFiringAtEnemy(enemy);
         }
         public void EnableAttackRadiusCollider()
         {

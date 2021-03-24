@@ -2,7 +2,6 @@
 using System.Linq;
 using GameDevHQ.Scripts;
 using Rock.Collections;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class AttackRadius : MonoBehaviour
@@ -46,8 +45,8 @@ public class AttackRadius : MonoBehaviour
                            $" {name}");
         }
         // TODO: Why'd I do this? To test something?
-        // _sphereCollider.enabled = false;
-        _sphereCollider.enabled = true;
+        _sphereCollider.enabled = false;
+        // _sphereCollider.enabled = true;
 
     }
 
@@ -113,7 +112,7 @@ public class AttackRadius : MonoBehaviour
         GameObject enemy = other.gameObject;
         OnEnemyEnterTowerRadius?.Invoke(enemy, _tower.gameObject);
         TrackTarget(enemy);
-        
+        UpdateTarget();
     }
 
     // If enemy is in trigger already, then track them for attacking as well.

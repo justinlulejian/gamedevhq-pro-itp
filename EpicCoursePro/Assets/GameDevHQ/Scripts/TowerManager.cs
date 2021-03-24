@@ -15,7 +15,7 @@ public class TowerManager : MonoSingleton<TowerManager>
     private HashSet<DecoyTower> _instantiatedDecoyTowers = new HashSet<DecoyTower>();
     // The decoy tower following the user's cursor, if requested.
     private DecoyTower _currentDecoyTower;
-    private GameObject _instantiatedPreviewTowerOnSpot;
+    private GameObject _previewDecoyOnTowerSpot;
 
     [SerializeField]
     private List<GameObject> _towerPrefabs;
@@ -23,10 +23,10 @@ public class TowerManager : MonoSingleton<TowerManager>
     private List<AbstractTower> _towerObjs = new List<AbstractTower>();
 
     public static event Action<bool> onTowerPlacementModeStatusChange;
-    public static event Action onTowerPreview;
+    public static event Action onTowerSpotPreview;
     public static event Action onTowerPlaced;
     // public static event Action<GameObject> onTowerReplaced;
-    public static event Action onDecoyEnabled;
+    public static event Action onTowerDecoyPlacementPreview;
     
     private bool _towerPlacementModeActivated;
 
@@ -104,16 +104,18 @@ public class TowerManager : MonoSingleton<TowerManager>
     private void ActivateTowerOnPlacementPreview(TowerSpot towerSpot)
     {
         {
-            _currentDecoyTower.gameObject.SetActive(false);
-            AbstractTower towerToPlace = _towerObjs.First(
-                t => t.TowerType == _currentDecoyTower.TowerType);
+            // _currentDecoyTower.gameObject.SetActive(false);
+            // AbstractTower towerToPlace = _towerObjs.First(
+            //     t => t.TowerType == _currentDecoyTower.TowerType);
             Transform towerSpotTransform = towerSpot.transform;
-            GameObject tower = PoolManager.Instance.RequestObjOfType(towerToPlace.gameObject);
-            tower.SetActive(true);
-            tower.transform.SetPositionAndRotation(
+            // GameObject tower = PoolManager.Instance.RequestObjOfType(towerToPlace.gameObject);
+            // tower.SetActive(true);
+            // tower.transform.SetPositionAndRotation(
+            //     towerSpotTransform.position, TowerSpot.TowerFacingEnemiesRotation);
+            _currentDecoyTower.transform.SetPositionAndRotation(
                 towerSpotTransform.position, TowerSpot.TowerFacingEnemiesRotation);
-            _instantiatedPreviewTowerOnSpot = tower;
-            onTowerPreview?.Invoke();
+            // _previewDecoyOnTowerSpot = tower;
+            onTowerSpotPreview?.Invoke();
         }
     }
 
@@ -122,22 +124,22 @@ public class TowerManager : MonoSingleton<TowerManager>
         if (_towerPlacementModeActivated && _currentDecoyTower != null)
         {
             EnableDecoy();
-            if (_instantiatedPreviewTowerOnSpot != null)
+            if (_previewDecoyOnTowerSpot != null)
             {
-                PoolManager.Instance.RecyclePooledObj(_instantiatedPreviewTowerOnSpot);
+                PoolManager.Instance.RecyclePooledObj(_previewDecoyOnTowerSpot);
             }
         }
     }
     
     private void PlaceTower(TowerSpot towerSpot)
     {
-        AbstractTower towerToPlace = _instantiatedPreviewTowerOnSpot.GetComponent<AbstractTower>();
+        AbstractTower towerToPlace = _previewDecoyOnTowerSpot.GetComponent<AbstractTower>();
         GameManager gM = GameManager.Instance;
         if (gM.PlayerCanPurchaseItem(towerToPlace.TowerInfo.WarFundsValue))
         {
             gM.PurchaseItem(towerToPlace.TowerInfo.WarFundsValue);
-            towerSpot.PlaceTower(_instantiatedPreviewTowerOnSpot);
-            _instantiatedPreviewTowerOnSpot = null;
+            towerSpot.PlaceTower(_previewDecoyOnTowerSpot);
+            _previewDecoyOnTowerSpot = null;
             EnableDecoy();
             onTowerPlaced?.Invoke();
         }
@@ -154,9 +156,9 @@ public class TowerManager : MonoSingleton<TowerManager>
         GameObject spawnedUpgradedTower = Instantiate(upgradedTowerPrefab);
         if (spawnedUpgradedTower == null)
         {
-            Debug.LogError($"Upgraded tower for tower spot " +
+            Debug.LogError("Upgraded tower for tower spot " +
                            $"{towerSpot.GetInstanceID().ToString()} was null when attempting to " +
-                           $"be placed by Tower Manager.");
+                           "be placed by Tower Manager.");
         }
         towerSpot.PlaceTower(spawnedUpgradedTower, upgrade:true);
         
@@ -166,8 +168,8 @@ public class TowerManager : MonoSingleton<TowerManager>
     {
         if (_towerPlacementModeActivated)
         {
-            _currentDecoyTower.gameObject.SetActive(true);
-            onDecoyEnabled?.Invoke();
+            // _currentDecoyTower.gameObject.SetActive(true);
+            onTowerDecoyPlacementPreview?.Invoke();
         }
     }
 
@@ -181,7 +183,7 @@ public class TowerManager : MonoSingleton<TowerManager>
             dt => dt.TowerType == towerType);
         _currentDecoyTower = decoyTower;
         decoyTower.gameObject.SetActive(true);
-        onDecoyEnabled?.Invoke();
+        onTowerDecoyPlacementPreview?.Invoke();
     }
 
     private void ResetCurrentDecoyTower()

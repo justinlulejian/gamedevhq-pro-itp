@@ -23,18 +23,15 @@ public class TowerSpot : MonoBehaviour
     public static event Action<TowerSpot> onUserPreviewTowerOnSpotIntent; 
     public static event Action onUserNoLongerPlaceTowerOnSpotPreviewIntent; 
     public static event Action<TowerSpot> onUserPlaceTowerIntent;
-    // public static event Action<PlayerUIManager.UIStates, TowerSpot> onUserTowerInteractIntent;
 
     private void OnEnable()
     {
         TowerManager.onTowerPlacementModeStatusChange += OnTowerPlacementModeChange;
-        // DismantleTowerInteractableChoiceUIManager.onDismantleTower += DismantleTower;
     }
 
     private void OnDisable()
     {
         TowerManager.onTowerPlacementModeStatusChange -= OnTowerPlacementModeChange;
-        // DismantleTowerInteractableChoiceUIManager.onDismantleTower -= DismantleTower;
     }
 
     private void Awake()

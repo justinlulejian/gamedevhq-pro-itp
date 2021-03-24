@@ -51,6 +51,12 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         protected override void Update()
         {
             base.Update();
+            if (_targetedEnemy?.CurrentHealth == 0)
+            {
+                _targetedEnemy = null; 
+                StopAttacking();
+                StartCoroutine(ResetRotation());
+            }
             if (_targetedEnemy && !_launched)
             {
                 StartCoroutine(FireRocketsRoutine());
@@ -129,11 +135,6 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             _launched = false; //set launch bool to false
         }
 
-
-        protected override void StartFiringAtEnemy(Enemy enemy)
-        {
-        }
-
         protected override void StopAttacking()
         {
             _targetedEnemy = null;
@@ -141,7 +142,8 @@ namespace GameDevHQ.FileBase.Missle_Launcher
 
         protected override void ResetFiringState()
         {
-            _firingAtEnemy = false;
+            // TODO: Make this a gatling-only concept since ML doesn't seem to use it.
+            // _firingAtEnemy = false;
         }
     }
 }
