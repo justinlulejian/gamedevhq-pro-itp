@@ -31,7 +31,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         protected bool _launched; //bool to check if we launched the rockets
         
         // Cached yields
-        private readonly WaitForSeconds _waitToStartFiring = new(.5f);
+        private readonly WaitForSeconds _waitToStartFiring = new WaitForSeconds(.5f);
         private WaitForSeconds _waitForFireDelay;
         private WaitForSeconds _waitForReloadTime;
 

@@ -10,7 +10,7 @@ namespace GameDevHQ.Scripts.UI
         private Text _warFundsText;
         
         // Cached yields
-        private readonly WaitForSeconds _textFlickerWait = new(.25f);
+        private readonly WaitForSeconds _textFlickerWait = new WaitForSeconds(.25f);
 
         private void Start()
         {

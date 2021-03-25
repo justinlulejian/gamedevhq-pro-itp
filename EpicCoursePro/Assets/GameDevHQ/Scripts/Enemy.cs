@@ -61,8 +61,8 @@ namespace GameDevHQ.Scripts
         protected List<Renderer> _dissolveMeshRenderers = new List<Renderer>();
         
         // Yield Caching
-        private readonly WaitForEndOfFrame _waitForEndOfFrame = new();
-        private readonly WaitForSeconds _waitOneAndHalfSeconds = new(1.5f);
+        private readonly WaitForEndOfFrame _waitForEndOfFrame = new WaitForEndOfFrame();
+        private readonly WaitForSeconds _waitOneAndHalfSeconds = new WaitForSeconds(1.5f);
         
         // When an enemy is enabled it will invoke this event.
         public static event Action<Transform, NavMeshAgent> onSpawnStart;

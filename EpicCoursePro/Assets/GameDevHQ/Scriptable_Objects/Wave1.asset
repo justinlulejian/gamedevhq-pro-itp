@@ -18,4 +18,4 @@ MonoBehaviour:
   - {fileID: 1079767520691416, guid: fed6fd85e4a83418485118c22ed9f184, type: 3}
   fixedSpawnSequence: []
   randomSpawnOn: 1
-  timeBeforeStart: 1
+  timeBeforeStart: 30

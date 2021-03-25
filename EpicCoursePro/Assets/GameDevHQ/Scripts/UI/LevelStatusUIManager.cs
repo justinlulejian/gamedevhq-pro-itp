@@ -22,7 +22,7 @@ public class LevelStatusUIManager : SpriteColorableUIManager
     public static event Action onCountdownFinished;
     
     // Cached yields
-    private readonly WaitForSeconds _waitForCountdownTick = new(1.0f);
+    private readonly WaitForSeconds _waitForCountdownTick = new WaitForSeconds(1.0f);
 
     private void OnDisable()
     {
