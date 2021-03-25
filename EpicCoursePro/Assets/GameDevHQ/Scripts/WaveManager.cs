@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GameDevHQ.Scripts;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class WaveManager : MonoSingleton<WaveManager>
@@ -72,7 +71,7 @@ public class WaveManager : MonoSingleton<WaveManager>
         _lastEnemySpawnedInWave = null;
     }
 
-    // TODO(improvement): Rather than do this with static time va   lues, try dynamically spacing
+    // TODO(improvement): Rather than do this with static time values, try dynamically spacing
     // enemies even if they have different speeds.
     private float TimeToWaitBetweenEnemySpawnInWave(GameObject enemyTypeToSpawn)
     {

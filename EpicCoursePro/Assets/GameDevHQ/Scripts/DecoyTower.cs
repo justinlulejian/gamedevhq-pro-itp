@@ -4,14 +4,24 @@
     {
         protected override void OnEnable()
         {
-            TowerManager.onDecoyEnabled += TurnOnAttackRadius;
-            TowerManager.onTowerPreview += TurnOffAttackRadius;
+            TowerManager.onTowerDecoyPlacementPreview += ChangeDecoyAttackRadiusToRed;
+            TowerManager.onTowerSpotPreview += ChangeDecoyAttackRadiusToGreen;
         }
 
         protected override void OnDisable()
         {
-            TowerManager.onDecoyEnabled -= TurnOnAttackRadius;
-            TowerManager.onTowerPreview -= TurnOffAttackRadius;
+            TowerManager.onTowerDecoyPlacementPreview -= ChangeDecoyAttackRadiusToRed;
+            TowerManager.onTowerSpotPreview -= ChangeDecoyAttackRadiusToGreen;
+        }
+
+        private void ChangeDecoyAttackRadiusToGreen()
+        {
+            _attackRadiusMeshRenderer.material.color = _attackRadiusEnabledColor;
+        }
+        
+        private void ChangeDecoyAttackRadiusToRed()
+        {
+            _attackRadiusMeshRenderer.material.color = _attackRadiusDisabledColor;
         }
 
         protected override void VerifyTowerInfo()

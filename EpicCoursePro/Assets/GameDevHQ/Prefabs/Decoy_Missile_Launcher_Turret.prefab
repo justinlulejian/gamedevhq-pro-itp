@@ -48,7 +48,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1182418357}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -633,6 +633,7 @@ MonoBehaviour:
     DismantleValue: 0
     UpgradeSprite: {fileID: 0}
     DismantleSprite: {fileID: 0}
+    UpgradedTowerPrefab: {fileID: 0}
   TowerType: 2
   AttackRadiusObj: {fileID: 1182418357}
 --- !u!1 &4376211189244729237

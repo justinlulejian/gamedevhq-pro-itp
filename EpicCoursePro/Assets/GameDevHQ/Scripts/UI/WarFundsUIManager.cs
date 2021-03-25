@@ -8,6 +8,9 @@ namespace GameDevHQ.Scripts.UI
     {
         [SerializeField] 
         private Text _warFundsText;
+        
+        // Cached yields
+        private readonly WaitForSeconds _textFlickerWait = new WaitForSeconds(.25f);
 
         private void Start()
         {
@@ -38,13 +41,13 @@ namespace GameDevHQ.Scripts.UI
         private IEnumerator FlashTextCoroutine(Text text)
         {
             text.enabled = false;
-            yield return new WaitForSeconds(.25f);
+            yield return _textFlickerWait;
             text.enabled = true;
-            yield return new WaitForSeconds(.25f);
+            yield return _textFlickerWait;
             text.enabled = false;
-            yield return new WaitForSeconds(.25f);
+            yield return _textFlickerWait;
             text.enabled = true;
-            yield return new WaitForSeconds(.25f);
+            yield return _textFlickerWait;
         }
     }
 }

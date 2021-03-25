@@ -39,13 +39,16 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
 
         private bool _fuseOut = false; //bool for if the rocket fuse
         private bool _trackRotation = false; //bool to track rotation of the rocket
-
-        // public static event Action<Missle, GameObject> onMissileHitEnemy; 
-
+        
+        // Cached yields
+        private WaitForSeconds _waitForFuseDelay;
+        
         private void Awake()
         {
             _missileCollider = GetComponentInChildren<CapsuleCollider>();
             _meshRenderer = GetComponentInChildren<MeshRenderer>();
+            _waitForFuseDelay =  new WaitForSeconds(_fuseDelay);
+            
             if (_missileCollider == null)
             {
                 Debug.LogError(
@@ -70,7 +73,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher.Missle
             _particleSystems.ForEach(p => p.Play()); //play the particles of the rocket
             _audioSource.Play(); //play the rocket sound
 
-            yield return new WaitForSeconds(_fuseDelay); //wait for the fuse delay
+            yield return _waitForFuseDelay; //wait for the fuse delay
 
             _initialLaunchTime = Time.time + 1.0f; //set the initial launch time
             _fuseOut = true; //set fuseOut to true

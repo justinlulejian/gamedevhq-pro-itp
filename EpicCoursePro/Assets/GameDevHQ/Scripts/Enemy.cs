@@ -28,9 +28,8 @@ namespace GameDevHQ.Scripts
         [Header("Health Settings")]
         [SerializeField] 
         private int _maxHealth = 100;
-        [SerializeField]
-        private int _currentHealth; 
-        public bool IsDead => _currentHealth == 0;
+        public int CurrentHealth;
+
         private CanvasHealthBar _healthBar;
         [SerializeField]
         private GameObject _healthBarGameObject;
@@ -61,6 +60,10 @@ namespace GameDevHQ.Scripts
         [SerializeField]
         protected List<Renderer> _dissolveMeshRenderers = new List<Renderer>();
         
+        // Yield Caching
+        private readonly WaitForEndOfFrame _waitForEndOfFrame = new WaitForEndOfFrame();
+        private readonly WaitForSeconds _waitOneAndHalfSeconds = new WaitForSeconds(1.5f);
+        
         // When an enemy is enabled it will invoke this event.
         public static event Action<Transform, NavMeshAgent> onSpawnStart;
         public static event Action<Enemy> onEnemyKilledByPlayer;
@@ -77,7 +80,7 @@ namespace GameDevHQ.Scripts
             }
 
             _navMeshAgent.enabled = true;
-            _healthBar?.gameObject?.SetActive(true);
+            if (_healthBar != null) _healthBar.gameObject.SetActive(true);
             onSpawnStart?.Invoke(this.transform, _navMeshAgent);
             _navDestinationPosition = _navMeshAgent.destination;
         }
@@ -142,14 +145,14 @@ namespace GameDevHQ.Scripts
         public float GetSpeed()
         {
             return _navigationSpeed;
-        }
+        }   
 
         private void PrepareEnemyForRecycling()
         {
             // Reset health so if recycled they'll start again with full health.
-            _currentHealth = _maxHealth;
+            CurrentHealth = _maxHealth;
             // TODO: Why do I need both null propogations here?
-            _healthBar?.gameObject?.SetActive(false);
+            if (_healthBar != null) _healthBar.gameObject.SetActive(false);
             _animator.ResetTrigger("IsEnemyFiring");
             _animator.SetTrigger("OnEnemyDeath");
             _animator.WriteDefaultValues(); // Reset position of mech to upright.
@@ -231,7 +234,7 @@ namespace GameDevHQ.Scripts
         {
             // TODO: static value to wait for explosion to finish. Change to check for explosion
             // finish.
-            yield return new WaitForSeconds(1.5f);
+            yield return _waitOneAndHalfSeconds;
             // TODO: Change this to do in steps across the death/dissolveTime vs statically like
             // this.
             float dissolveValue = 0;
@@ -243,7 +246,7 @@ namespace GameDevHQ.Scripts
                     meshRenderer.material.SetFloat("_fillAmount", dissolveValue);
                 }
 
-                yield return new WaitForEndOfFrame();
+                yield return _waitForEndOfFrame;
             }
         }
 
@@ -271,14 +274,19 @@ namespace GameDevHQ.Scripts
 
         public void PlayerDamageEnemy(int damageValue)
         {
-            _currentHealth = Mathf.Clamp(_currentHealth - damageValue, 0, _maxHealth);
+            CurrentHealth = Mathf.Clamp(CurrentHealth - damageValue, 0, _maxHealth);
             // TODO: Make is to that healthbar only shows up when enemy has been damaged.
-            _healthBar.UpdateHealthBar(_currentHealth, _maxHealth);
+            _healthBar.UpdateHealthBar(CurrentHealth, _maxHealth);
             
-            if (_currentHealth == 0)
+            if (CurrentHealth == 0)
             {
                 onEnemyKilledByPlayer.Invoke(this);
                 AnimateDeath();
+                // TODO(bug): For some reason this is started when enemy is inactive?
+                if (!gameObject.activeInHierarchy)
+                {
+                    Debug.Break();
+                }
                 StartCoroutine(WaitBeforeDespawn(this));
             }
         }

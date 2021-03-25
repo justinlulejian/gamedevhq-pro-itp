@@ -1040,6 +1040,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Missile_Attack_Radius
       objectReference: {fileID: 0}
+    - target: {fileID: 7089072073086872031, guid: 9d66a72ed7eb6104abd8c9c0b5a4413f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d66a72ed7eb6104abd8c9c0b5a4413f, type: 3}
 --- !u!1 &368257725 stripped

@@ -71,7 +71,12 @@ namespace GameDevHQ.Scripts
             base.Update();
             // TODO: Does this need to be called in update or could it be another less updated
             // method like a coroutine?
-            if (Time.time > _canFire && _targetedEnemy && !_targetedEnemy.IsDead)
+            if (_targetedEnemy == null)
+            {
+                StopAttacking();
+                StartCoroutine(ResetRotation());
+            }
+            if (Time.time > _canFire && _targetedEnemy != null)
             {
                 _targetedEnemy.PlayerDamageEnemy(_damageValue);
                 _canFire = Time.time + _damageRate; //
@@ -86,7 +91,7 @@ namespace GameDevHQ.Scripts
                
             }
             
-            if (_targetedEnemy && !_firingAtEnemy)
+            if (_targetedEnemy != null && !_firingAtEnemy)
             {
                 foreach (var muzzleFlash in _muzzleFlashes)
                 {
@@ -110,19 +115,6 @@ namespace GameDevHQ.Scripts
             }
         }
 
-        protected override void StartFiringAtEnemy(Enemy enemy)
-        {
-        }
-
-        // private IEnumerator RotateBarrelWhileFiring()
-        // {
-        //     while (_targetedEnemy != null)
-        //     {
-        //         RotateBarrel();
-        //         yield return null;
-        //     }
-        // }
-
         protected override void StopAttacking()
         {
             _targetedEnemy = null;
@@ -132,6 +124,7 @@ namespace GameDevHQ.Scripts
                 muzzleFlash.SetActive(false);
             }
             _audioSource.Stop();
+            ResetFiringState();
         }
 
         protected override void ResetFiringState()
