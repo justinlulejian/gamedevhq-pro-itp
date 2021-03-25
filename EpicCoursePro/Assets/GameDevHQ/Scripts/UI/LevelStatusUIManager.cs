@@ -20,6 +20,9 @@ public class LevelStatusUIManager : SpriteColorableUIManager
     private int _startCountdownTime = 5;
 
     public static event Action onCountdownFinished;
+    
+    // Cached yields
+    private readonly WaitForSeconds _waitForCountdownTick = new(1.0f);
 
     private void OnDisable()
     {
@@ -98,7 +101,7 @@ public class LevelStatusUIManager : SpriteColorableUIManager
         for (int i = _startCountdownTime; i >= 0; i--)
         {
             _countdownText.text = $"COUNTDOWN TO WAVE START: {i}";
-            yield return new WaitForSeconds(1.0f);
+            yield return _waitForCountdownTick;
         }
         onCountdownFinished?.Invoke();
     }

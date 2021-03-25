@@ -29,6 +29,11 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         [SerializeField]
         protected float _destroyTime = 10.0f; //how long till the rockets get cleaned up
         protected bool _launched; //bool to check if we launched the rockets
+        
+        // Cached yields
+        private readonly WaitForSeconds _waitToStartFiring = new(.5f);
+        private WaitForSeconds _waitForFireDelay;
+        private WaitForSeconds _waitForReloadTime;
 
         protected override void Awake()
         {
@@ -46,6 +51,8 @@ namespace GameDevHQ.FileBase.Missle_Launcher
                                "mismatching missile position lengths so firing might not work.");
             }
             _missilePositionsLength = _misslePositionsLeft.Length;
+            _waitForFireDelay = new WaitForSeconds(_fireDelay);
+            _waitForReloadTime = new WaitForSeconds(_reloadTime);
         }
 
         protected override void Update()
@@ -109,7 +116,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher
             // This also has the problem where a rocket will fire late after enemy exits and rocket
             // will fire later.
             // Wait a moment for the turret to get some rotation towards target before firing.
-            yield return new WaitForSeconds(.5f);
+            yield return _waitToStartFiring;
             for (int i = 0; i < _missilePositionsLength; i++) //for loop to iterate through each missle position
             {
                 // If we switch enemies mid-routine then stop firing, reload, and then start
@@ -119,13 +126,13 @@ namespace GameDevHQ.FileBase.Missle_Launcher
                     break;
                 }
                 FireRockets(i);
-                yield return new WaitForSeconds(_fireDelay); //wait for the firedelay
+                yield return _waitForFireDelay; //wait for the firedelay
             }
 
             // Reset/reload rockets after firing.
             for (int i = 0; i < _missilePositionsLength; i++) //itterate through missle positions
             {
-                yield return new WaitForSeconds(_reloadTime); //wait for reload time
+                yield return _waitForReloadTime; //wait for reload time
                 //enable fake rocket to show ready to fire
                 if(_misslePositionsLeft.Length > 0) _misslePositionsLeft[i].SetActive(true);
                 if(_missilePositionsRight.Length > 0) _missilePositionsRight[i].SetActive(true);

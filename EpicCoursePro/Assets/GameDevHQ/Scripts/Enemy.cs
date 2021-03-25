@@ -60,6 +60,10 @@ namespace GameDevHQ.Scripts
         [SerializeField]
         protected List<Renderer> _dissolveMeshRenderers = new List<Renderer>();
         
+        // Yield Caching
+        private readonly WaitForEndOfFrame _waitForEndOfFrame = new();
+        private readonly WaitForSeconds _waitOneAndHalfSeconds = new(1.5f);
+        
         // When an enemy is enabled it will invoke this event.
         public static event Action<Transform, NavMeshAgent> onSpawnStart;
         public static event Action<Enemy> onEnemyKilledByPlayer;
@@ -230,7 +234,7 @@ namespace GameDevHQ.Scripts
         {
             // TODO: static value to wait for explosion to finish. Change to check for explosion
             // finish.
-            yield return new WaitForSeconds(1.5f);
+            yield return _waitOneAndHalfSeconds;
             // TODO: Change this to do in steps across the death/dissolveTime vs statically like
             // this.
             float dissolveValue = 0;
@@ -242,7 +246,7 @@ namespace GameDevHQ.Scripts
                     meshRenderer.material.SetFloat("_fillAmount", dissolveValue);
                 }
 
-                yield return new WaitForEndOfFrame();
+                yield return _waitForEndOfFrame;
             }
         }
 
