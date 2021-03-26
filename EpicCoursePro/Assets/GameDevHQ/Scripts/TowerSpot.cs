@@ -18,7 +18,7 @@ public class TowerSpot : MonoBehaviour
     public bool IsUpgraded;
     
     // This rotation faces towers towards enemy start position.
-    public static Quaternion TowerFacingEnemiesRotation = Quaternion.Euler(0, -90, 0);
+    public static readonly Quaternion TowerFacingEnemiesRotation = Quaternion.Euler(0, -90, 0);
 
     public static event Action<TowerSpot> onUserPreviewTowerOnSpotIntent; 
     public static event Action onUserNoLongerPlaceTowerOnSpotPreviewIntent; 
@@ -66,7 +66,7 @@ public class TowerSpot : MonoBehaviour
     {
         if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
         {
-            onUserPreviewTowerOnSpotIntent.Invoke(this);
+            onUserPreviewTowerOnSpotIntent?.Invoke(this);
             _availableParticleSystem.Stop();
         }
     }

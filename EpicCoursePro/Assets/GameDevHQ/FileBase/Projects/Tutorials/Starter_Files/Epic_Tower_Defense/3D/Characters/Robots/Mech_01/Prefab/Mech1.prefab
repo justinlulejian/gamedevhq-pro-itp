@@ -1576,10 +1576,11 @@ MonoBehaviour:
   _navDestinationPosition: {x: 0, y: 0, z: 0}
   _navigationSpeed: 1.5
   _maxHealth: 100
-  _currentHealth: 0
+  CurrentHealth: 0
+  _healthBarGameObject: {fileID: 0}
   WarFundValue: 100
   _playerWeaponTarget: {fileID: 1970402011964454}
-  _target: {fileID: 0}
+  _currentTarget: {fileID: 0}
   _waistToTurnTowardsTarget: {fileID: 90610607}
   DeathAnimWaitTime: 5
   _deathExplosionPrefab: {fileID: 4688366796816071956, guid: 0bd59304b034bee4e939420e993113e1,
@@ -2187,9 +2188,9 @@ ParentConstraint:
   m_TranslationAtRest: {x: -0.17732793, y: 0.011147378, z: -1.0242804}
   m_RotationAtRest: {x: 2.6948268, y: 0, z: 0}
   m_TranslationOffsets:
-  - {x: -0.003291756, y: 1.3769305, z: 0.03994344}
+  - {x: -0.003291756, y: 1.3769305, z: 0.039943445}
   m_RotationOffsets:
-  - {x: 89.32826, y: -87.26202, z: -176.98082}
+  - {x: 89.32855, y: -87.262314, z: -176.98112}
   m_AffectTranslationX: 0
   m_AffectTranslationY: 0
   m_AffectTranslationZ: 0
