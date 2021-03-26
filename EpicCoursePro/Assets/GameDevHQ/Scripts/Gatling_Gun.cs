@@ -71,10 +71,11 @@ namespace GameDevHQ.Scripts
             base.Update();
             // TODO: Does this need to be called in update or could it be another less updated
             // method like a coroutine?
-            if (_targetedEnemy == null)
+            if (_targetedEnemy == null && !_resettingRotation)
             {
                 StopAttacking();
                 StartCoroutine(ResetRotation());
+                _resettingRotation = true;
             }
             if (Time.time > _canFire && _targetedEnemy != null)
             {
@@ -134,7 +135,6 @@ namespace GameDevHQ.Scripts
             {
                 muzzleFlash.SetActive(false);
             }
-            _audioSource.Stop();
         }
     }
 }

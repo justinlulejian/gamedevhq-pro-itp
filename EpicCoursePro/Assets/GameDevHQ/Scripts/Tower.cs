@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
+
 namespace GameDevHQ.Scripts
 {
     // TODO: Still needs to be abstract or can be regular class?
@@ -30,7 +31,11 @@ namespace GameDevHQ.Scripts
         [SerializeField]
         private float _rotationSpeed = 5f;
         private Transform _rotationTransform;
-        private Quaternion _originalRotation;
+        private readonly Quaternion _defaultRot = TowerSpot.TowerFacingEnemiesRotation;
+        protected bool _resettingRotation;
+
+        // Cache yields
+        private readonly WaitForEndOfFrame _waitForEndOfFrame = new WaitForEndOfFrame();
 
         protected abstract void StopAttacking();
 
@@ -42,7 +47,6 @@ namespace GameDevHQ.Scripts
             
             _attackRadius = AttackRadiusObj.GetComponent<AttackRadius>();
             _rotationTransform = _rotationObject.transform;
-            _originalRotation = _rotationObject.transform.rotation;
             
             if (_attackRadius == null)
             {
@@ -76,15 +80,16 @@ namespace GameDevHQ.Scripts
         // Resets the rotation while no targets, but will stop if a new enemy is being targeted.
         protected IEnumerator ResetRotation()
         {
-            // comparing rotation would prevent this from running forever.
-            Quaternion defaultRot = TowerSpot.TowerFacingEnemiesRotation;
-            while (_targetedEnemy == null && _rotationTransform.rotation != defaultRot)
+            // comparing rotation prevents this from running forever.
+            while (!_targetedEnemy && _rotationTransform.rotation != _defaultRot)
             {
                 _rotationTransform.rotation =
-                    Quaternion.Slerp(_rotationTransform.rotation, defaultRot,
+                    Quaternion.Slerp(_rotationTransform.rotation, _defaultRot,
                         _rotationSpeed * Time.deltaTime);
-                yield return null;
+                yield return _waitForEndOfFrame;
             }
+
+            _resettingRotation = false;
         }
 
         // How the tower will react to enemies within it's attack radius.

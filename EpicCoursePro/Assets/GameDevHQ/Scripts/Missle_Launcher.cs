@@ -58,10 +58,11 @@ namespace GameDevHQ.FileBase.Missle_Launcher
         protected override void Update()
         {
             base.Update();
-            if (_targetedEnemy == null)
+            if (_targetedEnemy == null && !_resettingRotation)
             {
                 StopAttacking();
                 StartCoroutine(ResetRotation());
+                _resettingRotation = true;
             }
             if (_targetedEnemy && !_launched)
             {
