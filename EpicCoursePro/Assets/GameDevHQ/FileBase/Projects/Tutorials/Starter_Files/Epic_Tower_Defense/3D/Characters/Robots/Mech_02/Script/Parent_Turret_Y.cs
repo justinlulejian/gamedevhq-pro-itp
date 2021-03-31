@@ -1,34 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GameDevHQ.Scripts;
 using UnityEngine;
 
-public class Parent_Turret_Y : MonoBehaviour
+namespace GameDevHQ.FileBase.Projects.Tutorials.Starter_Files.Epic_Tower_Defense._3D.Characters.Robots.Mech_02.Script
 {
-    public GameObject Parent_Point;
+    public class Parent_Turret_Y : MonoBehaviour
+    {
+        public GameObject Parent_Point;
     
-    [SerializeField]
-    private List<MeshRenderer> _dissolveMeshRenderers = new List<MeshRenderer>();
+        [SerializeField]
+        private List<Material> _dissolveMeshRendererMaterials = new List<Material>();
 
-    private void Awake()
-    {
-        _dissolveMeshRenderers = GetComponentsInChildren<MeshRenderer>().ToList();
-        
-        if (_dissolveMeshRenderers.Count < 1)
+        private void Awake()
         {
-            Debug.LogError($"Mesh renderer from parent turret script is non-existent on" +
-                           $" enemy {name}");
+            _dissolveMeshRendererMaterials = Enemy.GetMaterialsFromRenderers(
+                GetComponentsInChildren<Renderer>().ToList());
+            if (_dissolveMeshRendererMaterials.Count < 1)
+            {
+                Debug.LogError($"Mesh renderer from parent turret script is non-existent on" +
+                               $" enemy {name}");
+            }
         }
-    }
 
-    public List<MeshRenderer> GetDissolveMeshRenderers()
-    {
-        return _dissolveMeshRenderers;
-    }
+        public List<Material> GetDissolveMeshRendererMaterials()
+        {
+            return _dissolveMeshRendererMaterials;
+        }
 
 
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        transform.position = new Vector3(transform.position.x, Parent_Point.transform.position.y, Parent_Point.transform.position.z);
+        // Update is called once per frame
+        void LateUpdate()
+        {
+            transform.position = new Vector3(transform.position.x, Parent_Point.transform.position.y, Parent_Point.transform.position.z);
+        }
     }
 }

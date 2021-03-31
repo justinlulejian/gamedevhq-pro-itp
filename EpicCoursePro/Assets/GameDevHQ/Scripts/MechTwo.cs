@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameDevHQ.FileBase.Projects.Tutorials.Starter_Files.Epic_Tower_Defense._3D.Characters.Robots.Mech_02.Script;
+using UnityEngine;
 
 namespace GameDevHQ.Scripts
 {
@@ -17,9 +18,9 @@ namespace GameDevHQ.Scripts
                 Debug.LogError($"Parent turret Y is is non-existent on enemy {name}");
             }
 
-            int previousCountRenderers = _dissolveMeshRenderers.Count;
-            _dissolveMeshRenderers.AddRange(_parentTurretY.GetDissolveMeshRenderers());
-            if (previousCountRenderers >= _dissolveMeshRenderers.Count)
+            int previousCountRenderers = _dissolveMeshRendererMaterials.Count;
+            _dissolveMeshRendererMaterials.AddRange(_parentTurretY.GetDissolveMeshRendererMaterials());
+            if (previousCountRenderers >= _dissolveMeshRendererMaterials.Count)
             {
                 Debug.LogError("MechTwo did not get it's dissolve renderers from parent" +
                                "turret Y.");

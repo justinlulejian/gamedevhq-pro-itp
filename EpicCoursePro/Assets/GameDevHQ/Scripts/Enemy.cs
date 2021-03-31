@@ -29,6 +29,7 @@ namespace GameDevHQ.Scripts
         [SerializeField] 
         private int _maxHealth = 100;
         public int CurrentHealth;
+        [SerializeField] private bool _isDead;
 
         private CanvasHealthBar _healthBar;
         [SerializeField]
@@ -58,7 +59,7 @@ namespace GameDevHQ.Scripts
         private Animator _animator;
         public GameObject _deathExplosionPrefab;
         [SerializeField]
-        protected List<Renderer> _dissolveMeshRenderers = new List<Renderer>();
+        protected List<Material> _dissolveMeshRendererMaterials = new List<Material>();
         
         // Yield Caching
         private readonly WaitForEndOfFrame _waitForEndOfFrame = new WaitForEndOfFrame();
@@ -93,6 +94,16 @@ namespace GameDevHQ.Scripts
             // Reset health so if recycled they'll start with
             PrepareEnemyForRecycling();
         }
+
+        public static List<Material> GetMaterialsFromRenderers(List<Renderer> renderers)
+        {
+            List<Material> materials = new List<Material>();
+            renderers.RemoveAll(r => r is SpriteRenderer);
+            renderers
+                .FindAll(r => r.material != null)
+                .ForEach(r => materials.Add(r.material));
+            return materials;
+        }
         
         protected virtual void Awake()
         {
@@ -118,23 +129,24 @@ namespace GameDevHQ.Scripts
             }
 
             _animator = GetComponent<Animator>();
-            // TODO: Had to move animation to child of mech2 due to https://forum.unity.com/threads/animation-stops-object-movement.184084/ 
+            // TODO: Had to move animation to child of mech2 due to
+            // https://forum.unity.com/threads/animation-stops-object-movement.184084/ 
             if (_animator == null)
             {
                 _animator = GetComponentInChildren<Animator>();
             }
-            
-            _dissolveMeshRenderers = GetComponentsInChildren<Renderer>().ToList();
-            _dissolveMeshRenderers.RemoveAll(
-                r => r is SpriteRenderer);
+
+
+            _dissolveMeshRendererMaterials = GetMaterialsFromRenderers(
+                GetComponentsInChildren<Renderer>().ToList());
 
             if (_animator == null)
             {
                 Debug.LogError($"Animator is null on enemy {name}");
             }
-            if (_dissolveMeshRenderers.Count < 0)
+            if (_dissolveMeshRendererMaterials.Count < 1)
             {
-                Debug.LogError($"Mesh renderer is non-existent on enemy {name}");
+                Debug.LogError($"Mesh renderer materials are non-existent on enemy {name}");
             }
             if (_deathExplosionPrefab == null)
             {
@@ -159,11 +171,12 @@ namespace GameDevHQ.Scripts
             _navMeshAgent.enabled = false;
             
             // Reset dissolve shader value to opaque.
-            foreach (var meshRenderer in _dissolveMeshRenderers)        
+            foreach (var material in _dissolveMeshRendererMaterials)        
             {
-                meshRenderer.material.SetFloat(
-                    "_fillAmount", 0.0f);
+                material.SetFloat("_fillAmount", 0.0f);
             }
+
+            _isDead = false;
         }
 
         protected virtual void Start()
@@ -241,9 +254,9 @@ namespace GameDevHQ.Scripts
             while (dissolveValue < 1)
             {
                 dissolveValue += 0.01f;
-                foreach (var meshRenderer in _dissolveMeshRenderers)        
+                foreach (var material in _dissolveMeshRendererMaterials)        
                 {
-                    meshRenderer.material.SetFloat("_fillAmount", dissolveValue);
+                    material.SetFloat("_fillAmount", dissolveValue);
                 }
 
                 yield return _waitForEndOfFrame;
@@ -274,13 +287,17 @@ namespace GameDevHQ.Scripts
 
         public void PlayerDamageEnemy(int damageValue)
         {
+            if (_isDead) return;
+            
             CurrentHealth = Mathf.Clamp(CurrentHealth - damageValue, 0, _maxHealth);
             // TODO: Make is to that healthbar only shows up when enemy has been damaged.
-            _healthBar.UpdateHealthBar(CurrentHealth, _maxHealth);
+            // It seems that this could be nulled out since it can be called after enemy is dead?
+            if (_healthBar != null) _healthBar.UpdateHealthBar(CurrentHealth, _maxHealth);
             
-            if (CurrentHealth == 0)
+            if (CurrentHealth == 0 && !_isDead)
             {
-                onEnemyKilledByPlayer.Invoke(this);
+                _isDead = true;
+                onEnemyKilledByPlayer?.Invoke(this);
                 AnimateDeath();
                 // TODO(bug): For some reason this is started when enemy is inactive?
                 if (!gameObject.activeInHierarchy)

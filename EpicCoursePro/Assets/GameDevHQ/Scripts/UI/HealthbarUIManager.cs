@@ -34,14 +34,14 @@ public class HealthbarUIManager : MonoSingleton<HealthbarUIManager>
         CanvasHealthBar healthBar = _healthbarContainer.FirstOrDefault(
             hb => hb.gameObject.activeSelf == false);
 
-        if (healthBar == null)
+        if (healthBar != null)
         {
-            GeneratePooledHealthbar(1);
-            RequestHealthbar(parent);
+            healthBar.gameObject.SetActive(true);
+            healthBar.SetFollowing(parent);
+            return healthBar;
         }
-        healthBar.gameObject.SetActive(true);
-        healthBar.SetFollowing(parent);
-        return healthBar;
+        GeneratePooledHealthbar(1);
+        return RequestHealthbar(parent);
     }
     
 }

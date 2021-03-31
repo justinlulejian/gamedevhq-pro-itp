@@ -152,10 +152,12 @@ public class WaveManager : MonoSingleton<WaveManager>
         }
     }
 
+    #if UNITY_EDITOR
     public void StopCurrentWave()
     {
         KillCurrentWave = true;
     }
+    #endif
 
     private void DespawnEnemy(GameObject enemy)
     {

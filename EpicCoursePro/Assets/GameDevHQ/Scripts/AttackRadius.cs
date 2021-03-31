@@ -46,9 +46,7 @@ public class AttackRadius : MonoBehaviour
             Debug.LogError($"Mesh collider is not available from attack radius" +
                            $" {name}");
         }
-        // TODO: Why'd I do this? To test something?
         _sphereCollider.enabled = false;
-        // _sphereCollider.enabled = true;
 
     }
 
