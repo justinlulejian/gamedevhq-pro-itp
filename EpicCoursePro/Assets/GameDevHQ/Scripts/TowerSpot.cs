@@ -112,14 +112,7 @@ public class TowerSpot : MonoBehaviour
 
     public Tower GetTowerPlacedOnSpot()
     {
-        if (_towerPlaced)
-        {
-            return _towerPlaced;
-        }
-
-        Debug.LogError($"Requested placed tower from Tower spot ID" +
-                       $" {this.GetInstanceID().ToString()} but it is not set.");
-        return null;
+        return _towerPlaced ? _towerPlaced : null;
     }
     
     public void PlaceTower(GameObject towerToPlace, bool upgrade = false)

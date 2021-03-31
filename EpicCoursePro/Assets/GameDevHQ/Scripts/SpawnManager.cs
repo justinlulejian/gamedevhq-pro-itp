@@ -1,4 +1,5 @@
-﻿using GameDevHQ.Scripts;
+﻿using System;
+using GameDevHQ.Scripts;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,6 +10,23 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     private GameObject _enemySpawnStartPoint;
     [SerializeField]
     private GameObject _enemySpawnEndPoint;
+    
+    #if UNITY_EDITOR
+    // Debug functionality
+    public void StartNeverEndingWave()
+    {
+        SpawningEnabled = false;  // Stop new waves from starting.
+        // TODO: How can I stop the current wait but then start this new one without the killswitch
+        // applying to this too?
+        // WaveManager.Instance.StopCurrentWave();
+        Wave neverEndingWave = ScriptableObject.CreateInstance<Wave>();
+        neverEndingWave.amountToSpawn = Int32.MaxValue;
+        neverEndingWave.enemyTypesToSpawn = PoolManager.Instance.AllEnemyPrefabs;
+        neverEndingWave.timeBeforeStart = 0f;
+        neverEndingWave.randomSpawnOn = true;
+        StartCoroutine(WaveManager.Instance.SpawnWave(neverEndingWave));
+    }
+    #endif
 
     public bool SpawningEnabled { get; set; } = true;
 

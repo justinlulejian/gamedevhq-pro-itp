@@ -13,8 +13,7 @@ namespace GameDevHQ.Scripts
         private int _playerMaximumWarFunds = 100000;
         private float _currentTimeScale;
         private float _fixedDeltaTime;
-        [SerializeField]
-        private bool _skipIntoAckAndCountdown;
+       
 
         [SerializeField]
         private int _currentPlayerLives;
@@ -31,6 +30,23 @@ namespace GameDevHQ.Scripts
 
         public static event Action<int> onWarFundsChange;
         
+        #if UNITY_EDITOR
+        // Debug functionality
+        public bool SkipIntroAckAndCountdown;
+        public bool UnlimitedWarFunds;
+
+        public void DrainWarFunds()
+        {
+            _playerWarFunds = 0;
+        }
+
+        public void ChangeTimeSpeedIncrement(float increment)
+        {
+            Time.timeScale = Mathf.Clamp(Time.timeScale + increment, 0.0f, 5.0f);
+            Time.fixedDeltaTime = _fixedDeltaTime * Time.timeScale;
+        }
+
+        #endif
         
         private void OnEnable()
         {
@@ -86,12 +102,13 @@ namespace GameDevHQ.Scripts
             PlayerUIManager.Instance.UpdatePlayerLives(_currentPlayerLives);
             SetUIColorOnLivesAmount();
             PlayerUIManager.Instance.UpdateVersionNumber(_versionNumber);
-            
-            if (!_skipIntoAckAndCountdown)
-            {
-                PlayerUIManager.Instance.PresentStartUI(); 
-                return;
-            }
+            #if UNITY_EDITOR
+                if (!SkipIntroAckAndCountdown)
+                {
+                    PlayerUIManager.Instance.PresentStartUI(); 
+                    return;
+                }
+            #endif
             StartWaves();
         }
 
@@ -108,6 +125,13 @@ namespace GameDevHQ.Scripts
 
         public int GetWarFunds()
         {
+            #if UNITY_EDITOR
+                if (UnlimitedWarFunds)
+                {
+                    // TODO: make this update in the UI too.
+                    return 999999;
+                }
+            #endif
             return _playerWarFunds;
         }
 
@@ -125,7 +149,7 @@ namespace GameDevHQ.Scripts
 
         public bool PlayerCanPurchaseItem(int purchaseCost)
         {
-            return _playerWarFunds >= purchaseCost;
+            return GetWarFunds() >= purchaseCost;
         }
 
         public void PurchaseItem(int purchaseCost)
@@ -185,14 +209,16 @@ namespace GameDevHQ.Scripts
             PlayerUIManager.Instance.PresentPlayerWonLevelUI();
         }
 
-        public void PlayerRequestRestartLevel()
+        public AsyncOperation PlayerRequestRestartLevel()
         {
             EnableDisableLevel(true);
-            SceneManager.LoadSceneAsync("GameDevHQ/Scenes/Start_Level");
+            var loadSceneAsync = SceneManager.LoadSceneAsync("GameDevHQ/Scenes/Start_Level");
             PlayerUIManager.Instance.ResetRestartClicked();
             ResetGameSpeed();
             PlayerUIManager.Instance.ResetPlaySpeedUI();
+            return loadSceneAsync;
         }
+        
 
         private void EnableDisableLevel(bool enable)
         {

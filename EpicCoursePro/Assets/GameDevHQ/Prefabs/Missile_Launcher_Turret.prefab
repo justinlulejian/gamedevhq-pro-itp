@@ -209,6 +209,7 @@ MonoBehaviour:
     DismantleValue: 50
     UpgradeSprite: {fileID: 21300000, guid: 3ce8e108eb11d4fe18966017a3b5c886, type: 3}
     DismantleSprite: {fileID: 21300000, guid: 414e79bb2fa676a428943e04acaaa895, type: 3}
+    TowerPrefab: {fileID: 1589799907309799649}
     UpgradedTowerPrefab: {fileID: 1815566672332072, guid: db95df206f8d65d4ab93dc17ed20e522,
       type: 3}
   TowerType: 2

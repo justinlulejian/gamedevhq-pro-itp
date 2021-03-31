@@ -23,6 +23,11 @@ public class WaveManager : MonoSingleton<WaveManager>
     private Queue<Wave> _wavesToSpawn;
 
     private Enemy _lastEnemySpawnedInWave;
+    
+    #if UNITY_EDITOR
+    // Debug functionality
+    public bool KillCurrentWave;
+    #endif
 
     // When a wave has started.
     public static event Action<int, int> onWaveStart; 
@@ -55,10 +60,17 @@ public class WaveManager : MonoSingleton<WaveManager>
         }
     }
 
-    private IEnumerator SpawnRandom(Wave wave)
+    public IEnumerator SpawnRandom(Wave wave)
     {
         for (int i = 0; i < wave.amountToSpawn; i++)
         {
+            #if UNITY_EDITOR
+                if (KillCurrentWave)
+                {
+                    KillCurrentWave = false;
+                    break;
+                }
+            #endif
             List<GameObject> enemyTypes = wave.enemyTypesToSpawn;
             if (wave.enemyTypesToSpawn.Count < 1) Debug.LogError($"Wave {wave} has no " +
                                                                  $"enemies to spawn.");
@@ -95,6 +107,13 @@ public class WaveManager : MonoSingleton<WaveManager>
         List<GameObject> spawnSequence = wave.fixedSpawnSequence;
         for (int i = 0; i < spawnSequence.Count; i++)
         {
+            #if UNITY_EDITOR
+                if (KillCurrentWave)
+                {
+                    KillCurrentWave = false;
+                    break;
+                }
+            #endif
             GameObject enemyType = spawnSequence.ElementAt(i);
             yield return new WaitForSeconds(TimeToWaitBetweenEnemySpawnInWave(enemyType));
             SpawnEnemy(enemyType);
@@ -111,7 +130,7 @@ public class WaveManager : MonoSingleton<WaveManager>
         enemiesSpawnedInWave++;
     }
 
-    private IEnumerator SpawnWave(Wave wave)
+    public IEnumerator SpawnWave(Wave wave)
     {
         yield return new WaitForSeconds(wave.timeBeforeStart);
         onWaveStart?.Invoke(_currentWaveNumber, _totalWavesNumber);
@@ -131,6 +150,11 @@ public class WaveManager : MonoSingleton<WaveManager>
         {
             StartCoroutine(SpawnWave(_wavesToSpawn.Dequeue()));
         }
+    }
+
+    public void StopCurrentWave()
+    {
+        KillCurrentWave = true;
     }
 
     private void DespawnEnemy(GameObject enemy)

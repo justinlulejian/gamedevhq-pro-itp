@@ -14,7 +14,7 @@ namespace GameDevHQ.Scripts
         [SerializeField] 
         private GameObject _enemyContainer;
         [SerializeField] 
-        private List<GameObject> _allEnemyPrefabs = new List<GameObject>();
+        public List<GameObject> AllEnemyPrefabs = new List<GameObject>();
         [SerializeField]
         private int _numberOfEnemiesToPool = 30;
         private List<GameObject> _enemyPool = new List<GameObject>();
@@ -23,7 +23,7 @@ namespace GameDevHQ.Scripts
         [SerializeField] 
         private GameObject _towerContainer;
         [SerializeField] 
-        private List<GameObject> _allTowerPrefabs = new List<GameObject>();
+        public List<GameObject> AllTowerPrefabs = new List<GameObject>();
         [SerializeField]
         private int _numberOfTowersToPool = 5;
         private List<GameObject> _towerPool = new List<GameObject>();
@@ -31,21 +31,21 @@ namespace GameDevHQ.Scripts
         protected override void Awake()
         {
             base.Awake();
-            if (_allEnemyPrefabs.Count == 0) 
+            if (AllEnemyPrefabs.Count == 0) 
             {
                 Debug.LogError("Enemy prefabs have not been specified in Pool Manager.");
             }
-            if (_allTowerPrefabs.Count == 0) 
+            if (AllTowerPrefabs.Count == 0) 
             {
                 Debug.LogError("Tower prefabs have not been specified in Pool Manager.");
             }
 
-            foreach (GameObject enemyPrefab in _allEnemyPrefabs)
+            foreach (GameObject enemyPrefab in AllEnemyPrefabs)
             {
                 GeneratePooledObjects(_numberOfEnemiesToPool, enemyPrefab, _enemyPool,
                     _enemyContainer.transform);
             }
-            foreach (GameObject towerPrefab in _allTowerPrefabs)
+            foreach (GameObject towerPrefab in AllTowerPrefabs)
             {
                 GeneratePooledObjects(
                     _numberOfTowersToPool, towerPrefab, _towerPool, _towerContainer.transform);
@@ -65,11 +65,11 @@ namespace GameDevHQ.Scripts
 
         public GameObject RequestObjOfType(GameObject objType)
         {
-            if (_allEnemyPrefabs.Contains(objType))
+            if (AllEnemyPrefabs.Contains(objType))
             {
                return RequestEnemyType(objType);
             }
-            if (_allTowerPrefabs.Contains(objType))
+            if (AllTowerPrefabs.Contains(objType))
             {
                 return RequestTowerType(objType);
             }

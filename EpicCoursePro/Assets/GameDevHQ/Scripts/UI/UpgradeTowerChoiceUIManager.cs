@@ -34,7 +34,7 @@ namespace GameDevHQ.Scripts.UI
             TryBuyUpgrade();
         }
 
-        public void TryBuyUpgrade()
+        private void TryBuyUpgrade()
         {
             
             if (GameManager.Instance.PlayerCanPurchaseItem(_towerToUpgradeInfo.WarFundsValue))
