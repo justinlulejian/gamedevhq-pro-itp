@@ -9,6 +9,7 @@ namespace GameDevHQ.Scripts
     // Functionality allowed for use with the custom debug editor window.
     public class DebugGameModifiers : MonoSingleton<DebugGameModifiers>
     {
+        #if UNITY_EDITOR
         protected override void Awake() {
             // Keep script running across scene changes since it has to reset tower placement.
             // It's stateless for now so we should be okay.
@@ -109,5 +110,7 @@ namespace GameDevHQ.Scripts
             // TODO: Impl
         }
         
+        // End UNITY_EDITOR
+        #endif
     }
 }

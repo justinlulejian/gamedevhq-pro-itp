@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8eb9579478684e45badae34b89df18d, type: 3}
   m_Name: Wave1
   m_EditorClassIdentifier: 
-  amountToSpawn: 1
+  amountToSpawn: 50
   enemyTypesToSpawn:
   - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
   - {fileID: 1079767520691416, guid: fed6fd85e4a83418485118c22ed9f184, type: 3}

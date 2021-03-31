@@ -6,6 +6,7 @@ public class CanvasHealthBar : MonoBehaviour
    [SerializeField] private GameObject _gameObjectFollowing;
    [SerializeField] private Camera _mainCamera;
    [SerializeField] private Image barImage;
+   // TODO: This doesn't seem to actually raise them off the head of the enemy...
    [SerializeField] private Vector3 overheadOffset = new Vector3(0, 1f, 0);
 
    private void OnDisable()
