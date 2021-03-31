@@ -21,11 +21,13 @@ public class AttackRadius : MonoBehaviour
     private void OnEnable()
     {
         Enemy.onEnemyKilledByPlayer += RemoveTargetFromTrackingAndMaybeUpdate;
+        EnemyNavEnd.onEnemyCollision += RemoveTargetFromTrackingAndMaybeUpdate;
     }
 
     private void OnDisable()
     {
         Enemy.onEnemyKilledByPlayer -= RemoveTargetFromTrackingAndMaybeUpdate;
+        EnemyNavEnd.onEnemyCollision -= RemoveTargetFromTrackingAndMaybeUpdate;
     }
 
     private void Awake()
@@ -86,15 +88,12 @@ public class AttackRadius : MonoBehaviour
             : null);
     }
 
-    private void RemoveTargetFromRadiusTracking(GameObject enemyObj)
-    {
-        _enemiesInAttackRadius.Remove(enemyObj);
-    }
-    
     private void RemoveTargetFromTrackingAndMaybeUpdate(GameObject enemyObj)
     {
-        RemoveTargetFromRadiusTracking(enemyObj);
-        UpdateTarget();
+        if (_enemiesInAttackRadius.Remove(enemyObj))
+        {
+            UpdateTarget();
+        }
     }
     
     private void RemoveTargetFromTrackingAndMaybeUpdate(Enemy enemy)

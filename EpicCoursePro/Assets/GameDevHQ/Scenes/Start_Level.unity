@@ -12249,6 +12249,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6845e5c08717a01418e0928308100187, type: 2}
   _currentWaveNumber: 1
   _baseTimeToWaitBetweenEnemySpawns: 2
+  KillCurrentWave: 0
 --- !u!4 &365295940
 Transform:
   m_ObjectHideFlags: 0
@@ -13769,12 +13770,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defaultPositionForPooledObjects: {x: 0, y: 0, z: 0}
   _enemyContainer: {fileID: 2106290996}
-  _allEnemyPrefabs:
+  AllEnemyPrefabs:
   - {fileID: 1637921026644932, guid: b6f9eb08e9dcb484fbccc49d65f561ab, type: 3}
   - {fileID: 1079767520691416, guid: fed6fd85e4a83418485118c22ed9f184, type: 3}
   _numberOfEnemiesToPool: 1
   _towerContainer: {fileID: 1889572039}
-  _allTowerPrefabs:
+  AllTowerPrefabs:
   - {fileID: 2363984451845793099, guid: 1c0f8e288365b1043a83ccf4fad55b71, type: 3}
   - {fileID: 1589799907309799649, guid: 87f6de024d1535e4287acb0fb289aa50, type: 3}
   - {fileID: 1873819670802014, guid: 46e6e478c60d1824aacd2c5a982b6bf5, type: 3}
@@ -32658,12 +32659,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerWarFunds: 1000
   _playerMaximumWarFunds: 100000
-  _skipIntoAckAndCountdown: 1
   _currentPlayerLives: 0
   _startingPlayerLives: 100
   _highLivesAmountMin: 70
   _mediumLivesAmountMin: 40
   _versionNumber: 0.3
+  SkipIntroAckAndCountdown: 1
+  UnlimitedWarFunds: 0
 --- !u!4 &1387163928
 Transform:
   m_ObjectHideFlags: 0
@@ -33519,6 +33521,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteToColor: {fileID: 1432688604}
   _restartPressedGameObject: {fileID: 1861675125}
+--- !u!1 &1441445264
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1441445266}
+  - component: {fileID: 1441445265}
+  m_Layer: 0
+  m_Name: Debug_Game_Modifiers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1441445265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441445264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f16062ed3c4d1db3c8fc8f5b222da9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1441445266
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441445264}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -25.843996, y: 13.725688, z: 9.6196575}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1442524507
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77190,6 +77235,7 @@ MonoBehaviour:
   - {fileID: 4376203260760162403, guid: 3520b1cbae9817d4d86404df9b9ae550, type: 3}
   - {fileID: 8590953432724915804, guid: cf620696bc1bdfb429a5b401c05801de, type: 3}
   - {fileID: 4897243120280489644, guid: fc9c261740a8ad54fb283def77584a3a, type: 3}
+  _towerSpotContainer: {fileID: 288466718}
   _towerPrefabs:
   - {fileID: 2363984451845793099, guid: 1c0f8e288365b1043a83ccf4fad55b71, type: 3}
   - {fileID: 1589799907309799649, guid: 87f6de024d1535e4287acb0fb289aa50, type: 3}

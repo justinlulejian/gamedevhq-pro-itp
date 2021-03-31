@@ -13,6 +13,10 @@ public class TowerManager : MonoSingleton<TowerManager>
     [SerializeField] 
     private List<GameObject> _decoyTowerPrefabs;
     private HashSet<DecoyTower> _instantiatedDecoyTowers = new HashSet<DecoyTower>();
+    [SerializeField] 
+    private GameObject _towerSpotContainer;
+    private List<TowerSpot> _allTowerSpots = new List<TowerSpot>();
+
     // The decoy tower following the user's cursor, if requested.
     private DecoyTower _currentDecoyTower;
     private GameObject _previewDecoyOnTowerSpot;
@@ -21,14 +25,20 @@ public class TowerManager : MonoSingleton<TowerManager>
     private List<GameObject> _towerPrefabs;
 
     private List<AbstractTower> _towerObjs = new List<AbstractTower>();
-
     public static event Action<bool> onTowerPlacementModeStatusChange;
     public static event Action onTowerSpotPreview;
     public static event Action onTowerPlaced;
-    // public static event Action<GameObject> onTowerReplaced;
     public static event Action onTowerDecoyPlacementPreview;
     
     private bool _towerPlacementModeActivated;
+
+    #if UNITY_EDITOR
+    // Debug functionality
+    public List<TowerSpot> GetAllTowerSpots()
+    {
+        return _allTowerSpots;
+    }
+    #endif
 
     public bool IsTowerPlacementModeActivated()
     {
@@ -52,6 +62,13 @@ public class TowerManager : MonoSingleton<TowerManager>
     protected override void Awake()
     {
         base.Awake();
+
+        _allTowerSpots = _towerSpotContainer.GetComponentsInChildren<TowerSpot>().ToList();
+        
+        if (_allTowerSpots.Count == 0)
+        {
+            Debug.LogError("No tower spots found from Tower Manager.");
+        }
         if (_decoyTowerContainer == null)
         {
             Debug.LogError("Decoy tower container is null in Tower Manager.");
@@ -117,6 +134,14 @@ public class TowerManager : MonoSingleton<TowerManager>
         // back to red when we go off the tower spot.
         onTowerDecoyPlacementPreview?.Invoke();
     }
+
+    public void PlaceTowerOfTypeOnSpot(GameObject towerGameObject, TowerSpot towerSpot)
+    {
+        GameObject towerObjectToPlace = PoolManager.Instance.RequestObjOfType(towerGameObject);
+        towerObjectToPlace.SetActive(true);
+        towerSpot.PlaceTower(towerObjectToPlace);
+        onTowerPlaced?.Invoke();
+    }
     
     private void PlaceTower(TowerSpot towerSpot)
     {
@@ -126,10 +151,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         if (gM.PlayerCanPurchaseItem(towerToPlace.TowerInfo.WarFundsValue))
         {
             gM.PurchaseItem(towerToPlace.TowerInfo.WarFundsValue);
-            GameObject tower = PoolManager.Instance.RequestObjOfType(towerToPlace.gameObject);
-            tower.SetActive(true);
-            towerSpot.PlaceTower(tower);
-            onTowerPlaced?.Invoke();
+            PlaceTowerOfTypeOnSpot(towerToPlace.gameObject, towerSpot);
         }
 
         // If user is now out of money then deactivate the mode too.
@@ -141,7 +163,7 @@ public class TowerManager : MonoSingleton<TowerManager>
     
     public void PlayerUpgradeTowerOnSpot(TowerSpot towerSpot, GameObject upgradedTowerPrefab)
     {
-        // TODO: Convert to pooling.
+        // TODO: Convert to pooling/generic method for all upgrade/non-upgrade towers.
         GameObject spawnedUpgradedTower = Instantiate(upgradedTowerPrefab);
         if (spawnedUpgradedTower == null)
         {
