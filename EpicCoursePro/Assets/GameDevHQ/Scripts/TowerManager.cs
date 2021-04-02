@@ -25,6 +25,8 @@ public class TowerManager : MonoSingleton<TowerManager>
     private List<GameObject> _towerPrefabs;
 
     private List<AbstractTower> _towerObjs = new List<AbstractTower>();
+
+    private Camera _playerCamera;
     public static event Action<bool> onTowerPlacementModeStatusChange;
     public static event Action onTowerSpotPreview;
     public static event Action onTowerPlaced;
@@ -64,6 +66,7 @@ public class TowerManager : MonoSingleton<TowerManager>
         base.Awake();
 
         _allTowerSpots = _towerSpotContainer.GetComponentsInChildren<TowerSpot>().ToList();
+        _playerCamera = PlayerCamera.Instance.GetPlayerCamera();
         
         if (_allTowerSpots.Count == 0)
         {
@@ -100,12 +103,11 @@ public class TowerManager : MonoSingleton<TowerManager>
         // TODO: Switch this to be done by decoy tower itself or will that not work?
         if (_currentDecoyTower)
         {
-            Ray rayOrigin = PlayerCamera.Instance.GetPlayerCamera()
-                .ScreenPointToRay(Input.mousePosition);
-            RaycastHit rayHitInfo;
-            if (Physics.Raycast(rayOrigin, out rayHitInfo))
+            Ray rayOrigin = _playerCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] raycastHits = new RaycastHit[1];
+            if (Physics.RaycastNonAlloc(rayOrigin, raycastHits) > 0)
             {
-                _currentDecoyTower.transform.position = rayHitInfo.point;
+                _currentDecoyTower.transform.position = raycastHits[0].point;
             }
         }
     }
