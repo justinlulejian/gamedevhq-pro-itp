@@ -1,39 +1,47 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class CanvasHealthBar : MonoBehaviour
+namespace GameDevHQ.Scripts.UI
 {
-   [SerializeField] private GameObject _gameObjectFollowing;
-   [SerializeField] private Camera _mainCamera;
-   [SerializeField] private Image barImage;
-   // TODO: This doesn't seem to actually raise them off the head of the enemy...
-   [SerializeField] private Vector3 overheadOffset = new Vector3(0, 1f, 0);
-
-   private void OnDisable()
+   public class CanvasHealthBar : MonoBehaviour
    {
-      barImage.fillAmount = 1.0f;
-   }
+      [SerializeField] private GameObject _gameObjectFollowing;
+      [SerializeField] private Camera _playerCamera;
+      [SerializeField] private Image barImage;
+      // TODO: This doesn't seem to actually raise them off the head of the enemy...
+      [SerializeField] private Vector3 overheadOffset = new Vector3(0, 1f, 0);
 
-   private void Awake()
-   {
-      _mainCamera = Camera.main;
-      barImage = GetComponent<Image>();
-   }
+      private void OnDisable()
+      {
+         barImage.fillAmount = 1.0f;
+      }
 
-   private void Update()
-   {
-      transform.position = _mainCamera.WorldToScreenPoint(
-         _gameObjectFollowing.transform.position + overheadOffset);
-   }
+      private void Awake()
+      {
+         barImage = GetComponent<Image>();
+      }
 
-   public void SetFollowing(GameObject followee)
-   {
-      _gameObjectFollowing = followee;
-      transform.position = _gameObjectFollowing.transform.position;
-   }
+      private void Start()
+      {
+         _playerCamera = PlayerCamera.Instance.GetPlayerCamera();
+      }
 
-   public void UpdateHealthBar(int health, int maxHealth)
-   {
-      barImage.fillAmount = health / (float)maxHealth;
+      private void Update()
+      {
+         transform.position = _playerCamera.WorldToScreenPoint(
+            _gameObjectFollowing.transform.position + overheadOffset);
+      }
+
+      public void SetFollowing(GameObject followee)
+      {
+         _gameObjectFollowing = followee;
+         transform.position = _gameObjectFollowing.transform.position;
+      }
+
+      public void UpdateHealthBar(int health, int maxHealth)
+      {
+         barImage.fillAmount = health / (float)maxHealth;
+      }
    }
 }

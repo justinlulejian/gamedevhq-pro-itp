@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GameDevHQ.Scripts.UI;
 using UnityEngine;
 
 // TODO: Merge with PlayerUIManager to be a single UI Manager class?
