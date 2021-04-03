@@ -6389,7 +6389,7 @@ GameObject:
   - component: {fileID: 189097637}
   - component: {fileID: 189097638}
   m_Layer: 0
-  m_Name: SpawnManager
+  m_Name: Spawn_Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6407,7 +6407,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &189097638
 MonoBehaviour:
@@ -6634,7 +6634,7 @@ Transform:
   - {fileID: 52347284}
   - {fileID: 2052424246}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &254106823
 GameObject:
@@ -13515,7 +13515,7 @@ RectTransform:
   - {fileID: 1624499974}
   - {fileID: 932164646}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -25739,7 +25739,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1118615907
 GameObject:
@@ -31341,7 +31341,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -32639,7 +32639,7 @@ GameObject:
   - component: {fileID: 1387163928}
   - component: {fileID: 1387163927}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Game_Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33532,7 +33532,7 @@ GameObject:
   - component: {fileID: 1441445266}
   - component: {fileID: 1441445265}
   m_Layer: 0
-  m_Name: Debug_Game_Modifiers
+  m_Name: Debug_Game_Modifiers_Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33562,7 +33562,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1442524507
 PrefabInstance:
@@ -50392,6 +50392,55 @@ Transform:
   - {fileID: 1900215640}
   m_Father: {fileID: 246519963}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1724476998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1724477000}
+  - component: {fileID: 1724476999}
+  m_Layer: 0
+  m_Name: Paypal_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1724476999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724476998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4bc7ca5c03b7324e8495d168c48dafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _paypalPaymentSandboxAddress: https://api-m.sandbox.paypal.com/v1/payments/payment
+  _paypalTokenSandboxAddress: https://api-m.sandbox.paypal.com/v1/oauth2/token
+  _paypalAuthResponse:
+    access_token: 
+  _clientID: AdaowpqzbOR2wA0Nl4xgNjBHq89aAYWjuoBRdY95oy2AAyw70ENw7Cc9a4ppIaGhUVKPFu1shQqwneUZ
+  _clientSecret: EC-ljrMH9KWjqqLYlOmf03SnTxh79L9W-8SLHQN6GjsS4TQePHyWnNZi43BOqTsEZkfK92d48h3y5Y9w
+--- !u!4 &1724477000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724476998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 791.3568, y: 439.8237, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1729764490
 PrefabInstance:
@@ -77211,7 +77260,7 @@ GameObject:
   - component: {fileID: 2135656937}
   - component: {fileID: 2135656936}
   m_Layer: 0
-  m_Name: TowerManager
+  m_Name: Tower_Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -46,12 +46,14 @@ namespace GameDevHQ.Scripts.UI
         {
             LevelStatusUIManager.onCountdownFinished += StartCountdownFinished;
             WaveManager.onWaveStart += UpdateWaveCountUI;
+            GameManager.onWarFundsChange += PresentWarFundsPaymentUI;
         }
 
         private void OnDisable()
         {
             LevelStatusUIManager.onCountdownFinished += StartCountdownFinished;
             WaveManager.onWaveStart -= UpdateWaveCountUI;
+            GameManager.onWarFundsChange -= PresentWarFundsPaymentUI;
         }
 
         private void StartCountdownFinished()
@@ -89,6 +91,8 @@ namespace GameDevHQ.Scripts.UI
                     $" {nullUIs}");
             }
         }
+
+        #region TowerPlacement UI
 
         public void EnableDisableTowerPlacementUI(bool enable)
         {
@@ -130,6 +134,35 @@ namespace GameDevHQ.Scripts.UI
         {
             _warFundsUI.WarFundsOutAnim();
         }
+        
+        #endregion
+
+        #region Payment UI
+
+        public void PresentWarFundsPaymentUI(int warFunds)
+        {
+            if (warFunds == 0)
+            {
+                // TODO: display the UI.
+            }
+        }
+        
+        public void PendingWarFundsPaymentUI()
+        {
+            // TODO: Add a UI showing a progress bar when we add retry logic to the paypal manager.
+        }
+        
+        public void PresentSuccessfulWarFundsPaymentUI()
+        {
+            
+        }
+
+        public void DismissWarFundsPaymentUI()
+        {
+            
+        }
+
+        #endregion
 
         #region Game state changes UI
 
@@ -168,7 +201,6 @@ namespace GameDevHQ.Scripts.UI
         }
 
         #endregion
-
 
         #region Lives, Waves, and Version
 
