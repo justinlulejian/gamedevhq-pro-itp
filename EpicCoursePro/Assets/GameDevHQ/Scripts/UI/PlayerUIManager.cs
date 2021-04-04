@@ -33,6 +33,8 @@ namespace GameDevHQ.Scripts.UI
         [SerializeField]
         private GameObject _dismantleUIObject;
         private DismantleTowerUIManager _dismantleUI;
+        [SerializeField] 
+        private GameObject _buyWarFundsUIObject;
 
         private readonly List<MonoBehaviour> _userInterfaces =
             new List<MonoBehaviour>();
@@ -144,6 +146,7 @@ namespace GameDevHQ.Scripts.UI
             if (warFunds == 0)
             {
                 // TODO: display the UI.
+                _buyWarFundsUIObject.SetActive(true);
             }
         }
         
@@ -154,12 +157,12 @@ namespace GameDevHQ.Scripts.UI
         
         public void PresentSuccessfulWarFundsPaymentUI()
         {
-            
+            // TODO: create a UI image to display.
         }
 
         public void DismissWarFundsPaymentUI()
         {
-            
+            _buyWarFundsUIObject.SetActive(false);
         }
 
         #endregion

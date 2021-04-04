@@ -1,8 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using GameDevHQ.Scripts.Payment.PPEPR;
+using GameDevHQ.Scripts.Payment.PPPAR;
+using GameDevHQ.Scripts.Payment.PPR;
+using GameDevHQ.Scripts.Payment.PPResp;
+using GameDevHQ.Scripts.UI;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -17,7 +22,7 @@ namespace GameDevHQ.Scripts.Payment
         public string access_token;
     }
 
-    public class PaypalManager : MonoBehaviour
+    public class PaypalManager : MonoSingleton<PaypalManager>
     {
         [SerializeField] private string _paypalPaymentSandboxAddress =
             "https://api-m.sandbox.paypal.com/v1/payments/payment";
@@ -42,30 +47,23 @@ namespace GameDevHQ.Scripts.Payment
         private string clientIdAndSecret;
         private string _base64ClientIdAndSecret;
 
-
-
         // TODO:
         // Add ability to add warfunds with paypal payment.
         // Have UI menu pop-up when warfunds are zero to ask if they want to buy more warfunds
         // if they click yes, execute payment for buyer
         // once you confirm it went through add 1000 warfunds to player
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             clientIdAndSecret = $"{_clientID}:{_clientSecret}";
             _base64ClientIdAndSecret = Convert.ToBase64String(
                 Encoding.ASCII.GetBytes(clientIdAndSecret));
         }
 
-        private void Start()
+        public void GetPaymentFromUser(float cost)
         {
-            // TODO: Move to UI method.
-            GetPaymentFromUser(new decimal(2.0f));
-        }
-
-        public void GetPaymentFromUser(Decimal cost)
-        {
-            Decimal paymentCost = System.Math.Round(cost, 2); // Dollars and cents only
+            Decimal paymentCost = new decimal(Math.Round(cost, 2)); // Dollars and cents only
             RequestPaymentFromPaypal(paymentCost);
         }
 
@@ -81,17 +79,17 @@ namespace GameDevHQ.Scripts.Payment
                 Debug.LogError("Payer ID couldn't be retrieved from payment approval.");
                 return;
             }
-            Debug.Log($"payerID: {payerId}");
 
-            // string executePaymentUri = payment.links.Find(l => l.rel == "execute").href;
-            // if (await ExecutePayment(executePaymentUri, payerId, accessToken))
-            // {
-            //     // TODO: display payment complete unity UI and add to warfunds.
-            //     Debug.Log($"Execute payment successful.");
-            //     return;
-            // }
-            //
-            // Debug.LogError("Executing payment failed.");
+            string executePaymentUri = payment.links.Find(l => l.rel == "execute").href;
+            if (await ExecutePayment(executePaymentUri, payerId, accessToken))
+            {
+                PlayerUIManager.Instance.DismissWarFundsPaymentUI();
+                GameManager.Instance.AddWarFunds(5000);
+                GameManager.Instance.ResetGameSpeed();
+                return;
+            }
+            
+            Debug.LogError("Executing payment failed.");
         }
 
         #region SendUnityWebRequest overloads
@@ -120,7 +118,7 @@ namespace GameDevHQ.Scripts.Payment
             }
             else if (jsonObj != null)
             {
-                string jsonString = JsonUtility.ToJson(jsonObj);
+                string jsonString = JsonConvert.SerializeObject(jsonObj);
                 byte[] jsonBodyRaw = Encoding.UTF8.GetBytes(jsonString);
                 request = new UnityWebRequest(uri, "POST")
                 {
@@ -145,14 +143,13 @@ namespace GameDevHQ.Scripts.Payment
             T response;
             if (request.isNetworkError || request.isHttpError)
             {
-                Debug.LogError($"Error sending request to: {uri}, error: {request.error}");
+                Debug.LogError($"Error sending request to: {uri}, error: {request.error}." +
+                               $" Request.text {request.downloadHandler.text}");
                 response = new T();
             }
             else
             {
-                Debug.Log(
-                    $"Form upload complete! Response: {request.downloadHandler.text}");
-                response = JsonUtility.FromJson<T>(request.downloadHandler.text);
+                response = JsonConvert.DeserializeObject<T>(request.downloadHandler.text);
             }
 
             return response;
@@ -183,7 +180,7 @@ namespace GameDevHQ.Scripts.Payment
             }
             else if (jsonObj != null)
             {
-                string jsonString = JsonUtility.ToJson(jsonObj);
+                string jsonString =  JsonConvert.SerializeObject(jsonObj);
                 byte[] jsonBodyRaw = Encoding.UTF8.GetBytes(jsonString);
                 request = new UnityWebRequest(uri, "POST")
                 {
@@ -213,9 +210,7 @@ namespace GameDevHQ.Scripts.Payment
             }
             else
             {
-                Debug.Log(
-                    $"Form upload complete! Response: {request.downloadHandler.text}");
-                response = JsonUtility.FromJson<T>(request.downloadHandler.text);
+                response = JsonConvert.DeserializeObject<T>(request.downloadHandler.text);
             }
 
             return response;
@@ -264,9 +259,7 @@ namespace GameDevHQ.Scripts.Payment
             }
             else
             {
-                Debug.Log(
-                    $"Form upload complete! Response: {request.downloadHandler.text}");
-                response = JsonUtility.FromJson<T>(request.downloadHandler.text);
+                response = JsonConvert.DeserializeObject<T>(request.downloadHandler.text);
             }
 
             return response;
@@ -300,15 +293,13 @@ namespace GameDevHQ.Scripts.Payment
         private async Task<PaypalPaymentResponse> CreatePayment(
             Decimal paymentCost, string accessToken)
         {
-            Transaction transaction = new Transaction();
+            PPR.Transaction transaction = new PPR.Transaction();
             string paymentCostString = paymentCost.ToString("N");
-            transaction.amount = new Amount()
+            transaction.amount = new PPR.Amount()
             {
-                // ReSharper disable once SpecifyACultureInStringConversionExplicitly
-                // total = paymentCostString,
                 total = paymentCostString,
                 currency = "USD",
-                details = new Details()
+                details = new PPR.Details()
                 {
                     subtotal = paymentCostString,
                     tax = "0.00",
@@ -318,24 +309,23 @@ namespace GameDevHQ.Scripts.Payment
                     insurance = "0.00"
                 },
             };
-            transaction.payment_options = new PaymentOptions()
+            transaction.payment_options = new PPR.PaymentOptions()
                 {allowed_payment_method = "INSTANT_FUNDING_SOURCE"};
             transaction.description = "This is a microtransaction from EpicCoursePro for WarFunds.";
-            transaction.item_list = new ItemList()
+            transaction.item_list = new PPR.ItemList()
             {
-                items = new List<Item>()
+                items = new List<PPR.Item>()
                 {
-                    new Item()
+                    new PPR.Item()
                     {
                         name = "WarFunds",
                         quantity = "1",
-                        // ReSharper disable once SpecifyACultureInStringConversionExplicitly
                         price = paymentCostString,
                         currency = "USD",
                         sku = "123"
                     },
                 },
-                shipping_address = new ShippingAddress()
+                shipping_address = new PPR.ShippingAddress()
                 {
                     recipient_name = "Justin",
                     line1 = "1600 Ampitheatre Pkwy",
@@ -350,16 +340,16 @@ namespace GameDevHQ.Scripts.Payment
             PaypalPaymentRequest paymentRequest = new PaypalPaymentRequest()
             {
                 intent = "sale",
-                payer = new Payer()
+                payer = new PPR.Payer()
                 {
-                    payment_method = "paypal"
+                    payment_method = "paypal",
                 },
-                redirect_urls = new RedirectUrls()
+                redirect_urls = new PPR.RedirectUrls()
                 {
                     return_url = "www.gamdevhq.com",
                     cancel_url = "www.gamdevhq.com"
                 },
-                transactions = new List<Transaction>() {transaction},
+                transactions = new List<PPR.Transaction>() {transaction},
                 note_to_payer = "Good luck!"
             };
             _paypalPaymentRequest = paymentRequest;
@@ -378,7 +368,7 @@ namespace GameDevHQ.Scripts.Payment
         }
 
 
-        private async Task<string> GetPaymentApproval(List<Link> paymentLinks, string accessToken)
+        private async Task<string> GetPaymentApproval(List<PPResp.Link> paymentLinks, string accessToken)
         {
             // load the approval URL in a webpage
             // Pause for the player since we're going to have them go to a window to pay.
@@ -394,17 +384,16 @@ namespace GameDevHQ.Scripts.Payment
             {
                 {"Authorization", $"Basic {_base64ClientIdAndSecret}"}
             };
-            PaypalPaymentApprovalResponse authResponse = new PaypalPaymentApprovalResponse();
-            while (!authResponse.payer.status.Equals("VERIFIED"))
+            PaypalPaymentApprovalResponse authResponse = null;
+            // REST API does not fill out payer before payment has been approved.
+            while (authResponse?.payer == null || !authResponse.payer.status.Equals("VERIFIED"))
             {
-                Debug.Log("Haven't found approved payment by user yet.");
                 await WaitBetweenApprovalCheckRetries();
                 authResponse = await
                     SendUnityWebRequest<PaypalPaymentApprovalResponse>(
                         checkPaymentApprovedURI, null, _requestHeaderKeyValues);
             }
 
-            Debug.Log("user approved payment");
             return authResponse.payer.payer_info.payer_id;
         }
 
@@ -413,7 +402,7 @@ namespace GameDevHQ.Scripts.Payment
             await Task.Delay(TimeSpan.FromSeconds(1));
         }
 
-        private async Task<bool> ExecutePayment(string payerId, string executePaymentUri,
+        private async Task<bool> ExecutePayment(string executePaymentUri, string payerId,
             string accessToken)
         {
             PaypalExecutePaymentRequest paymentRequest = new PaypalExecutePaymentRequest()
@@ -431,7 +420,7 @@ namespace GameDevHQ.Scripts.Payment
 
             _paypalExecutePaymentResponse = executePaymentResponse;
 
-            Transaction approvedTransaction = null;
+            PPEPR.Transaction approvedTransaction = null;
             foreach (var transaction in executePaymentResponse.transactions)
             {
                 foreach (var relatedResource in transaction.related_resources)
