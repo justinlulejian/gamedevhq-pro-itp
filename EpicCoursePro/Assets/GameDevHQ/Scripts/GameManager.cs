@@ -72,23 +72,6 @@ namespace GameDevHQ.Scripts
             _currentPlayerLives = _startingPlayerLives;
         }
 
-        private void Update()
-        {
-            #if UNITY_EDITOR
-                if (Input.GetKey(KeyCode.H))
-                {
-                    Time.timeScale = Mathf.Clamp(Time.timeScale - .01f, 0f, 1.0f);
-                } else if (Input.GetKey(KeyCode.J))
-                {
-                    Time.timeScale += .1f;
-                } else if (Input.GetKey(KeyCode.K))
-                {
-                    Time.timeScale = 1.0f;
-                }
-                _currentTimeScale = Time.timeScale;
-            #endif
-        }
-
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name.Equals("Start_Level") && scene.isLoaded)

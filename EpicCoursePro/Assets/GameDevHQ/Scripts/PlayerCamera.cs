@@ -75,7 +75,7 @@ public class PlayerCamera : MonoSingleton<PlayerCamera>
 
     private void Update()
     {
-        CalculateMovement();
+        // CalculateMovement();
     }
 
 

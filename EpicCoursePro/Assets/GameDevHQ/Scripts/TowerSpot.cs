@@ -85,29 +85,29 @@ public class TowerSpot : MonoBehaviour
     // open dismantle tower UI if tower is present
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
-        {
-            if (TowerManager.Instance.IsTowerPlacementModeActivated() && !_towerPlaced)
-            {
-                if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
-                {
-                    onUserPlaceTowerIntent?.Invoke(this);
-                    return;
-                } 
-            }
-
-            if (_towerPlaced)
-            {
-               PlayerUIManager.Instance.EnableTowerUpgradeUI(this, _towerPlaced.TowerInfo);
-               return;
-            }
-        }
-        
-        if (Input.GetMouseButtonDown((int) MouseButton.RightMouse) &&
-            !TowerManager.Instance.IsTowerPlacementModeActivated() && _towerPlaced)
-        {
-            PlayerUIManager.Instance.EnableTowerDismantleUI(this, _towerPlaced.TowerInfo);
-        }
+        // if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
+        // {
+        //     if (TowerManager.Instance.IsTowerPlacementModeActivated() && !_towerPlaced)
+        //     {
+        //         if (IsAvailableForPlacement && TowerManager.Instance.IsTowerPlacementModeActivated())
+        //         {
+        //             onUserPlaceTowerIntent?.Invoke(this);
+        //             return;
+        //         } 
+        //     }
+        //
+        //     if (_towerPlaced)
+        //     {
+        //        PlayerUIManager.Instance.EnableTowerUpgradeUI(this, _towerPlaced.TowerInfo);
+        //        return;
+        //     }
+        // }
+        //
+        // if (Input.GetMouseButtonDown((int) MouseButton.RightMouse) &&
+        //     !TowerManager.Instance.IsTowerPlacementModeActivated() && _towerPlaced)
+        // {
+        //     PlayerUIManager.Instance.EnableTowerDismantleUI(this, _towerPlaced.TowerInfo);
+        // }
     }
 
     public Tower GetTowerPlacedOnSpot()

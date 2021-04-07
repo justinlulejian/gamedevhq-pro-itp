@@ -66,7 +66,6 @@ public class TowerManager : MonoSingleton<TowerManager>
         base.Awake();
 
         _allTowerSpots = _towerSpotContainer.GetComponentsInChildren<TowerSpot>().ToList();
-        _playerCamera = PlayerCamera.Instance.GetPlayerCamera();
         
         if (_allTowerSpots.Count == 0)
         {
@@ -98,26 +97,31 @@ public class TowerManager : MonoSingleton<TowerManager>
         }
     }
 
+    private void Start()
+    {
+        // _playerCamera = PlayerCamera.Instance.GetPlayerCamera();
+    }
+
     private void FixedUpdate()
     {
-        // TODO: Switch this to be done by decoy tower itself or will that not work?
-        if (_currentDecoyTower)
-        {
-            Ray rayOrigin = _playerCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] raycastHits = new RaycastHit[1];
-            if (Physics.RaycastNonAlloc(rayOrigin, raycastHits) > 0)
-            {
-                _currentDecoyTower.transform.position = raycastHits[0].point;
-            }
-        }
+        // // TODO: Switch this to be done by decoy tower itself or will that not work?
+        // if (_currentDecoyTower)
+        // {
+        //     Ray rayOrigin = _playerCamera.ScreenPointToRay(Input.mousePosition);
+        //     RaycastHit[] raycastHits = new RaycastHit[1];
+        //     if (Physics.RaycastNonAlloc(rayOrigin, raycastHits) > 0)
+        //     {
+        //         _currentDecoyTower.transform.position = raycastHits[0].point;
+        //     }
+        // }
     }
     
     private void Update()
     {
-        if (_towerPlacementModeActivated && Input.GetMouseButtonDown((int)MouseButton.RightMouse))
-        {
-            DeactivateTowerPlacementMode();
-        }
+        // if (_towerPlacementModeActivated && Input.GetMouseButtonDown((int)MouseButton.RightMouse))
+        // {
+        //     DeactivateTowerPlacementMode();
+        // }
     }
     
     private void ActivateTowerOnPlacementPreview(TowerSpot towerSpot)

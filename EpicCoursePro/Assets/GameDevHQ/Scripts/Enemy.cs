@@ -6,10 +6,11 @@ using GameDevHQ.Scripts.UI;
 using Rock.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace GameDevHQ.Scripts
 {
-    public class Enemy : MonoBehaviour
+    public class Enemy : XRBaseInteractable
     {
         [Header("Generic Enemy Settings")]
         [Tooltip("The unique ID of the enemy, must something other than 0 (zero).")]
@@ -188,12 +189,12 @@ namespace GameDevHQ.Scripts
             }
             _navMeshAgent.speed = _navigationSpeed;
             
-            _healthBar = HealthbarUIManager.Instance.RequestHealthbar(gameObject);
-            _healthBarGameObject = _healthBar.gameObject;
-            if (_healthBar == null)
-            {
-                Debug.LogError($"Health bar is null on enemy {name}");
-            }
+            // _healthBar = HealthbarUIManager.Instance.RequestHealthbar(gameObject);
+            // _healthBarGameObject = _healthBar.gameObject;
+            // if (_healthBar == null)
+            // {
+            //     Debug.LogError($"Health bar is null on enemy {name}");
+            // }
             
         }
 

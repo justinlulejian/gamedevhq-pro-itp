@@ -14,11 +14,11 @@ public class HealthbarUIManager : MonoSingleton<HealthbarUIManager>
     [SerializeField] 
     private int _numberOfHealthbarsToPool = 30;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        GeneratePooledHealthbar(_numberOfHealthbarsToPool);
-    }
+    // protected override void Awake()
+    // {
+    //     base.Awake();
+    //     GeneratePooledHealthbar(_numberOfHealthbarsToPool);
+    // }
     
     private void GeneratePooledHealthbar(int numBars)
     {
